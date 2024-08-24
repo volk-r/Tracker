@@ -12,6 +12,8 @@
 		3C75B1C72C77BF320045E709 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C75B1C62C77BF320045E709 /* ViewController.swift */; };
 		3C75B1CC2C77BF330045E709 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C75B1CB2C77BF330045E709 /* Assets.xcassets */; };
 		3C75B1CF2C77BF330045E709 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 3C75B1CE2C77BF330045E709 /* Base */; };
+		3CC22E2D2C7A632F00265819 /* AppColorSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC22E2C2C7A632F00265819 /* AppColorSettings.swift */; };
+		3CC22E302C7A637900265819 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC22E2F2C7A637900265819 /* UIColor+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		3C75B1CB2C77BF330045E709 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3C75B1CE2C77BF330045E709 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3C75B1D02C77BF330045E709 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3CC22E2C2C7A632F00265819 /* AppColorSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColorSettings.swift; sourceTree = "<group>"; };
+		3CC22E2F2C7A637900265819 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +59,10 @@
 			isa = PBXGroup;
 			children = (
 				3C75B1C62C77BF320045E709 /* ViewController.swift */,
+				3CC22E312C7A63DF00265819 /* Navigation */,
+				3CC22E2E2C7A636300265819 /* Extensions */,
 				3CC22E2A2C77C0F700265819 /* SystemFiles */,
+				3CC22E2B2C7A62D500265819 /* AppSettings */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -70,6 +77,29 @@
 				3C75B1D02C77BF330045E709 /* Info.plist */,
 			);
 			path = SystemFiles;
+			sourceTree = "<group>";
+		};
+		3CC22E2B2C7A62D500265819 /* AppSettings */ = {
+			isa = PBXGroup;
+			children = (
+				3CC22E2C2C7A632F00265819 /* AppColorSettings.swift */,
+			);
+			path = AppSettings;
+			sourceTree = "<group>";
+		};
+		3CC22E2E2C7A636300265819 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				3CC22E2F2C7A637900265819 /* UIColor+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		3CC22E312C7A63DF00265819 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Navigation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,7 +173,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C75B1C72C77BF320045E709 /* ViewController.swift in Sources */,
+				3CC22E302C7A637900265819 /* UIColor+Extensions.swift in Sources */,
 				3C75B1C32C77BF320045E709 /* AppDelegate.swift in Sources */,
+				3CC22E2D2C7A632F00265819 /* AppColorSettings.swift in Sources */,
 				3C75B1C52C77BF320045E709 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
