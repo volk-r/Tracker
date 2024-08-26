@@ -8,10 +8,12 @@
 import UIKit
 
 final class StatisticViewController: UIViewController {
+    // MARK: PROPERTIES
+    private lazy var statisticView = StatisticView()
     // MARK: Lifestyle
     override func loadView() {
         super.loadView()
-        view.backgroundColor = .white
+        view = statisticView
         navigationController?.navigationBar.isHidden = true
     }
     

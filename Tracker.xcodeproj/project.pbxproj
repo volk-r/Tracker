@@ -15,6 +15,9 @@
 		3CB438CA2C7B9BA800E3614F /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB438C92C7B9BA800E3614F /* TabBarViewController.swift */; };
 		3CB438CF2C7B9D6500E3614F /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB438CE2C7B9D6500E3614F /* StatisticViewController.swift */; };
 		3CB438D12C7BA6E900E3614F /* TrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB438D02C7BA6E900E3614F /* TrackerView.swift */; };
+		3CB438D32C7CEF1C00E3614F /* DummyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB438D22C7CEF1C00E3614F /* DummyView.swift */; };
+		3CB438D62C7CF24800E3614F /* AppImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB438D52C7CF24800E3614F /* AppImages.swift */; };
+		3CB438D82C7CF8A800E3614F /* StatisticView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB438D72C7CF8A800E3614F /* StatisticView.swift */; };
 		3CC22E2D2C7A632F00265819 /* AppColorSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC22E2C2C7A632F00265819 /* AppColorSettings.swift */; };
 		3CC22E302C7A637900265819 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC22E2F2C7A637900265819 /* UIColor+Extensions.swift */; };
 /* End PBXBuildFile section */
@@ -30,6 +33,9 @@
 		3CB438C92C7B9BA800E3614F /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		3CB438CE2C7B9D6500E3614F /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
 		3CB438D02C7BA6E900E3614F /* TrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerView.swift; sourceTree = "<group>"; };
+		3CB438D22C7CEF1C00E3614F /* DummyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyView.swift; sourceTree = "<group>"; };
+		3CB438D52C7CF24800E3614F /* AppImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImages.swift; sourceTree = "<group>"; };
+		3CB438D72C7CF8A800E3614F /* StatisticView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticView.swift; sourceTree = "<group>"; };
 		3CC22E2C2C7A632F00265819 /* AppColorSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColorSettings.swift; sourceTree = "<group>"; };
 		3CC22E2F2C7A637900265819 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -78,6 +84,7 @@
 			children = (
 				3CB438CB2C7B9D3100E3614F /* Tracker */,
 				3CB438CC2C7B9D3A00E3614F /* Statistic */,
+				3CB438D42C7CF0CF00E3614F /* Dummy */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -95,8 +102,17 @@
 			isa = PBXGroup;
 			children = (
 				3CB438CE2C7B9D6500E3614F /* StatisticViewController.swift */,
+				3CB438D72C7CF8A800E3614F /* StatisticView.swift */,
 			);
 			path = Statistic;
+			sourceTree = "<group>";
+		};
+		3CB438D42C7CF0CF00E3614F /* Dummy */ = {
+			isa = PBXGroup;
+			children = (
+				3CB438D22C7CEF1C00E3614F /* DummyView.swift */,
+			);
+			path = Dummy;
 			sourceTree = "<group>";
 		};
 		3CC22E2A2C77C0F700265819 /* SystemFiles */ = {
@@ -115,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				3CC22E2C2C7A632F00265819 /* AppColorSettings.swift */,
+				3CB438D52C7CF24800E3614F /* AppImages.swift */,
 			);
 			path = AppSettings;
 			sourceTree = "<group>";
@@ -209,9 +226,12 @@
 				3CB438CF2C7B9D6500E3614F /* StatisticViewController.swift in Sources */,
 				3CC22E302C7A637900265819 /* UIColor+Extensions.swift in Sources */,
 				3CB438D12C7BA6E900E3614F /* TrackerView.swift in Sources */,
+				3CB438D32C7CEF1C00E3614F /* DummyView.swift in Sources */,
 				3C75B1C32C77BF320045E709 /* AppDelegate.swift in Sources */,
 				3CC22E2D2C7A632F00265819 /* AppColorSettings.swift in Sources */,
 				3CB438CA2C7B9BA800E3614F /* TabBarViewController.swift in Sources */,
+				3CB438D62C7CF24800E3614F /* AppImages.swift in Sources */,
+				3CB438D82C7CF8A800E3614F /* StatisticView.swift in Sources */,
 				3C75B1C52C77BF320045E709 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
