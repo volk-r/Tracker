@@ -14,7 +14,12 @@ final class StatisticViewController: UIViewController {
     override func loadView() {
         super.loadView()
         view = statisticView
-        navigationController?.navigationBar.isHidden = true
+        
+        setupNavBar()
+    }
+    
+    private func setupNavBar() {
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     override func viewDidLoad() {

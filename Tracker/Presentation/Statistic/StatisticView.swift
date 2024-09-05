@@ -9,15 +9,7 @@ import UIKit
 
 final class StatisticView: UIView {
     // MARK: PROPERTIES
-    private lazy var pageTitle: UILabel = {
-        let label = UILabel()
-        label.textColor = AppColorSettings.fontColor
-        label.text = "Статистика"
-        label.font = .systemFont(ofSize: 32, weight: .bold)
-        return label
-    }()
-    
-    lazy var statisticCollectionView: UICollectionView = {
+    private lazy var statisticCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -27,7 +19,7 @@ final class StatisticView: UIView {
         return collectionView
     }()
     
-    lazy var placeHolderView: UIView = DummyView(description: "Анализировать пока нечего", imageName: AppImages.statisticEmptyPage)
+    private lazy var placeHolderView: UIView = DummyView(description: "Анализировать пока нечего", imageName: AppImages.statisticEmptyPage)
     
     // MARK: Init
     override init(frame: CGRect) {
@@ -44,7 +36,6 @@ final class StatisticView: UIView {
     // MARK: setupLayout
     private func setupLayout() {
         [
-            pageTitle,
             statisticCollectionView,
             placeHolderView
         ].forEach{
@@ -53,10 +44,7 @@ final class StatisticView: UIView {
         }
         
         NSLayoutConstraint.activate([
-            pageTitle.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 44),
-            pageTitle.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            
-            statisticCollectionView.topAnchor.constraint(equalTo: pageTitle.bottomAnchor, constant: 10),
+            statisticCollectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
             statisticCollectionView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             statisticCollectionView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             statisticCollectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),

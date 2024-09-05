@@ -14,17 +14,43 @@ class TrackerViewController: UIViewController {
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     
+    private var datePicker = UIDatePicker()
+    private var currentDate: Date = {
+        let calendar = Calendar.current
+        return calendar.startOfDay(for: Date())
+    }()
+    
     // MARK: Lifestyle
     override func loadView() {
         super.loadView()
         view = trackerView
-        navigationController?.navigationBar.isHidden = true
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        setupButtons()
+        setupNavBar()
+        setupDatePicker()
+    }
+    
+    private func setupDatePicker() {
+        datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .compact
+        datePicker.locale = Locale(identifier: "ru_CH")
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+    }
+    
+    private func setupNavBar() {
+        navigationController?.navigationBar.prefersLargeTitles = true
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: AppImages.addNewTracker), style: .done, target: self, action: #selector(addAction))
+        navigationItem.leftBarButtonItem?.tintColor = AppColorSettings.fontColor
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
+    }
+    
+    @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
+        currentDate = sender.date
     }
 }
 
@@ -37,10 +63,6 @@ extension TrackerViewController {
     }
     
     // MARK: setupButtons
-    private func setupButtons() {
-        trackerView.addButton.addTarget(self, action: #selector(addAction), for: .touchUpInside)
-    }
-    
     @objc private func addAction() {
         print("clicked")
     }
