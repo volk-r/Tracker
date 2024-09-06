@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C62898B2C8AE6E2003CE842 /* NewTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C62898A2C8AE6E2003CE842 /* NewTrackerView.swift */; };
+		3C62898E2C8AE717003CE842 /* NewTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C62898D2C8AE717003CE842 /* NewTrackerViewController.swift */; };
+		3C6289912C8AE95E003CE842 /* TrackerTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6289902C8AE95E003CE842 /* TrackerTypes.swift */; };
+		3C6289942C8AF72D003CE842 /* ShowPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6289932C8AF72D003CE842 /* ShowPreview.swift */; };
+		3C6289962C8B0CA9003CE842 /* Emoji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6289952C8B0CA9003CE842 /* Emoji.swift */; };
+		3C6289982C8B1359003CE842 /* EmojiCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6289972C8B1359003CE842 /* EmojiCollectionViewCell.swift */; };
+		3C62899A2C8B1C5D003CE842 /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6289992C8B1C5D003CE842 /* UICollectionView+Extension.swift */; };
 		3C75B1C32C77BF320045E709 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C75B1C22C77BF320045E709 /* AppDelegate.swift */; };
 		3C75B1C52C77BF320045E709 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C75B1C42C77BF320045E709 /* SceneDelegate.swift */; };
 		3C75B1C72C77BF320045E709 /* TrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C75B1C62C77BF320045E709 /* TrackerViewController.swift */; };
@@ -28,6 +35,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3C62898A2C8AE6E2003CE842 /* NewTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerView.swift; sourceTree = "<group>"; };
+		3C62898D2C8AE717003CE842 /* NewTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewController.swift; sourceTree = "<group>"; };
+		3C6289902C8AE95E003CE842 /* TrackerTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTypes.swift; sourceTree = "<group>"; };
+		3C6289932C8AF72D003CE842 /* ShowPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowPreview.swift; sourceTree = "<group>"; };
+		3C6289952C8B0CA9003CE842 /* Emoji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Emoji.swift; sourceTree = "<group>"; };
+		3C6289972C8B1359003CE842 /* EmojiCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCollectionViewCell.swift; sourceTree = "<group>"; };
+		3C6289992C8B1C5D003CE842 /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
 		3C75B1BF2C77BF310045E709 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C75B1C22C77BF320045E709 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3C75B1C42C77BF320045E709 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -61,6 +75,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3C62898C2C8AE6EF003CE842 /* NewTracker */ = {
+			isa = PBXGroup;
+			children = (
+				3C62898D2C8AE717003CE842 /* NewTrackerViewController.swift */,
+				3C62898A2C8AE6E2003CE842 /* NewTrackerView.swift */,
+				3C6289972C8B1359003CE842 /* EmojiCollectionViewCell.swift */,
+				3C62898F2C8AE941003CE842 /* Models */,
+			);
+			path = NewTracker;
+			sourceTree = "<group>";
+		};
+		3C62898F2C8AE941003CE842 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3C6289902C8AE95E003CE842 /* TrackerTypes.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3C6289922C8AF718003CE842 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				3C6289932C8AF72D003CE842 /* ShowPreview.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		3C75B1B62C77BF310045E709 = {
 			isa = PBXGroup;
 			children = (
@@ -80,6 +121,7 @@
 		3C75B1C12C77BF320045E709 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				3C6289922C8AF718003CE842 /* Helpers */,
 				3CC22E312C7A63DF00265819 /* Navigation */,
 				3CB438C82C7B9B3300E3614F /* Presentation */,
 				3CC22E2E2C7A636300265819 /* Extensions */,
@@ -95,6 +137,7 @@
 				3CB438CB2C7B9D3100E3614F /* Tracker */,
 				3CB438CC2C7B9D3A00E3614F /* Statistic */,
 				3CB438E12C8AC0C200E3614F /* CreateTracker */,
+				3C62898C2C8AE6EF003CE842 /* NewTracker */,
 				3CB438D42C7CF0CF00E3614F /* Dummy */,
 			);
 			path = Presentation;
@@ -163,6 +206,7 @@
 			children = (
 				3CC22E2C2C7A632F00265819 /* AppColorSettings.swift */,
 				3CB438D52C7CF24800E3614F /* AppImages.swift */,
+				3C6289952C8B0CA9003CE842 /* Emoji.swift */,
 			);
 			path = AppSettings;
 			sourceTree = "<group>";
@@ -171,6 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				3CC22E2F2C7A637900265819 /* UIColor+Extensions.swift */,
+				3C6289992C8B1C5D003CE842 /* UICollectionView+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -255,19 +300,26 @@
 			files = (
 				3CB438DB2C84D67600E3614F /* Tracker.swift in Sources */,
 				3C75B1C72C77BF320045E709 /* TrackerViewController.swift in Sources */,
+				3C6289982C8B1359003CE842 /* EmojiCollectionViewCell.swift in Sources */,
+				3C62898B2C8AE6E2003CE842 /* NewTrackerView.swift in Sources */,
 				3CB438CF2C7B9D6500E3614F /* StatisticViewController.swift in Sources */,
 				3CB438DF2C84DA3600E3614F /* TrackerRecord.swift in Sources */,
 				3CC22E302C7A637900265819 /* UIColor+Extensions.swift in Sources */,
 				3CB438D12C7BA6E900E3614F /* TrackerView.swift in Sources */,
 				3CB438DD2C84D88600E3614F /* TrackerCategory.swift in Sources */,
+				3C62899A2C8B1C5D003CE842 /* UICollectionView+Extension.swift in Sources */,
 				3CB438D32C7CEF1C00E3614F /* DummyView.swift in Sources */,
 				3C75B1C32C77BF320045E709 /* AppDelegate.swift in Sources */,
 				3CC22E2D2C7A632F00265819 /* AppColorSettings.swift in Sources */,
+				3C6289942C8AF72D003CE842 /* ShowPreview.swift in Sources */,
+				3C6289962C8B0CA9003CE842 /* Emoji.swift in Sources */,
 				3CB438CA2C7B9BA800E3614F /* TabBarViewController.swift in Sources */,
 				3CB438D62C7CF24800E3614F /* AppImages.swift in Sources */,
 				3CB438D82C7CF8A800E3614F /* StatisticView.swift in Sources */,
 				3CB438E52C8AC30200E3614F /* CreateTrackerView.swift in Sources */,
 				3CB438E32C8AC11400E3614F /* CreateTrackerViewController.swift in Sources */,
+				3C6289912C8AE95E003CE842 /* TrackerTypes.swift in Sources */,
+				3C62898E2C8AE717003CE842 /* NewTrackerViewController.swift in Sources */,
 				3C75B1C52C77BF320045E709 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

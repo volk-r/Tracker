@@ -9,7 +9,7 @@ import UIKit
 
 final class CreateTrackerView: UIView {
     // MARK: PROPERTIES
-    lazy private var mainStackView: UIStackView = {
+    private lazy var mainStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.distribution = .equalCentering
@@ -28,7 +28,7 @@ final class CreateTrackerView: UIView {
         button.layer.cornerRadius = 16
         button.backgroundColor = AppColorSettings.fontColor
         
-        button.accessibilityIdentifier = "habitButton"
+        button.accessibilityIdentifier = "HabitButton"
         
         return button
     }()
@@ -43,7 +43,7 @@ final class CreateTrackerView: UIView {
         button.layer.cornerRadius = 16
         button.backgroundColor = AppColorSettings.fontColor
         
-        button.accessibilityIdentifier = "eventButton"
+        button.accessibilityIdentifier = "EventButton"
         
         return button
     }()
