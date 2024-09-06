@@ -26,3 +26,14 @@ final class StatisticViewController: UIViewController {
         super.viewDidLoad()
     }
 }
+
+// MARK: - SHOW PREVIEW
+#if DEBUG
+
+import SwiftUI
+struct StatisticView_Preview: PreviewProvider {
+    static var previews: some View {
+        StatisticViewController().showPreview()
+    }
+}
+#endif

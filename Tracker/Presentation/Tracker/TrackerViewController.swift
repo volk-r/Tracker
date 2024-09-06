@@ -72,7 +72,7 @@ extension TrackerViewController {
 // MARK: UICollectionViewDataSource
 extension TrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        1
+        1// TODO: 
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -85,3 +85,14 @@ extension TrackerViewController: UICollectionViewDataSource {
 // MARK: UICollectionViewDelegate
 extension TrackerViewController: UICollectionViewDelegate {
 }
+
+// MARK: - SHOW PREVIEW
+#if DEBUG
+
+import SwiftUI
+struct TrackerView_Preview: PreviewProvider {
+    static var previews: some View {
+        TrackerViewController().showPreview()
+    }
+}
+#endif
