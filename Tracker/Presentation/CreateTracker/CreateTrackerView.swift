@@ -77,9 +77,7 @@ final class CreateTrackerView: UIView {
         }
         
         NSLayoutConstraint.activate([
-            habitButton.widthAnchor.constraint(lessThanOrEqualToConstant: 335),
             habitButton.heightAnchor.constraint(equalToConstant: 60),
-            eventButton.widthAnchor.constraint(lessThanOrEqualToConstant: 335),
             eventButton.heightAnchor.constraint(equalToConstant: 60),
             
             mainStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),

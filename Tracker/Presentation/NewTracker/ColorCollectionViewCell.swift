@@ -54,3 +54,14 @@ extension ColorCollectionViewCell {
         colorView.backgroundColor = color
     }
 }
+
+extension ColorCollectionViewCell: CellSelectProtocol {
+    func select() {
+        contentView.layer.borderColor = colorView.backgroundColor?.withAlphaComponent(0.3).cgColor
+        contentView.layer.borderWidth = 3
+    }
+    
+    func deselect() {
+        contentView.layer.borderWidth = 0
+    }
+}

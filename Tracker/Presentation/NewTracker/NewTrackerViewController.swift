@@ -7,7 +7,42 @@
 
 import UIKit
 
+// TODO: textfields
+
 final class NewTrackerViewController: UIViewController {
+    // MARK: PROPERTIES
+    private var trackerType: TrackerTypes
+    private lazy var newTrackerView = NewTrackerView()
+    
+    private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 6, leftInset: 28, rightInset: 28, topInset: 24, bottomInset: 24, height: 52, cellSpacing: 5)
+    
+    private var selectedItems: [Int: IndexPath] = [:]
+    
+    // MARK: init
+    init(trackerType: TrackerTypes) {
+        self.trackerType = trackerType
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: Lifestyle
+    override func loadView() {
+        super.loadView()
+        view = newTrackerView
+        title = trackerType.rawValue
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupCollectionView()
+        setupButtons()
+    }
+}
+
+extension NewTrackerViewController {
     // MARK: ENUMS
     private enum CollectionViewCellTypes: Int, CaseIterable {
         case emoji = 0
@@ -35,37 +70,7 @@ final class NewTrackerViewController: UIViewController {
             }
         }
     }
-
-    // MARK: PROPERTIES
-    private var trackerType: TrackerTypes
-    private lazy var newTrackerView = NewTrackerView()
     
-    private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 6, leftInset: 28, rightInset: 28, topInset: 24, bottomInset: 24, height: 52, cellSpacing: 5)
-    
-    // MARK: init
-    init(trackerType: TrackerTypes) {
-        self.trackerType = trackerType
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    // MARK: Lifestyle
-    override func loadView() {
-        super.loadView()
-        view = newTrackerView
-        title = trackerType.rawValue
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupCollectionView()
-    }
-}
-
-extension NewTrackerViewController {
     // MARK: setupCollectionView
     func setupCollectionView() {
         newTrackerView.collectionView.dataSource = self
@@ -86,6 +91,14 @@ extension NewTrackerViewController {
             ColorCollectionViewCell.self,
             forCellWithReuseIdentifier: ColorCollectionViewCell.identifier
         )
+    }
+    
+    private func setupButtons() {
+        newTrackerView.cancelButton.addTarget(self, action: #selector(cancelTapAction), for: .touchUpInside)
+    }
+    
+    @objc private func cancelTapAction() {
+        dismiss(animated: true)
     }
 }
 
@@ -115,11 +128,13 @@ extension NewTrackerViewController: UICollectionViewDataSource {
                 withReuseIdentifier: EmojiCollectionViewCell.identifier,
                 for: indexPath
             ) as? EmojiCollectionViewCell {
-                
                 emojiCell.prepareForReuse()
-                emojiCell.setupCell(
-                    with: AppEmojis[indexPath.item]
-                )
+                
+                if selectedItems[indexPath.section] == indexPath {
+                    emojiCell.select()
+                }
+                
+                emojiCell.setupCell(with: AppEmojis[indexPath.item])
                 
                 return emojiCell
             }
@@ -128,11 +143,13 @@ extension NewTrackerViewController: UICollectionViewDataSource {
                 withReuseIdentifier: ColorCollectionViewCell.identifier,
                 for: indexPath
             ) as? ColorCollectionViewCell {
-                
                 colorCell.prepareForReuse()
-                colorCell.setupCell(
-                    with: AppColorSettings.palette[indexPath.item]
-                )
+                
+                if selectedItems[indexPath.section] == indexPath {
+                    colorCell.select()
+                }
+                
+                colorCell.setupCell(with: AppColorSettings.palette[indexPath.item])
                 
                 return colorCell
             }
@@ -142,9 +159,6 @@ extension NewTrackerViewController: UICollectionViewDataSource {
         
         return UICollectionViewCell()
     }
-    
-    // TODO: headers
-    // TODO: textfields
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -247,6 +261,19 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
 // MARK: UICollectionViewDelegate
 extension NewTrackerViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? CellSelectProtocol else {
+            return
+        }
+        
+        if let previouslySelectedIndexPath = selectedItems[indexPath.section] {
+            guard let previouslySelectedCell = collectionView.cellForItem(at: previouslySelectedIndexPath) as? CellSelectProtocol else {
+                return
+            }
+            previouslySelectedCell.deselect()
+        }
+
+        selectedItems[indexPath.section] = indexPath
+        cell.select()
     }
 }
 

@@ -51,3 +51,13 @@ extension EmojiCollectionViewCell {
         emojiLabel.text = label
     }
 }
+
+extension EmojiCollectionViewCell: CellSelectProtocol {
+    func select() {
+        contentView.backgroundColor = AppColorSettings.chosenItemBackgroundColor
+    }
+    
+    func deselect() {
+        contentView.backgroundColor = .clear
+    }
+}
