@@ -64,7 +64,8 @@ extension TrackerViewController {
     
     // MARK: setupButtons
     @objc private func addAction() {
-        print("clicked")
+        let createTrackerVC = CreateTrackerViewController()
+        present(UINavigationController(rootViewController: createTrackerVC), animated: true)
     }
 }
 
