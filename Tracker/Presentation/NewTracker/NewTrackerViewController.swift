@@ -12,6 +12,28 @@ final class NewTrackerViewController: UIViewController {
     private enum CollectionViewCellTypes: Int, CaseIterable {
         case emoji = 0
         case color = 1
+
+        static func getNumberOfItemsInSection(_ number: Int) -> Int {
+            switch number {
+            case self.emoji.rawValue:
+                return AppEmojis.count
+            case self.color.rawValue:
+                return AppColorSettings.palette.count
+            default:
+                return 0
+            }
+        }
+        
+        static func getTitleSection(_ number: Int) -> String {
+            switch number {
+            case self.emoji.rawValue:
+                return "Emoji"
+            case self.color.rawValue:
+                return "Цвет"
+            default:
+                return "Unknown"
+            }
+        }
     }
 
     // MARK: PROPERTIES
@@ -20,7 +42,7 @@ final class NewTrackerViewController: UIViewController {
     
     private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 6, leftInset: 28, rightInset: 28, topInset: 24, bottomInset: 24, height: 52, cellSpacing: 5)
     
-    // MARK: Lifestyle
+    // MARK: init
     init(trackerType: TrackerTypes) {
         self.trackerType = trackerType
         super.init(nibName: nil, bundle: nil)
@@ -44,44 +66,85 @@ final class NewTrackerViewController: UIViewController {
 }
 
 extension NewTrackerViewController {
+    // MARK: setupCollectionView
     func setupCollectionView() {
         newTrackerView.collectionView.dataSource = self
         newTrackerView.collectionView.delegate = self
-        newTrackerView.collectionView.register(EmojiCollectionViewCell.self, forCellWithReuseIdentifier: EmojiCollectionViewCell.identifier)
+        
+        newTrackerView.collectionView.register(
+            SupplementaryView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: SupplementaryView.identifier
+        )
+        
+        newTrackerView.collectionView.register(
+            EmojiCollectionViewCell.self,
+            forCellWithReuseIdentifier: EmojiCollectionViewCell.identifier
+        )
+        
+        newTrackerView.collectionView.register(
+            ColorCollectionViewCell.self,
+            forCellWithReuseIdentifier: ColorCollectionViewCell.identifier
+        )
     }
 }
 
 // MARK: UICollectionViewDataSource
 extension NewTrackerViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(
+        in collectionView: UICollectionView
+    ) -> Int {
         CollectionViewCellTypes.allCases.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch section {
-        case CollectionViewCellTypes.emoji.rawValue:
-            return AppEmojis.count
-        case CollectionViewCellTypes.color.rawValue:
-            return AppColorSettings.palette.count
-        default:
-            return 0
-        }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        CollectionViewCellTypes.getNumberOfItemsInSection(section)
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        if let emojiCell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiCollectionViewCell.identifier, for: indexPath) as? EmojiCollectionViewCell {
-            
-            emojiCell.prepareForReuse()
-            emojiCell.setupCell(with: AppEmojis[indexPath.item])
-            
-            return emojiCell
+    // MARK: SETUP CELLS
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        switch indexPath.section {
+        case CollectionViewCellTypes.emoji.rawValue:
+            if let emojiCell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: EmojiCollectionViewCell.identifier,
+                for: indexPath
+            ) as? EmojiCollectionViewCell {
+                
+                emojiCell.prepareForReuse()
+                emojiCell.setupCell(
+                    with: AppEmojis[indexPath.item]
+                )
+                
+                return emojiCell
+            }
+        case CollectionViewCellTypes.color.rawValue:
+            if let colorCell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ColorCollectionViewCell.identifier,
+                for: indexPath
+            ) as? ColorCollectionViewCell {
+                
+                colorCell.prepareForReuse()
+                colorCell.setupCell(
+                    with: AppColorSettings.palette[indexPath.item]
+                )
+                
+                return colorCell
+            }
+        default:
+            return UICollectionViewCell()
         }
-        
-        // TODO: color cell
         
         return UICollectionViewCell()
     }
+    
+    // TODO: headers
+    // TODO: textfields
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -129,6 +192,55 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGFloat
     {
         0
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView
+    {
+        guard
+            kind == UICollectionView.elementKindSectionHeader,
+            let view = collectionView.dequeueReusableSupplementaryView(
+                ofKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: SupplementaryView.identifier,
+                for: indexPath
+            ) as? SupplementaryView
+        else {
+            return UICollectionReusableView()
+        }
+        
+        let sectionTitle = CollectionViewCellTypes.getTitleSection(indexPath.section)
+        view.setupCell(title: sectionTitle)
+        
+        return view
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        referenceSizeForHeaderInSection section: Int
+    ) -> CGSize
+    {
+        let indexPath = IndexPath(
+            row: 0,
+            section: section
+        )
+        let headerView = self.collectionView(
+            collectionView,
+            viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
+            at: indexPath
+        )
+        
+        return headerView.systemLayoutSizeFitting(
+            CGSize(
+                width: collectionView.frame.width,
+                height: UIView.layoutFittingExpandedSize.height
+            ),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
     }
 }
 

@@ -9,8 +9,6 @@ import UIKit
 
 final class EmojiCollectionViewCell: UICollectionViewCell {
     // MARK: - PROPERTIES
-    static let identifier = "EmojiCollectionViewCell"
-    
     private let emojiLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 32)
@@ -30,7 +28,7 @@ final class EmojiCollectionViewCell: UICollectionViewCell {
 }
 
 // MARK: FUNCTIONS
-extension EmojiCollectionViewCell {
+private extension EmojiCollectionViewCell {
     func setupView() {
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
@@ -45,7 +43,9 @@ extension EmojiCollectionViewCell {
             emojiLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
     }
-    
+}
+
+extension EmojiCollectionViewCell {
     // MARK: setupCell
     func setupCell(with label: String) {
         emojiLabel.text = label
