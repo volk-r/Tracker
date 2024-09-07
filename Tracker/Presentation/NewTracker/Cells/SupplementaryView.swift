@@ -17,7 +17,7 @@ final class SupplementaryView: UICollectionReusableView {
         return label
     }()
     
-    // MARK: - INIT
+    // MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()

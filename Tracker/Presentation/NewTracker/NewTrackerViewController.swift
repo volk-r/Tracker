@@ -334,8 +334,13 @@ extension NewTrackerViewController: UITableViewDataSource {
         }
         
         // TODO: need to setup cell
-//        configCell(for: newTrackerCell, with: indexPath)
-        cell.textLabel?.text = "sdfsdfsefesf"
+        if indexPath.row == 0 {
+            newTrackerCell.setupCell(title: "Категория", description: "Важное")
+        } else {
+//            newTrackerCell.setupCell(title: "Расписание", description: "Вт, Ср")
+            newTrackerCell.setupCell(title: "Расписание", description: nil)
+        }
+        
         newTrackerView.tableView.reloadRows(at: [indexPath], with: .automatic)
         
         return newTrackerCell
