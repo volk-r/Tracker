@@ -9,7 +9,8 @@ import UIKit
 
 final class NewTrackerView: UIView {
     // MARK: PROPERTIES
-    var tableViewTopConstraint: NSLayoutConstraint?
+    private var tableViewTopConstraint: NSLayoutConstraint?
+    private var tableViewHeightConstraint: NSLayoutConstraint?
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -28,18 +29,26 @@ final class NewTrackerView: UIView {
         textField.layer.cornerRadius = 16
         textField.clearButtonMode = .whileEditing
         textField.setLeftPaddingPoints(16)
-
         return textField
     }()
     
-    lazy var errorLabel: UILabel = {
+    private lazy var errorLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .regular)
         label.text = "Ограничение 38 символов"
         label.textColor = AppColorSettings.redColor
         label.isHidden = true
-        
         return label
+    }()
+    
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .clear
+        tableView.isScrollEnabled = false
+        tableView.layer.masksToBounds = true
+        tableView.layer.cornerRadius = 10
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        return tableView
     }()
     
     lazy var collectionView: UICollectionView = {
@@ -48,7 +57,7 @@ final class NewTrackerView: UIView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         let collectionViewLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout // casting is required because UICollectionViewLayout doesn't offer header pin. Its feature of UICollectionViewFlowLayout
         collectionViewLayout?.sectionHeadersPinToVisibleBounds = true
-        
+        collectionViewLayout?.collectionView?.isScrollEnabled = false
         return collectionView
     }()
     
@@ -95,6 +104,9 @@ final class NewTrackerView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+}
+ 
+extension NewTrackerView {
     // MARK: LAYOUT
     private func setupLayout() {
         [
@@ -117,6 +129,7 @@ final class NewTrackerView: UIView {
         [
             trackerNameTextField,
             errorLabel,
+            tableView,
             collectionView,
             footerStackView
         ].forEach {
@@ -124,9 +137,11 @@ final class NewTrackerView: UIView {
             contentView.addSubview($0)
         }
         
-//        tableViewTopConstraint = parametersTableView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 32)
-        tableViewTopConstraint = collectionView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 2)
+        tableViewTopConstraint = tableView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 2)
         tableViewTopConstraint?.isActive = true
+        
+        tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 75)
+        tableViewHeightConstraint?.isActive = true
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
@@ -137,7 +152,7 @@ final class NewTrackerView: UIView {
             contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.frameLayoutGuide.bottomAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
             
             trackerNameTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
@@ -147,17 +162,32 @@ final class NewTrackerView: UIView {
             
             errorLabel.topAnchor.constraint(equalTo: trackerNameTextField.bottomAnchor, constant: 8),
             errorLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            errorLabel.heightAnchor.constraint(equalToConstant: 22),
+            
+            tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
-//            collectionView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 32),
-            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 32),
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             collectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: 430),
 
-            footerStackView.topAnchor.constraint(greaterThanOrEqualTo: collectionView.bottomAnchor, constant: 16),
+            footerStackView.topAnchor.constraint(greaterThanOrEqualTo: collectionView.bottomAnchor, constant: 40),
             footerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             footerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             footerStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             footerStackView.heightAnchor.constraint(equalToConstant: 60)
         ])
+    }
+    
+    // MARK: setHeightTableView
+    func setHeightTableView(cellsCount multiplier: CGFloat) {
+        tableViewHeightConstraint?.constant = 75 * multiplier
+    }
+    
+    // MARK: showTrackerNameError
+    func showTrackerNameError(_ show: Bool) {
+        errorLabel.isHidden = show
+        tableViewTopConstraint?.constant = show ? 2 : 32
     }
 }

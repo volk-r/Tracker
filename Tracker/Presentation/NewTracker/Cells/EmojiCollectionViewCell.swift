@@ -9,6 +9,8 @@ import UIKit
 
 final class EmojiCollectionViewCell: UICollectionViewCell {
     // MARK: - PROPERTIES
+    static let identifier = "EmojiCollectionViewCell"
+    
     private let emojiLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 32)

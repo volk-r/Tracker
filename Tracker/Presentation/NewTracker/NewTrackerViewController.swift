@@ -7,8 +7,6 @@
 
 import UIKit
 
-// TODO: tableview
-
 final class NewTrackerViewController: UIViewController {
     // MARK: PROPERTIES
     private var trackerType: TrackerTypes
@@ -39,6 +37,7 @@ final class NewTrackerViewController: UIViewController {
         super.viewDidLoad()
         setupCollectionView()
         setupTextField()
+        setupTableView()
         setupButtons()
     }
 }
@@ -75,6 +74,21 @@ extension NewTrackerViewController {
     // MARK: setupTextField
     func setupTextField() {
         newTrackerView.trackerNameTextField.delegate = self
+    }
+    
+    // MARK: setupTableView
+    func setupTableView() {
+        newTrackerView.tableView.delegate = self
+        newTrackerView.tableView.dataSource = self
+        newTrackerView.tableView.register(
+            NewTrackerTableViewCell.self,
+            forCellReuseIdentifier: NewTrackerTableViewCell.identifier
+        )
+        
+        newTrackerView.tableView.separatorStyle = trackerType.paramsCellsCount == 1
+            ? .none
+            : .singleLine
+        newTrackerView.setHeightTableView(cellsCount: CGFloat(trackerType.paramsCellsCount))
     }
     
     // MARK: setupCollectionView
@@ -114,8 +128,7 @@ extension NewTrackerViewController {
         guard let text = sender.text else { return }
         
         let errorIsHidden = text.count < 38
-        newTrackerView.errorLabel.isHidden = errorIsHidden
-        newTrackerView.tableViewTopConstraint?.constant = errorIsHidden ? 2 : 30
+        newTrackerView.showTrackerNameError(errorIsHidden)
     }
 }
 
@@ -134,7 +147,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
         CollectionViewCellTypes.getNumberOfItemsInSection(section)
     }
     
-    // MARK: SETUP CELLS
+    // MARK: SETUP Collection CELLS
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -301,6 +314,42 @@ extension NewTrackerViewController: UITextFieldDelegate {
         textField.endEditing(true)
         
         return true
+    }
+}
+
+// MARK: UITableViewDataSource
+extension NewTrackerViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        trackerType.paramsCellsCount
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: NewTrackerTableViewCell.identifier,
+            for: indexPath
+        )
+        
+        guard let newTrackerCell = cell as? NewTrackerTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        // TODO: need to setup cell
+//        configCell(for: newTrackerCell, with: indexPath)
+        cell.textLabel?.text = "sdfsdfsefesf"
+        newTrackerView.tableView.reloadRows(at: [indexPath], with: .automatic)
+        
+        return newTrackerCell
+    }
+}
+
+// MARK: UITableViewDataSource
+extension NewTrackerViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 75
     }
 }
 

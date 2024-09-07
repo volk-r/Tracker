@@ -8,12 +8,16 @@
 import UIKit
 
 final class SupplementaryView: UICollectionReusableView {
+    // MARK: - PROPERTIES
+    static let identifier = "SupplementaryView"
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         return label
     }()
     
+    // MARK: - INIT
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -25,6 +29,7 @@ final class SupplementaryView: UICollectionReusableView {
 }
 
 extension SupplementaryView {
+    // MARK: - setupLayout
     private func setupLayout() {
         addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false

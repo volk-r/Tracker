@@ -10,4 +10,11 @@ import Foundation
 enum TrackerTypes: String {
     case habit = "Новая привычка"
     case event = "Новое нерегулярное событие"
+    
+    var paramsCellsCount: Int {
+        switch self {
+            case .habit: 2
+            case .event: 1
+        }
+    }
 }

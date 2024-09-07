@@ -9,6 +9,8 @@ import UIKit
 
 final class ColorCollectionViewCell: UICollectionViewCell {
     // MARK: - PROPERTIES
+    static let identifier = "ColorCollectionViewCell"
+    
     private let colorView: UIView = {
         let view = UIView()
         view.layer.masksToBounds = true
