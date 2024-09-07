@@ -7,7 +7,7 @@
 
 import UIKit
 
-// TODO: textfields
+// TODO: tableview
 
 final class NewTrackerViewController: UIViewController {
     // MARK: PROPERTIES
@@ -38,12 +38,13 @@ final class NewTrackerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
+        setupTextField()
         setupButtons()
     }
 }
 
 extension NewTrackerViewController {
-    // MARK: ENUMS
+    // MARK: CollectionViewCellTypes
     private enum CollectionViewCellTypes: Int, CaseIterable {
         case emoji = 0
         case color = 1
@@ -71,6 +72,11 @@ extension NewTrackerViewController {
         }
     }
     
+    // MARK: setupTextField
+    func setupTextField() {
+        newTrackerView.trackerNameTextField.delegate = self
+    }
+    
     // MARK: setupCollectionView
     func setupCollectionView() {
         newTrackerView.collectionView.dataSource = self
@@ -93,12 +99,23 @@ extension NewTrackerViewController {
         )
     }
     
+    // MARK: setupButtons
     private func setupButtons() {
         newTrackerView.cancelButton.addTarget(self, action: #selector(cancelTapAction), for: .touchUpInside)
+        
+        newTrackerView.trackerNameTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
     }
     
     @objc private func cancelTapAction() {
         dismiss(animated: true)
+    }
+    
+    @objc private func editingChanged(_ sender: UITextField) {
+        guard let text = sender.text else { return }
+        
+        let errorIsHidden = text.count < 38
+        newTrackerView.errorLabel.isHidden = errorIsHidden
+        newTrackerView.tableViewTopConstraint?.constant = errorIsHidden ? 2 : 30
     }
 }
 
@@ -189,8 +206,7 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         insetForSectionAt section: Int
-    ) -> UIEdgeInsets
-    {
+    ) -> UIEdgeInsets {
         UIEdgeInsets(
             top: collectionViewParams.topInset,
             left: collectionViewParams.leftInset,
@@ -203,17 +219,17 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAt section: Int
-    ) -> CGFloat
-    {
+    ) -> CGFloat {
         0
     }
+    
+    // MARK: collectionView Header
     
     func collectionView(
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,
         at indexPath: IndexPath
-    ) -> UICollectionReusableView
-    {
+    ) -> UICollectionReusableView {
         guard
             kind == UICollectionView.elementKindSectionHeader,
             let view = collectionView.dequeueReusableSupplementaryView(
@@ -235,8 +251,7 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         referenceSizeForHeaderInSection section: Int
-    ) -> CGSize
-    {
+    ) -> CGSize {
         let indexPath = IndexPath(
             row: 0,
             section: section
@@ -260,7 +275,10 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: UICollectionViewDelegate
 extension NewTrackerViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? CellSelectProtocol else {
             return
         }
@@ -274,6 +292,15 @@ extension NewTrackerViewController: UICollectionViewDelegate {
 
         selectedItems[indexPath.section] = indexPath
         cell.select()
+    }
+}
+
+// MARK: UITextFieldDelegate
+extension NewTrackerViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true)
+        
+        return true
     }
 }
 
