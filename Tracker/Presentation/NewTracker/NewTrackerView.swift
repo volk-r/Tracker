@@ -11,6 +11,16 @@ final class NewTrackerView: UIView {
     // MARK: PROPERTIES
     var tableViewTopConstraint: NSLayoutConstraint?
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        return scrollView
+    }()
+    
+    private let contentView: UIView = {
+        let contentView = UIView()
+        return contentView
+    }()
+    
     lazy var trackerNameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Введите название трекера"
@@ -87,6 +97,14 @@ final class NewTrackerView: UIView {
     
     // MARK: LAYOUT
     private func setupLayout() {
+        [
+            scrollView,
+            contentView
+        ].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        addSubview(scrollView)
+        scrollView.addSubview(contentView)
         // footer body
         [
             cancelButton,
@@ -103,7 +121,7 @@ final class NewTrackerView: UIView {
             footerStackView
         ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            addSubview($0)
+            contentView.addSubview($0)
         }
         
 //        tableViewTopConstraint = parametersTableView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 32)
@@ -111,25 +129,35 @@ final class NewTrackerView: UIView {
         tableViewTopConstraint?.isActive = true
         
         NSLayoutConstraint.activate([
-            createButton.heightAnchor.constraint(equalToConstant: 60),
-            cancelButton.heightAnchor.constraint(equalToConstant: 60),
+            scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
             
-            trackerNameTextField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 24),
-            trackerNameTextField.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            trackerNameTextField.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.frameLayoutGuide.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+            
+            trackerNameTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            trackerNameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            trackerNameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             trackerNameTextField.heightAnchor.constraint(equalToConstant: 63),
             
             errorLabel.topAnchor.constraint(equalTo: trackerNameTextField.bottomAnchor, constant: 8),
-            errorLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            
+            errorLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+
 //            collectionView.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 32),
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            
-            footerStackView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 16),
-            footerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            footerStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            footerStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            collectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: 430),
+
+            footerStackView.topAnchor.constraint(greaterThanOrEqualTo: collectionView.bottomAnchor, constant: 16),
+            footerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            footerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            footerStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            footerStackView.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
 }
