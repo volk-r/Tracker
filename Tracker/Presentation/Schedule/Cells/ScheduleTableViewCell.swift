@@ -11,6 +11,10 @@ final class ScheduleTableViewCell: UITableViewCell {
     // MARK: - PROPERTIES
     static let identifier = "ScheduleTableViewCell"
     
+    private var weekday: WeekDay?
+    
+    weak var delegate: ScheduleViewControllerCellDelegate?
+    
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .regular)
@@ -20,6 +24,7 @@ final class ScheduleTableViewCell: UITableViewCell {
     private lazy var switchView: UISwitch = {
         let switchView = UISwitch()
         switchView.onTintColor = AppColorSettings.launchScreenBackgroundColor
+        switchView.addTarget(self, action: #selector(didToggleSwitchView), for: .valueChanged)
         return switchView
     }()
     
@@ -68,7 +73,14 @@ extension ScheduleTableViewCell {
     
     // MARK: setupCell
     func setupCell(with model: WeekDayModel) {
+        self.weekday = model.day
         nameLabel.text = model.day.description
         switchView.isOn = model.isSelected
+    }
+    
+    // MARK: didToggleSwitchView
+    @objc private func didToggleSwitchView(_ sender: UISwitch) {
+        guard let weekday else { return }
+        delegate?.didToggleSwitchView(to: sender.isOn, of: weekday)
     }
 }

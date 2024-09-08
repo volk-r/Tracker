@@ -37,6 +37,7 @@ final class NewTrackerTableViewCell: UITableViewCell {
         let image = UIImage(systemName: "chevron.right")
         button.setImage(image, for: .normal)
         button.tintColor = AppColorSettings.notActiveFontColor
+        button.isUserInteractionEnabled = false
         return button
     }()
     

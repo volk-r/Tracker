@@ -8,6 +8,6 @@
 import Foundation
 
 struct WeekDayModel {
-    let day: WeekDays
+    let day: WeekDay
     var isSelected: Bool
 }

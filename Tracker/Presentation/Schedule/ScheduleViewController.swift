@@ -11,9 +11,21 @@ final class ScheduleViewController: UIViewController {
     // MARK: PROPERTIES
     private lazy var scheduleView = ScheduleView()
     
-    private var selectedWeekdays: Set<WeekDays> = []
+    weak var cellDelegate: ScheduleViewControllerCellDelegate?
+    weak var delegate: ScheduleViewControllerDelegate?
+    
+    private var selectedWeekdays: Set<WeekDay>
     
     // MARK: Lifestyle
+    init(selectedWeekdays: [WeekDay]) {
+        self.selectedWeekdays = Set(selectedWeekdays)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func loadView() {
         super.loadView()
         view = scheduleView
@@ -40,12 +52,12 @@ extension ScheduleViewController {
     
     // MARK: setupButtons
     func setupButtons() {
-        scheduleView.doneButton.addTarget(self, action: #selector(doneButtonAction), for: .touchUpInside)
+        scheduleView.doneButton.addTarget(self, action: #selector(doneButtonTapAction), for: .touchUpInside)
     }
     
-    @objc private func doneButtonAction() {
-        // TODO: send data to NewTrackerViewController
-        print("doneButtonAction tapped")
+    @objc private func doneButtonTapAction() {
+        let weekdays = Array(selectedWeekdays).sorted()
+        delegate?.didConfirmSchedule(weekdays)
     }
 }
 
@@ -67,7 +79,7 @@ extension ScheduleViewController: UITableViewDelegate {
 
 extension ScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        WeekDays.allCases.count
+        WeekDay.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -80,15 +92,26 @@ extension ScheduleViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let weekday = WeekDays.allCases[indexPath.row]
+        let weekday = WeekDay.allCases[indexPath.row]
         let model = WeekDayModel(
             day: weekday,
             isSelected: selectedWeekdays.contains(weekday)
         )
         scheduleCell.setupCell(with: model)
+        scheduleCell.delegate = self
         scheduleView.tableView.reloadRows(at: [indexPath], with: .automatic)
         
         return scheduleCell
+    }
+}
+
+extension ScheduleViewController: ScheduleViewControllerCellDelegate {
+    func didToggleSwitchView(to isSelected: Bool, of weekday: WeekDay) {
+        if isSelected {
+            selectedWeekdays.insert(weekday)
+        } else {
+            selectedWeekdays.remove(weekday)
+        }
     }
 }
 
@@ -98,7 +121,7 @@ extension ScheduleViewController: UITableViewDataSource {
 import SwiftUI
 struct ScheduleVC_Preview: PreviewProvider {
     static var previews: some View {
-        ScheduleViewController().showPreview()
+        ScheduleViewController(selectedWeekdays: []).showPreview()
     }
 }
 
