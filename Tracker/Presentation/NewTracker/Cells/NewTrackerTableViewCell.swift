@@ -10,8 +10,6 @@ import UIKit
 final class NewTrackerTableViewCell: UITableViewCell {
     // MARK: - PROPERTIES
     static let identifier = "NewTrackerTableViewCell"
-       
-    private var indexPathCell = IndexPath()
     
     private let nameLabel: UILabel = {
         let label = UILabel()

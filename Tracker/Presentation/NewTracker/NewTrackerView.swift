@@ -48,6 +48,7 @@ final class NewTrackerView: UIView {
         tableView.layer.masksToBounds = true
         tableView.layer.cornerRadius = 10
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        tableView.isEmptyHeaderHidden = true
         return tableView
     }()
     
@@ -93,7 +94,7 @@ final class NewTrackerView: UIView {
         return button
     }()
     
-    // MARK: INIT
+    // MARK: Lifestyle
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white

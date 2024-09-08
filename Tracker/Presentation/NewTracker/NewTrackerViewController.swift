@@ -349,8 +349,26 @@ extension NewTrackerViewController: UITableViewDataSource {
 
 // MARK: UITableViewDataSource
 extension NewTrackerViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: tableView.bounds.width)
+        }
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        switch indexPath.row {
+        case 0:
+            print("Открыть контроллер выбора Категории")
+        case 1:
+//            guard let schedule = data.schedule else { return }
+            let scheduleViewController = ScheduleViewController()
+//            let scheduleViewController = ScheduleViewController(selectedWeekdays: schedule)
+//            scheduleViewController.delegate = self
+            let navigationController = UINavigationController(rootViewController: scheduleViewController)
+            present(navigationController, animated: true)
+        default:
+            return
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
