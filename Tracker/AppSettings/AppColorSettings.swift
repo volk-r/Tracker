@@ -10,6 +10,7 @@ import UIKit
 enum AppColorSettings {
     static let launchScreenBackgroundColor = UIColor(hexString: "#3772E7")
     static let fontColor = UIColor(hexString: "#1A1B22")
+    static let cellIconFontColor = UIColor(hexString: "#FFFFFF")
     static let notActiveFontColor = UIColor(hexString: "#AEAFB4")
     static let redColor = UIColor(hexString: "#F56B6C")
     static let chosenItemBackgroundColor = UIColor(hexString: "#E6E8EB")
