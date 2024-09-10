@@ -11,12 +11,33 @@ class TrackerViewController: UIViewController {
     // MARK: PROPERTIES
     private lazy var trackerView = TrackerView()
     
-    private var categories: [TrackerCategory] = [] {
+    // TODO: Mock Data
+    private var categories: [TrackerCategory] = TrackerCategory.mockData {
         didSet {
-            trackerView.placeHolderView.isHidden = !categories.isEmpty
+            showPlaceHolder()
         }
     }
     private var completedTrackers: Set<TrackerRecord> = []
+    private var trackerRecordStore: [TrackerRecord] = []
+    private var filteredCategories: [TrackerCategory] {
+        let weekday = Calendar.current.component(.weekday, from: currentDate)
+        var result = [TrackerCategory]()
+        
+        guard let selectedWeekday = WeekDay(rawValue: weekday) else { return result }
+        
+        for category in categories {
+            let filteredTrackers = category.trackerList.filter { tracker in
+                guard let schedule = tracker.schedule else { return true }
+                return schedule.contains(selectedWeekday)
+            }
+            
+            if !filteredTrackers.isEmpty {
+                result.append(TrackerCategory(title: category.title, trackerList: filteredTrackers))
+            }
+        }
+        
+        return result
+    }
     
     private var datePicker = UIDatePicker()
     private var currentDate: Date = {
@@ -30,9 +51,6 @@ class TrackerViewController: UIViewController {
     override func loadView() {
         super.loadView()
         view = trackerView
-        
-        // TODO: Mock Data
-        categories = MockTrackerCategoryData
     }
 
     override func viewDidLoad() {
@@ -40,12 +58,14 @@ class TrackerViewController: UIViewController {
         setupCollectionView()
         setupNavBar()
         setupDatePicker()
+        showPlaceHolder()
     }
 }
 
 extension TrackerViewController {
     // MARK: setupDatePicker
     private func setupDatePicker() {
+        datePicker.maximumDate = Date()
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
         datePicker.locale = Locale(identifier: "ru_CH")
@@ -69,6 +89,8 @@ extension TrackerViewController {
     // MARK: datePickerValueChanged
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
+        showPlaceHolder()
+        trackerView.trackerCollectionView.reloadData()
     }
     
     // MARK: setupCollectionView
@@ -92,16 +114,21 @@ extension TrackerViewController {
         let createTrackerVC = CreateTrackerViewController()
         present(UINavigationController(rootViewController: createTrackerVC), animated: true)
     }
+    
+    // MARK: showPlaceHolder
+    private func showPlaceHolder() {
+        trackerView.placeHolderView.isHidden = !filteredCategories.isEmpty
+    }
 }
 
 // MARK: UICollectionViewDataSource
 extension TrackerViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        categories.count
+        filteredCategories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        categories[section].trackerList.count
+        filteredCategories[section].trackerList.count
     }
     
     // MARK: SETUP Collection CELLS
@@ -116,11 +143,11 @@ extension TrackerViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        let tracker = categories[indexPath.section].trackerList[indexPath.row]
-        
+        let tracker = filteredCategories[indexPath.section].trackerList[indexPath.row]
+        let daysCount = completedTrackers.filter { $0.trackerId == tracker.id }.count
         let isCompleted = completedTrackers.contains { $0.date == currentDate && $0.trackerId == tracker.id }
-        // TODO: completed days
-        trackerCell.setupCell(with: tracker, days: 0, isCompleted: isCompleted)
+
+        trackerCell.setupCell(with: tracker, days: daysCount, isCompleted: isCompleted)
         trackerCell.delegate = self
 
         return trackerCell
