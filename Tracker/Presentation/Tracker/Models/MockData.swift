@@ -10,6 +10,10 @@ import Foundation
 extension TrackerCategory {
     static let mockData = [
         TrackerCategory(
+            title: "Важное",
+            trackerList: []
+        ),
+        TrackerCategory(
             title: "Важное 2",
             trackerList: [
                 Tracker(

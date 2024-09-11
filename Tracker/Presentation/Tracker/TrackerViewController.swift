@@ -111,7 +111,7 @@ extension TrackerViewController {
     
     // MARK: setupButtons
     @objc private func addAction() {
-        let createTrackerVC = CreateTrackerViewController()
+        let createTrackerVC = CreateTrackerViewController(delegate: self)
         present(UINavigationController(rootViewController: createTrackerVC), animated: true)
     }
     
@@ -192,7 +192,7 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
             return UICollectionReusableView()
         }
         
-        let title = categories[indexPath.section].title
+        let title = filteredCategories[indexPath.section].title
         view.setupHeaderCell(with: title)
         
         return view
@@ -233,6 +233,33 @@ extension TrackerViewController: TrackerCollectionViewCellDelegate {
             cell.increaseDayCount()
             cell.setupAddDayButton(isCompleted: true)
         }
+    }
+}
+
+// MARK: NewTrackerViewControllerDelegate
+extension TrackerViewController: NewTrackerViewControllerDelegate {
+    func didTapConfirmButton(categoryTitle: String, trackerToAdd: Tracker) {
+        guard let categoryIndex = categories.firstIndex(where: { $0.title == categoryTitle }) else { return }
+        dismiss(animated: true)
+        let updatedCategory = TrackerCategory(
+            title: categoryTitle,
+            trackerList: categories[categoryIndex].trackerList + [trackerToAdd]
+        )
+        categories[categoryIndex] = updatedCategory
+        trackerView.trackerCollectionView.reloadData()
+    }
+    
+    func didTapCancelButton() {
+        dismiss(animated: true)
+    }
+}
+
+// MARK: CreateTrackerViewControllerDelegate
+extension TrackerViewController: CreateTrackerViewControllerDelegate {
+    func didSelectedTypeTracker(trackerType: TrackerType) {
+        dismiss(animated: true)
+        let newTrackerVC = NewTrackerViewController(trackerType: trackerType, delegate: self)
+        present(UINavigationController(rootViewController: newTrackerVC), animated: true)
     }
 }
 

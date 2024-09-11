@@ -9,6 +9,8 @@ import UIKit
 
 final class NewTrackerViewController: UIViewController {
     // MARK: PROPERTIES
+    weak var delegate: NewTrackerViewControllerDelegate?
+    
     private enum NewTrackerParam: Int {
         case category = 0
         case schedule = 1
@@ -24,16 +26,28 @@ final class NewTrackerViewController: UIViewController {
     private var trackerType: TrackerType
     private lazy var newTrackerView = NewTrackerView()
     
-    private var schedule: [WeekDay] = []
     private var indexPathCell: [NewTrackerParam: IndexPath]?
     
     private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 6, leftInset: 28, rightInset: 28, topInset: 24, bottomInset: 24, height: 52, cellSpacing: 5)
     
     private var selectedItems: [Int: IndexPath] = [:]
     
+    private var data: Tracker.NewTrackerData = Tracker.NewTrackerData() {
+        didSet {
+            checkDataValidation()
+        }
+    }
+    // TODO: gag
+    private var category: String? = "Важное" {
+        didSet {
+            checkDataValidation()
+        }
+    }
+    
     // MARK: init
-    init(trackerType: TrackerType) {
+    init(trackerType: TrackerType, delegate: NewTrackerViewControllerDelegate) {
         self.trackerType = trackerType
+        self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -54,6 +68,8 @@ final class NewTrackerViewController: UIViewController {
         setupTextField()
         setupTableView()
         setupButtons()
+        
+        checkDataValidation()
     }
 }
 
@@ -128,22 +144,68 @@ extension NewTrackerViewController {
         )
     }
     
+    private func checkDataValidation() {
+        guard
+            let category,
+            !category.isEmpty,
+            let name = data.name,
+            !name.isEmpty,
+            let emoji = data.emoji,
+            let color = data.color
+        else {
+            newTrackerView.doCreateButtonActive(false)
+            return
+        }
+        
+        if
+            trackerType == TrackerType.habit,
+            data.schedule == nil
+        {
+            newTrackerView.doCreateButtonActive(false)
+            return
+        }
+        
+        newTrackerView.doCreateButtonActive(true)
+    }
+    
     // MARK: setupButtons
     private func setupButtons() {
         newTrackerView.cancelButton.addTarget(self, action: #selector(cancelTapAction), for: .touchUpInside)
+        newTrackerView.createButton.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
         
         newTrackerView.trackerNameTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
     }
     
     @objc private func cancelTapAction() {
         dismiss(animated: true)
+        delegate?.didTapCancelButton()
     }
     
     @objc private func editingChanged(_ sender: UITextField) {
         guard let text = sender.text else { return }
-        
+        data.name = text
         let errorIsHidden = text.count < 38
         newTrackerView.showTrackerNameError(errorIsHidden)
+    }
+
+    @objc private func didTapCreateButton() {
+        guard
+            let category,
+            let name = data.name,
+            !name.isEmpty,
+            let emoji = data.emoji,
+            let color = data.color
+        else {
+            return
+        }
+
+        let newTracker = Tracker(
+            name: name,
+            color: color,
+            emoji: emoji,
+            schedule: data.schedule
+        )
+        delegate?.didTapConfirmButton(categoryTitle: category, trackerToAdd: newTracker)
     }
 }
 
@@ -319,6 +381,15 @@ extension NewTrackerViewController: UICollectionViewDelegate {
 
         selectedItems[indexPath.section] = indexPath
         cell.select()
+        
+        switch indexPath.section {
+        case CollectionViewCellTypes.emoji.rawValue:
+            data.emoji = AppEmojis[indexPath.item]
+        case CollectionViewCellTypes.color.rawValue:
+            data.color = AppColorSettings.palette[indexPath.item]
+        default:
+            break
+        }
     }
 }
 
@@ -352,12 +423,12 @@ extension NewTrackerViewController: UITableViewDataSource {
         switch indexPath.row {
         case NewTrackerParam.category.rawValue:
             indexPathCell = [.category: indexPath]
-            newTrackerCell.setupCell(title: NewTrackerParam.category.description, description: "Важное")
+            newTrackerCell.setupCell(title: NewTrackerParam.category.description, description: category)
         case NewTrackerParam.schedule.rawValue:
             indexPathCell = [.schedule: indexPath]
             newTrackerCell.setupCell(
                 title: NewTrackerParam.schedule.description,
-                description: WeekDay.getScheduleString(from: schedule)
+                description: WeekDay.getScheduleString(from: data.schedule)
             )
         default:
             return UITableViewCell()
@@ -382,8 +453,9 @@ extension NewTrackerViewController: UITableViewDelegate {
         case NewTrackerParam.category.rawValue:
             print("Открыть контроллер выбора Категории")
         case NewTrackerParam.schedule.rawValue:
-            let scheduleViewController = ScheduleViewController(selectedWeekdays: schedule)
-            scheduleViewController.delegate = self
+            let schedule = data.schedule ?? []
+            let scheduleViewController = ScheduleViewController(selectedWeekdays: schedule, delegate: self)
+
             let navigationController = UINavigationController(rootViewController: scheduleViewController)
             present(navigationController, animated: true)
         default:
@@ -399,7 +471,7 @@ extension NewTrackerViewController: UITableViewDelegate {
 // MARK: ScheduleViewControllerDelegate
 extension NewTrackerViewController: ScheduleViewControllerDelegate {
     func didConfirmSchedule(_ schedule: [WeekDay]) {
-        self.schedule = schedule
+        data.schedule = schedule
         let indexPathCell = indexPathCell?.filter( {
             $0.key == NewTrackerParam.schedule
         } )
@@ -416,8 +488,9 @@ extension NewTrackerViewController: ScheduleViewControllerDelegate {
 import SwiftUI
 struct NewTrackerVC_Preview: PreviewProvider {
     static var previews: some View {
-        NewTrackerViewController(trackerType: .habit).showPreview()
-        NewTrackerViewController(trackerType: .event).showPreview()
+        let delegate = TrackerViewController()
+        NewTrackerViewController(trackerType: .habit, delegate: delegate).showPreview()
+        NewTrackerViewController(trackerType: .event, delegate: delegate).showPreview()
     }
 }
 

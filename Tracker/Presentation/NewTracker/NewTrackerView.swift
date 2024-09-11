@@ -191,4 +191,12 @@ extension NewTrackerView {
         errorLabel.isHidden = show
         tableViewTopConstraint?.constant = show ? 2 : 32
     }
+    
+    // MARK: doCreateButtonActive
+    func doCreateButtonActive(_ isEnabled: Bool) {
+        createButton.isEnabled = isEnabled
+        createButton.backgroundColor = isEnabled
+            ? AppColorSettings.fontColor
+            : AppColorSettings.notActiveFontColor
+    }
 }

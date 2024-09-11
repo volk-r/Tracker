@@ -17,8 +17,9 @@ final class ScheduleViewController: UIViewController {
     private var selectedWeekdays: Set<WeekDay>
     
     // MARK: Lifestyle
-    init(selectedWeekdays: [WeekDay]) {
+    init(selectedWeekdays: [WeekDay], delegate: ScheduleViewControllerDelegate) {
         self.selectedWeekdays = Set(selectedWeekdays)
+        self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -121,7 +122,8 @@ extension ScheduleViewController: ScheduleViewControllerCellDelegate {
 import SwiftUI
 struct ScheduleVC_Preview: PreviewProvider {
     static var previews: some View {
-        ScheduleViewController(selectedWeekdays: []).showPreview()
+        let vc = NewTrackerViewController(trackerType: TrackerType.habit, delegate: TrackerViewController())
+        ScheduleViewController(selectedWeekdays: [], delegate: vc).showPreview()
     }
 }
 

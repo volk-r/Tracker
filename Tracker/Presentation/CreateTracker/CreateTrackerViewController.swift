@@ -9,7 +9,18 @@ import UIKit
 
 final class CreateTrackerViewController: UIViewController {
     // MARK: PROPERTIES
-    private var createTrackerView = CreateTrackerView()
+    private lazy var createTrackerView = CreateTrackerView()
+    
+    weak var delegate: CreateTrackerViewControllerDelegate?
+    
+    init(delegate: CreateTrackerViewControllerDelegate) {
+        self.delegate = delegate
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: Lifestyle
     override func loadView() {
@@ -31,13 +42,11 @@ extension CreateTrackerViewController {
     }
     
     @objc private func habitButtonTapAction() {
-        let newTrackerVC = NewTrackerViewController(trackerType: .habit)
-        present(UINavigationController(rootViewController: newTrackerVC), animated: true)
+        delegate?.didSelectedTypeTracker(trackerType: .habit)
     }
     
     @objc private func eventButtonTapAction() {
-        let newTrackerVC = NewTrackerViewController(trackerType: .event)
-        present(UINavigationController(rootViewController: newTrackerVC), animated: true)
+        delegate?.didSelectedTypeTracker(trackerType: .event)
     }
 }
 
@@ -47,7 +56,8 @@ extension CreateTrackerViewController {
 import SwiftUI
 struct CreateTracker_Preview: PreviewProvider {
     static var previews: some View {
-        CreateTrackerViewController().showPreview()
+        let vc = TrackerViewController()
+        CreateTrackerViewController(delegate: vc).showPreview()
     }
 }
 #endif

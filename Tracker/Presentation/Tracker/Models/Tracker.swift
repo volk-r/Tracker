@@ -13,4 +13,11 @@ struct Tracker {
     let color: UIColor
     let emoji: String
     let schedule: [WeekDay]?
+    
+    struct NewTrackerData {
+        var name: String? = nil
+        var color: UIColor? = nil
+        var emoji: String? = nil
+        var schedule: [WeekDay]? = nil
+    }
 }
