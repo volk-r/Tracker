@@ -25,7 +25,6 @@
 		3C6289B22C8D81B0003CE842 /* WeekDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6289B12C8D81B0003CE842 /* WeekDay.swift */; };
 		3C6289B52C8D9166003CE842 /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6289B42C8D9166003CE842 /* ScheduleTableViewCell.swift */; };
 		3C6289B72C8D9971003CE842 /* UITableView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6289B62C8D9971003CE842 /* UITableView+Extensions.swift */; };
-		3C6289B92C8DD317003CE842 /* TableViewMainCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6289B82C8DD317003CE842 /* TableViewMainCell.swift */; };
 		3C6289BC2C8DE37D003CE842 /* ScheduleTableViewCellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6289BB2C8DE37D003CE842 /* ScheduleTableViewCellProtocol.swift */; };
 		3C6289BE2C8DE902003CE842 /* ScheduleViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6289BD2C8DE902003CE842 /* ScheduleViewControllerDelegate.swift */; };
 		3C6289C22C8E1F1E003CE842 /* TrackerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6289C12C8E1F1E003CE842 /* TrackerCollectionViewCell.swift */; };
@@ -73,7 +72,6 @@
 		3C6289B12C8D81B0003CE842 /* WeekDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDay.swift; sourceTree = "<group>"; };
 		3C6289B42C8D9166003CE842 /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		3C6289B62C8D9971003CE842 /* UITableView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extensions.swift"; sourceTree = "<group>"; };
-		3C6289B82C8DD317003CE842 /* TableViewMainCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewMainCell.swift; sourceTree = "<group>"; };
 		3C6289BB2C8DE37D003CE842 /* ScheduleTableViewCellProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCellProtocol.swift; sourceTree = "<group>"; };
 		3C6289BD2C8DE902003CE842 /* ScheduleViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewControllerDelegate.swift; sourceTree = "<group>"; };
 		3C6289C12C8E1F1E003CE842 /* TrackerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -265,7 +263,6 @@
 				3C62898C2C8AE6EF003CE842 /* NewTracker */,
 				3C6289A92C8D80F6003CE842 /* Schedule */,
 				3CB438D42C7CF0CF00E3614F /* Dummy */,
-				3C6289B82C8DD317003CE842 /* TableViewMainCell.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -439,7 +436,6 @@
 				3C62898B2C8AE6E2003CE842 /* NewTrackerView.swift in Sources */,
 				3C6289AD2C8D8164003CE842 /* ScheduleView.swift in Sources */,
 				3C6289B22C8D81B0003CE842 /* WeekDay.swift in Sources */,
-				3C6289B92C8DD317003CE842 /* TableViewMainCell.swift in Sources */,
 				3C6289AB2C8D8117003CE842 /* ScheduleViewController.swift in Sources */,
 				3C6289D12C90D1A2003CE842 /* NewTrackerViewControllerDelegate.swift in Sources */,
 				3CB438CF2C7B9D6500E3614F /* StatisticViewController.swift in Sources */,

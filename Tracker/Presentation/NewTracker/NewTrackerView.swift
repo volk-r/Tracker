@@ -169,8 +169,8 @@ extension NewTrackerView {
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
             collectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 32),
-            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             collectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: 430),
 
             footerStackView.topAnchor.constraint(greaterThanOrEqualTo: collectionView.bottomAnchor, constant: 40),

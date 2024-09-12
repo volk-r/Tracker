@@ -28,7 +28,7 @@ final class NewTrackerViewController: UIViewController {
     
     private var indexPathCell: [NewTrackerParam: IndexPath]?
     
-    private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 6, leftInset: 28, rightInset: 28, topInset: 24, bottomInset: 24, height: 52, cellSpacing: 5)
+    private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 6, leftInset: 18, rightInset: 18, topInset: 24, bottomInset: 24, height: 52, cellSpacing: 5)
     
     private var selectedItems: [Int: IndexPath] = [:]
     
