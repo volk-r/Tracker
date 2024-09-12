@@ -64,12 +64,12 @@ class TrackerViewController: UIViewController {
     }
 }
 
-
 extension TrackerViewController {
     // MARK: setupGesture
     private func setupGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        trackerView.addGestureRecognizer(tapGesture)
+        // TODO: it's broke all
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+//        trackerView.addGestureRecognizer(tapGesture)
     }
     
     @objc private func dismissKeyboard() {

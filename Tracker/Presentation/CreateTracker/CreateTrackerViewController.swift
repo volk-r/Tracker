@@ -9,9 +9,9 @@ import UIKit
 
 final class CreateTrackerViewController: UIViewController {
     // MARK: PROPERTIES
-    private lazy var createTrackerView = CreateTrackerView()
-    
     weak var delegate: CreateTrackerViewControllerDelegate?
+    
+    private lazy var createTrackerView = CreateTrackerView()
     
     init(delegate: CreateTrackerViewControllerDelegate) {
         self.delegate = delegate

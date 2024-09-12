@@ -11,9 +11,9 @@ final class ScheduleTableViewCell: UITableViewCell {
     // MARK: - PROPERTIES
     static let identifier = "ScheduleTableViewCell"
     
-    private var weekday: WeekDay?
-    
     weak var delegate: ScheduleViewControllerCellDelegate?
+    
+    private var weekday: WeekDay?
     
     private let nameLabel: UILabel = {
         let label = UILabel()

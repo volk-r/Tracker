@@ -9,19 +9,6 @@ import UIKit
 
 final class NewTrackerView: UIView {
     // MARK: PROPERTIES
-    private var tableViewTopConstraint: NSLayoutConstraint?
-    private var tableViewHeightConstraint: NSLayoutConstraint?
-    
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        return scrollView
-    }()
-    
-    private let contentView: UIView = {
-        let contentView = UIView()
-        return contentView
-    }()
-    
     lazy var trackerNameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Введите название трекера"
@@ -30,15 +17,6 @@ final class NewTrackerView: UIView {
         textField.clearButtonMode = .whileEditing
         textField.setLeftPaddingPoints(16)
         return textField
-    }()
-    
-    private lazy var errorLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 17, weight: .regular)
-        label.text = "Ограничение 38 символов"
-        label.textColor = AppColorSettings.redColor
-        label.isHidden = true
-        return label
     }()
     
     lazy var tableView: UITableView = {
@@ -62,12 +40,17 @@ final class NewTrackerView: UIView {
         return collectionView
     }()
     
-    private lazy var footerStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.spacing = 8
-        return stackView
+    private var tableViewTopConstraint: NSLayoutConstraint?
+    private var tableViewHeightConstraint: NSLayoutConstraint?
+    
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        return scrollView
+    }()
+    
+    private let contentView: UIView = {
+        let contentView = UIView()
+        return contentView
     }()
     
     lazy var cancelButton: UIButton = {
@@ -92,6 +75,23 @@ final class NewTrackerView: UIView {
         button.layer.masksToBounds = true
         button.isEnabled = false
         return button
+    }()
+    
+    private lazy var errorLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 17, weight: .regular)
+        label.text = "Ограничение 38 символов"
+        label.textColor = AppColorSettings.redColor
+        label.isHidden = true
+        return label
+    }()
+    
+    private lazy var footerStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 8
+        return stackView
     }()
     
     // MARK: Lifestyle

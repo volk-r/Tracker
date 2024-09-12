@@ -9,15 +9,6 @@ import UIKit
 
 final class CreateTrackerView: UIView {
     // MARK: PROPERTIES
-    private lazy var mainStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.distribution = .equalCentering
-        stackView.spacing = 16
-        
-        return stackView
-    }()
-    
     lazy var habitButton: UIButton = {
         let button = UIButton()
         button.setTitle("Привычка", for: .normal)
@@ -46,6 +37,15 @@ final class CreateTrackerView: UIView {
         button.accessibilityIdentifier = "EventButton"
         
         return button
+    }()
+    
+    private lazy var mainStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .equalCentering
+        stackView.spacing = 16
+        
+        return stackView
     }()
     
     // MARK: INIT

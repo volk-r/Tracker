@@ -110,8 +110,9 @@ extension NewTrackerViewController {
     
     // MARK: setupGesture
     private func setupGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        newTrackerView.addGestureRecognizer(tapGesture)
+        // TODO: it's broke all
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+//        newTrackerView.addGestureRecognizer(tapGesture)
     }
     
     @objc private func dismissKeyboard() {

@@ -9,10 +9,10 @@ import UIKit
 
 final class ScheduleViewController: UIViewController {
     // MARK: PROPERTIES
-    private lazy var scheduleView = ScheduleView()
-    
     weak var cellDelegate: ScheduleViewControllerCellDelegate?
     weak var delegate: ScheduleViewControllerDelegate?
+    
+    private lazy var scheduleView = ScheduleView()
     
     private var selectedWeekdays: Set<WeekDay>
     
