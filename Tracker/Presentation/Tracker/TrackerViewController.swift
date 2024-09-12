@@ -60,22 +60,11 @@ class TrackerViewController: UIViewController {
         setupDatePicker()
         showPlaceHolder()
         setupSearchTextField()
-        setupGesture()
+        addTapGestureToHideKeyboard()
     }
 }
 
 extension TrackerViewController {
-    // MARK: setupGesture
-    private func setupGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        trackerView.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc private func dismissKeyboard() {
-        trackerView.endEditing(true)
-    }
-    
     // MARK: setupSearchTextField
     private func setupSearchTextField() {
         trackerView.searchTextField.delegate = self

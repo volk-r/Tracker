@@ -66,9 +66,9 @@ final class NewTrackerViewController: UIViewController {
         super.viewDidLoad()
         setupCollectionView()
         setupTextField()
-        setupGesture()
         setupTableView()
         setupButtons()
+        addTapGestureToHideKeyboard()
         
         checkDataValidation()
     }
@@ -106,17 +106,6 @@ extension NewTrackerViewController {
     // MARK: setupTextField
     func setupTextField() {
         newTrackerView.trackerNameTextField.delegate = self
-    }
-    
-    // MARK: setupGesture
-    private func setupGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        newTrackerView.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc private func dismissKeyboard() {
-        newTrackerView.endEditing(true)
     }
     
     // MARK: setupTableView
