@@ -59,10 +59,28 @@ class TrackerViewController: UIViewController {
         setupNavBar()
         setupDatePicker()
         showPlaceHolder()
+        setupSearchTextField()
+        setupGesture()
     }
 }
 
+
 extension TrackerViewController {
+    // MARK: setupGesture
+    private func setupGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        trackerView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func dismissKeyboard() {
+        trackerView.endEditing(true)
+    }
+    
+    // MARK: setupSearchTextField
+    private func setupSearchTextField() {
+        trackerView.searchTextField.delegate = self
+    }
+    
     // MARK: setupDatePicker
     private func setupDatePicker() {
         datePicker.maximumDate = Date()
@@ -251,6 +269,15 @@ extension TrackerViewController: NewTrackerViewControllerDelegate {
     
     func didTapCancelButton() {
         dismiss(animated: true)
+    }
+}
+
+// MARK: UITextFieldDelegate
+extension TrackerViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true)
+        
+        return true
     }
 }
 
