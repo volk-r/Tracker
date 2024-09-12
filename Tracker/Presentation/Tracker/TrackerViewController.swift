@@ -67,9 +67,9 @@ class TrackerViewController: UIViewController {
 extension TrackerViewController {
     // MARK: setupGesture
     private func setupGesture() {
-        // TODO: it's broke all
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-//        trackerView.addGestureRecognizer(tapGesture)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        trackerView.addGestureRecognizer(tapGesture)
     }
     
     @objc private func dismissKeyboard() {
