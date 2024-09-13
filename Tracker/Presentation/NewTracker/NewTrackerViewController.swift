@@ -44,7 +44,7 @@ final class NewTrackerViewController: UIViewController {
         }
     }
     
-    // MARK: init
+    // MARK: INIT
     init(trackerType: TrackerType, delegate: NewTrackerViewControllerDelegate) {
         self.trackerType = trackerType
         self.delegate = delegate

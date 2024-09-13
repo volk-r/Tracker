@@ -13,6 +13,7 @@ final class CreateTrackerViewController: UIViewController {
     
     private lazy var createTrackerView = CreateTrackerView()
     
+    // MARK: INIT
     init(delegate: CreateTrackerViewControllerDelegate) {
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
@@ -37,16 +38,9 @@ final class CreateTrackerViewController: UIViewController {
 
 extension CreateTrackerViewController {
     private func setupButton() {
-        createTrackerView.habitButton.addTarget(self, action: #selector(habitButtonTapAction), for: .touchUpInside)
-        createTrackerView.eventButton.addTarget(self, action: #selector(eventButtonTapAction), for: .touchUpInside)
-    }
-    
-    @objc private func habitButtonTapAction() {
-        delegate?.didSelectedTypeTracker(trackerType: .habit)
-    }
-    
-    @objc private func eventButtonTapAction() {
-        delegate?.didSelectedTypeTracker(trackerType: .event)
+        createTrackerView.trackerCallback = { [weak delegate] type in
+            delegate?.didSelectedTypeTracker(trackerType: type)
+        }
     }
 }
 

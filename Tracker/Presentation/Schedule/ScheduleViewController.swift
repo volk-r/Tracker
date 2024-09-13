@@ -16,7 +16,7 @@ final class ScheduleViewController: UIViewController {
     
     private var selectedWeekdays: Set<WeekDay>
     
-    // MARK: Lifestyle
+    // MARK: INIT
     init(selectedWeekdays: [WeekDay], delegate: ScheduleViewControllerDelegate) {
         self.selectedWeekdays = Set(selectedWeekdays)
         self.delegate = delegate
@@ -27,6 +27,7 @@ final class ScheduleViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Lifestyle
     override func loadView() {
         super.loadView()
         view = scheduleView

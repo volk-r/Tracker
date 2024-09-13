@@ -9,35 +9,7 @@ import UIKit
 
 final class CreateTrackerView: UIView {
     // MARK: PROPERTIES
-    lazy var habitButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Привычка", for: .normal)
-        
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 16
-        button.backgroundColor = AppColorSettings.fontColor
-        
-        button.accessibilityIdentifier = "HabitButton"
-        
-        return button
-    }()
-    
-    lazy var eventButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Нерегулярные событие", for: .normal)
-        
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 16
-        button.backgroundColor = AppColorSettings.fontColor
-        
-        button.accessibilityIdentifier = "EventButton"
-        
-        return button
-    }()
+    var trackerCallback: ((TrackerType) -> Void)?
     
     private lazy var mainStackView: UIStackView = {
         let stackView = UIStackView()
@@ -46,6 +18,36 @@ final class CreateTrackerView: UIView {
         stackView.spacing = 16
         
         return stackView
+    }()
+    
+    private lazy var habitButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Привычка", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 16
+        button.backgroundColor = AppColorSettings.fontColor
+        button.addTarget(self, action: #selector(didHabitTapped), for: .touchUpInside)
+        
+        button.accessibilityIdentifier = "HabitButton"
+        
+        return button
+    }()
+    
+    private lazy var eventButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Нерегулярные событие", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 16
+        button.backgroundColor = AppColorSettings.fontColor
+        button.addTarget(self, action: #selector(didEventTapped), for: .touchUpInside)
+        
+        button.accessibilityIdentifier = "EventButton"
+        
+        return button
     }()
     
     // MARK: INIT
@@ -58,7 +60,9 @@ final class CreateTrackerView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+}
+
+extension CreateTrackerView {
     // MARK: LAYOUT
     private func setupLayout() {
         // body
@@ -85,5 +89,15 @@ final class CreateTrackerView: UIView {
             mainStackView.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
             mainStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
         ])
+    }
+    
+    // MARK: didHabitTapped
+    @objc private func didHabitTapped() {
+        trackerCallback?(.habit)
+    }
+    
+    // MARK: didEventTapped
+    @objc private func didEventTapped() {
+        trackerCallback?(.event)
     }
 }
