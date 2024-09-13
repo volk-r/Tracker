@@ -486,13 +486,19 @@ extension NewTrackerViewController: ScheduleViewControllerDelegate {
 // MARK: - SHOW PREVIEW
 #if DEBUG
 
-import SwiftUI
-struct NewTrackerVC_Preview: PreviewProvider {
-    static var previews: some View {
-        let delegate = TrackerViewController()
-        NewTrackerViewController(trackerType: .habit, delegate: delegate).showPreview()
-        NewTrackerViewController(trackerType: .event, delegate: delegate).showPreview()
-    }
+@available(iOS 17, *)
+#Preview("Habit") {
+    let delegate = TrackerViewController()
+    let viewController = NewTrackerViewController(trackerType: .habit, delegate: delegate)
+    return viewController
+
+}
+
+@available(iOS 17, *)
+#Preview("Event") {
+    let delegate = TrackerViewController()
+    let viewController = NewTrackerViewController(trackerType: .event, delegate: delegate)
+    return viewController
 }
 
 #endif

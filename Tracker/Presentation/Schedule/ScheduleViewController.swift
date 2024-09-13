@@ -119,12 +119,11 @@ extension ScheduleViewController: ScheduleViewControllerCellDelegate {
 // MARK: - SHOW PREVIEW
 #if DEBUG
 
-import SwiftUI
-struct ScheduleVC_Preview: PreviewProvider {
-    static var previews: some View {
-        let vc = NewTrackerViewController(trackerType: TrackerType.habit, delegate: TrackerViewController())
-        ScheduleViewController(selectedWeekdays: [], delegate: vc).showPreview()
-    }
+@available(iOS 17, *)
+#Preview("Event") {
+    let delegate = NewTrackerViewController(trackerType: TrackerType.habit, delegate: TrackerViewController())
+    let viewController = ScheduleViewController(selectedWeekdays: [], delegate: delegate)
+    return viewController
 }
 
 #endif

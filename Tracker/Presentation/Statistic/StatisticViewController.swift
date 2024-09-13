@@ -30,10 +30,9 @@ final class StatisticViewController: UIViewController {
 // MARK: - SHOW PREVIEW
 #if DEBUG
 
-import SwiftUI
-struct StatisticView_Preview: PreviewProvider {
-    static var previews: some View {
-        StatisticViewController().showPreview()
-    }
+@available(iOS 17, *)
+#Preview {
+    StatisticViewController()
 }
+
 #endif

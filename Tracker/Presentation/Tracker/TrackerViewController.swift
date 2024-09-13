@@ -282,10 +282,9 @@ extension TrackerViewController: CreateTrackerViewControllerDelegate {
 // MARK: - SHOW PREVIEW
 #if DEBUG
 
-import SwiftUI
-struct TrackerView_Preview: PreviewProvider {
-    static var previews: some View {
-        TrackerViewController().showPreview()
-    }
+@available(iOS 17, *)
+#Preview {
+    TrackerViewController()
 }
+
 #endif

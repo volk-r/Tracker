@@ -53,11 +53,11 @@ extension CreateTrackerViewController {
 // MARK: - SHOW PREVIEW
 #if DEBUG
 
-import SwiftUI
-struct CreateTracker_Preview: PreviewProvider {
-    static var previews: some View {
-        let vc = TrackerViewController()
-        CreateTrackerViewController(delegate: vc).showPreview()
-    }
+@available(iOS 17, *)
+#Preview {
+    let delegate = TrackerViewController()
+    let viewController = CreateTrackerViewController(delegate: delegate)
+    return viewController
 }
+
 #endif
