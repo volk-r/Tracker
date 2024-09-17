@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C1EBC942C99E1E8006E0D02 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3C1EBC922C99E1E8006E0D02 /* Model.xcdatamodeld */; };
+		3C1EBC962C99E5B5006E0D02 /* DaysValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C1EBC952C99E5B5006E0D02 /* DaysValueTransformer.swift */; };
 		3C62898B2C8AE6E2003CE842 /* NewTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C62898A2C8AE6E2003CE842 /* NewTrackerView.swift */; };
 		3C62898E2C8AE717003CE842 /* NewTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C62898D2C8AE717003CE842 /* NewTrackerViewController.swift */; };
 		3C6289912C8AE95E003CE842 /* TrackerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6289902C8AE95E003CE842 /* TrackerType.swift */; };
@@ -54,6 +56,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3C1EBC932C99E1E8006E0D02 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		3C1EBC952C99E5B5006E0D02 /* DaysValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysValueTransformer.swift; sourceTree = "<group>"; };
 		3C62898A2C8AE6E2003CE842 /* NewTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerView.swift; sourceTree = "<group>"; };
 		3C62898D2C8AE717003CE842 /* NewTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewController.swift; sourceTree = "<group>"; };
 		3C6289902C8AE95E003CE842 /* TrackerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerType.swift; sourceTree = "<group>"; };
@@ -217,6 +221,15 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		3C6289D72C98939E003CE842 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				3C1EBC922C99E1E8006E0D02 /* Model.xcdatamodeld */,
+				3C1EBC952C99E5B5006E0D02 /* DaysValueTransformer.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		3C75B1B62C77BF310045E709 = {
 			isa = PBXGroup;
 			children = (
@@ -238,6 +251,7 @@
 			children = (
 				3CC22E312C7A63DF00265819 /* Navigation */,
 				3CB438C82C7B9B3300E3614F /* Presentation */,
+				3C6289D72C98939E003CE842 /* CoreData */,
 				3CC22E2E2C7A636300265819 /* Extensions */,
 				3CC22E2A2C77C0F700265819 /* SystemFiles */,
 				3CC22E2B2C7A62D500265819 /* AppSettings */,
@@ -428,6 +442,8 @@
 				3C62898B2C8AE6E2003CE842 /* NewTrackerView.swift in Sources */,
 				3C6289AD2C8D8164003CE842 /* ScheduleView.swift in Sources */,
 				3C6289B22C8D81B0003CE842 /* WeekDay.swift in Sources */,
+				3C1EBC942C99E1E8006E0D02 /* Model.xcdatamodeld in Sources */,
+				3C1EBC962C99E5B5006E0D02 /* DaysValueTransformer.swift in Sources */,
 				3C6289AB2C8D8117003CE842 /* ScheduleViewController.swift in Sources */,
 				3C6289D12C90D1A2003CE842 /* NewTrackerViewControllerDelegate.swift in Sources */,
 				3CB438CF2C7B9D6500E3614F /* StatisticViewController.swift in Sources */,
@@ -687,6 +703,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		3C1EBC922C99E1E8006E0D02 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				3C1EBC932C99E1E8006E0D02 /* Model.xcdatamodel */,
+			);
+			currentVersion = 3C1EBC932C99E1E8006E0D02 /* Model.xcdatamodel */;
+			name = Model.xcdatamodeld;
+			path = /Users/rromanov/Documents/Swift/Tracker/Tracker/CoreData/Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 3C75B1B72C77BF310045E709 /* Project object */;
 }
