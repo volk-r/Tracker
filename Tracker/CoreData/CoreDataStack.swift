@@ -20,7 +20,7 @@ final class CoreDataStack: CoreDataStackProtocol {
         let container = NSPersistentContainer(name: "TrackersDataBase")
         container.loadPersistentStores { (storeDescription, error) in
             if let error = error as NSError? {
-                fatalError("Не удалось загрузить хранилища: \(error), \(error.userInfo)")
+                fatalError("❌ Could not load Tracker DataBase: \(error), \(error.userInfo)")
             }
         }
         return container
@@ -37,7 +37,7 @@ final class CoreDataStack: CoreDataStackProtocol {
                 try context.save()
             } catch {
                 let nserror = error as NSError
-                fatalError("Не удалось сохранить контекст \(nserror), \(nserror.userInfo)")
+                fatalError("❌ Could not save context \(nserror), \(nserror.userInfo)")
             }
         }
     }
