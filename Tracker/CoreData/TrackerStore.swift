@@ -16,7 +16,7 @@ final class TrackerStore: TrackerStoreProtocol {
         trackerEntity.trackerId = tracker.id
         trackerEntity.color = tracker.color
         trackerEntity.emoji = tracker.emoji
-        trackerEntity.schedule = tracker.schedule as NSArray?
+        trackerEntity.schedule = tracker.schedule as? NSArray
         trackerEntity.name = tracker.name
         
         coreDataStack.saveContext()
