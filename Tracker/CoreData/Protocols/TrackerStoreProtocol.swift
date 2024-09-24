@@ -11,6 +11,6 @@ protocol TrackerStoreProtocol {
     var numberOfTrackers: Int { get }
     var numberOfSections: Int { get }
     func fetchTrackers() -> [Tracker]
-    func addTracker(with tracker: Tracker)
+    func addTracker(_ tracker: Tracker, to category: TrackerCategory)
     func numberOfRowsInSection(_ section: Int) -> Int
 }

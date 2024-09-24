@@ -11,15 +11,23 @@ class TrackerViewController: UIViewController {
     // MARK: PROPERTIES
     private lazy var trackerView = TrackerView()
     
+    private let trackerStore: TrackerStoreProtocol = TrackerStore()
+    private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
+    private let trackerRecordStore: TrackerRecordStoreProtocol = TrackerRecordStore()
+
+    private var completedTrackers: Set<TrackerRecord> = []
     // TODO: Mock Data
-    private var categories: [TrackerCategory] = TrackerCategory.mockData {
+//    private var categories: [TrackerCategory] = TrackerCategory.mockData {
+//        didSet {
+//            showPlaceHolder()
+//        }
+//    }
+    private var categories = [TrackerCategory]() {
         didSet {
             showPlaceHolder()
         }
     }
-    private var completedTrackers: Set<TrackerRecord> = []
-    private var trackerStore: TrackerStoreProtocol = TrackerStore()
-    private var trackerRecordStore: [TrackerRecord] = []
+    
     private var filteredCategories: [TrackerCategory] {
         let weekday = Calendar.current.component(.weekday, from: currentDate)
         var result = [TrackerCategory]()
@@ -62,10 +70,25 @@ class TrackerViewController: UIViewController {
         showPlaceHolder()
         setupSearchTextField()
         addTapGestureToHideKeyboard()
+        
+        getAllCategories()
+        getCompletedTrackers()
     }
 }
 
 extension TrackerViewController {
+    // MARK: getCompletedTrackers
+    private func getAllCategories() {
+        categories = trackerCategoryStore.fetchAllCategories()
+        print("categories", categories)
+    }
+    
+    // MARK: getCompletedTrackers
+    private func getCompletedTrackers() {
+        completedTrackers = Set(trackerRecordStore.fetchAllRecords())
+        print("completedTrackers", completedTrackers)
+    }
+    
     // MARK: setupSearchTextField
     private func setupSearchTextField() {
         trackerView.searchTextField.delegate = self
@@ -231,16 +254,19 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
 extension TrackerViewController: TrackerCollectionViewCellDelegate {
     func didTapAddDayButton(for tracker: Tracker, in cell: TrackerCollectionViewCell) {
         if let completedTracker = completedTrackers.first(where: { $0.date == currentDate && $0.trackerId == tracker.id }) {
-            completedTrackers.remove(completedTracker)
+//            completedTrackers.remove(completedTracker)
+            trackerRecordStore.deleteRecord(for: completedTracker)
             cell.decreaseDayCount()
             cell.setupAddDayButton(isCompleted: false)
         } else {
-            completedTrackers.insert(
-                TrackerRecord(id: tracker.id, trackerId: UUID(), date: currentDate)
-            )
+            let trackerRecord = TrackerRecord(id: tracker.id, trackerId: UUID(), date: currentDate)
+//            completedTrackers.insert(trackerRecord)
+            trackerRecordStore.addTrackerRecord(with: trackerRecord)
             cell.increaseDayCount()
             cell.setupAddDayButton(isCompleted: true)
         }
+        
+        getCompletedTrackers()
     }
 }
 
@@ -249,12 +275,15 @@ extension TrackerViewController: NewTrackerViewControllerDelegate {
     func didTapConfirmButton(categoryTitle: String, trackerToAdd: Tracker) {
         guard let categoryIndex = categories.firstIndex(where: { $0.title == categoryTitle }) else { return }
         dismiss(animated: true)
-        let updatedCategory = TrackerCategory(
-            id: categories[categoryIndex].id,
-            title: categoryTitle,
-            trackerList: categories[categoryIndex].trackerList + [trackerToAdd]
-        )
-        categories[categoryIndex] = updatedCategory
+        
+        trackerStore.addTracker(trackerToAdd, to: categories[categoryIndex])
+        // TODO:
+//        let updatedCategory = TrackerCategory(
+//            id: categories[categoryIndex].id,
+//            title: categoryTitle,
+//            trackerList: categories[categoryIndex].trackerList + [trackerToAdd]
+//        )
+//        categories[categoryIndex] = updatedCategory
         trackerView.trackerCollectionView.reloadData()
     }
     

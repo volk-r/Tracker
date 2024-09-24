@@ -10,6 +10,7 @@ import CoreData
 
 final class TrackerStore: NSObject {
     private let coreDataStack = CoreDataStack.shared
+    private let trackerCategoryStore = TrackerCategoryStore()
     
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
@@ -70,13 +71,18 @@ extension TrackerStore: TrackerStoreProtocol {
         }
     }
     
-    func addTracker(with tracker: Tracker) {
+    func addTracker(_ tracker: Tracker, to category: TrackerCategory) {
+        guard let categoryCoreData = trackerCategoryStore.getCategoryById(category.id) else {
+            return
+        }
+        
         let trackerEntity = TrackerCoreData(context: coreDataStack.context)
         trackerEntity.trackerId = tracker.id
         trackerEntity.color = tracker.color
         trackerEntity.emoji = tracker.emoji
         trackerEntity.schedule = tracker.schedule as? NSArray
         trackerEntity.name = tracker.name
+        trackerEntity.category = categoryCoreData
         
         coreDataStack.saveContext()
     }
