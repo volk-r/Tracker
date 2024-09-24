@@ -201,6 +201,7 @@ extension NewTrackerViewController {
         }
 
         let newTracker = Tracker(
+            id: UUID(),
             name: name,
             color: color,
             emoji: emoji,

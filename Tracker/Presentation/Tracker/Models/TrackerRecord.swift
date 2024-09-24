@@ -8,11 +8,21 @@
 import Foundation
 
 struct TrackerRecord: Hashable {
-    let id = UUID()
+    let id: UUID
     let trackerId: UUID
     let date: Date
-    
-    init(trackerId: UUID, date: Date) {
+}
+
+extension TrackerRecord {
+    init?(from trackerRecordEntity: TrackerRecordCoreData) {
+        guard let recordId = trackerRecordEntity.recordId,
+              let trackerId = trackerRecordEntity.trackerId,
+              let date = trackerRecordEntity.createdAt
+        else {
+            return nil
+        }
+        
+        self.id = recordId
         self.trackerId = trackerId
         self.date = date
     }

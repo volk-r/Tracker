@@ -7,8 +7,24 @@
 
 import Foundation
 
-struct TrackerCategory {
-    let id = UUID()
+struct TrackerCategory: Hashable {
+    let id: UUID
     let title: String
     let trackerList: [Tracker]
+}
+
+extension TrackerCategory {
+    init?(from categoryCoreData: TrackerCategoryCoreData) {
+        guard let title = categoryCoreData.title,
+              let id = categoryCoreData.categoryId
+        else {
+            return nil
+        }
+        
+        let trackerList = categoryCoreData.trackers as? [Tracker]
+        
+        self.title = title
+        self.id = id
+        self.trackerList = trackerList ?? []
+    }
 }

@@ -241,11 +241,9 @@
 			isa = PBXGroup;
 			children = (
 				3C1EBC922C99E1E8006E0D02 /* TrackersDataBase.xcdatamodeld */,
-				3C1EBC952C99E5B5006E0D02 /* DaysValueTransformer.swift */,
 				3C1EBCBA2C9A0012006E0D02 /* CoreDataStack.swift */,
-				3C85FA592C9F080F00E4109A /* TrackerStore.swift */,
-				3C85FA5B2C9F081600E4109A /* TrackerCategoryStore.swift */,
-				3C85FA5D2C9F081E00E4109A /* TrackerRecordStore.swift */,
+				3C1EBC952C99E5B5006E0D02 /* DaysValueTransformer.swift */,
+				3C85FA6F2CA329F500E4109A /* DataStores */,
 				3C85FA612C9F091000E4109A /* Protocols */,
 			);
 			path = CoreData;
@@ -289,6 +287,16 @@
 				3C85FA692C9F431500E4109A /* TrackerRecordStoreProtocol.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		3C85FA6F2CA329F500E4109A /* DataStores */ = {
+			isa = PBXGroup;
+			children = (
+				3C85FA592C9F080F00E4109A /* TrackerStore.swift */,
+				3C85FA5B2C9F081600E4109A /* TrackerCategoryStore.swift */,
+				3C85FA5D2C9F081E00E4109A /* TrackerRecordStore.swift */,
+			);
+			path = DataStores;
 			sourceTree = "<group>";
 		};
 		3CB438C82C7B9B3300E3614F /* Presentation */ = {

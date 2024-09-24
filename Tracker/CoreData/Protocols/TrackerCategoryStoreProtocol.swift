@@ -9,4 +9,5 @@ import Foundation
 
 protocol TrackerCategoryStoreProtocol {
     func createCategory(with category: TrackerCategory)
+    func fetchAllCategories() -> [TrackerCategory]
 }

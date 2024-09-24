@@ -18,6 +18,7 @@ class TrackerViewController: UIViewController {
         }
     }
     private var completedTrackers: Set<TrackerRecord> = []
+    private var trackerStore: TrackerStoreProtocol = TrackerStore()
     private var trackerRecordStore: [TrackerRecord] = []
     private var filteredCategories: [TrackerCategory] {
         let weekday = Calendar.current.component(.weekday, from: currentDate)
@@ -32,7 +33,7 @@ class TrackerViewController: UIViewController {
             }
             
             if !filteredTrackers.isEmpty {
-                result.append(TrackerCategory(title: category.title, trackerList: filteredTrackers))
+                result.append(TrackerCategory(id: category.id, title: category.title, trackerList: filteredTrackers))
             }
         }
         
@@ -235,7 +236,7 @@ extension TrackerViewController: TrackerCollectionViewCellDelegate {
             cell.setupAddDayButton(isCompleted: false)
         } else {
             completedTrackers.insert(
-                TrackerRecord(trackerId: tracker.id, date: currentDate)
+                TrackerRecord(id: tracker.id, trackerId: UUID(), date: currentDate)
             )
             cell.increaseDayCount()
             cell.setupAddDayButton(isCompleted: true)
@@ -249,6 +250,7 @@ extension TrackerViewController: NewTrackerViewControllerDelegate {
         guard let categoryIndex = categories.firstIndex(where: { $0.title == categoryTitle }) else { return }
         dismiss(animated: true)
         let updatedCategory = TrackerCategory(
+            id: categories[categoryIndex].id,
             title: categoryTitle,
             trackerList: categories[categoryIndex].trackerList + [trackerToAdd]
         )

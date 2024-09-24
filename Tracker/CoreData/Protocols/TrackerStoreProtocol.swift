@@ -8,5 +8,9 @@
 import Foundation
 
 protocol TrackerStoreProtocol {
-    func createTracker(with tracker: Tracker)
+    var numberOfTrackers: Int { get }
+    var numberOfSections: Int { get }
+    func fetchTrackers() -> [Tracker]
+    func addTracker(with tracker: Tracker)
+    func numberOfRowsInSection(_ section: Int) -> Int
 }
