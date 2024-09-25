@@ -21,10 +21,10 @@ extension TrackerCategory {
             return nil
         }
         
-        let trackerList = categoryCoreData.trackers as? [Tracker]
+        let trackerList = categoryCoreData.trackers as? Set<Tracker> ?? []
         
         self.title = title
         self.id = id
-        self.trackerList = trackerList ?? []
+        self.trackerList = Array(trackerList)
     }
 }

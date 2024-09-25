@@ -237,6 +237,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
                 withReuseIdentifier: EmojiCollectionViewCell.identifier,
                 for: indexPath
             ) as? EmojiCollectionViewCell {
+                // TODO: надо ли это специально вызывать? в каких случаях?
                 emojiCell.prepareForReuse()
                 
                 if selectedItems[indexPath.section] == indexPath {
@@ -252,6 +253,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
                 withReuseIdentifier: ColorCollectionViewCell.identifier,
                 for: indexPath
             ) as? ColorCollectionViewCell {
+                // TODO: надо ли это специально вызывать? в каких случаях?
                 colorCell.prepareForReuse()
                 
                 if selectedItems[indexPath.section] == indexPath {
