@@ -29,7 +29,7 @@ extension Tracker {
             let id = trackerEntity.trackerId,
             let name = trackerEntity.name,
             let emoji = trackerEntity.emoji,
-            let color = trackerEntity.color as? UIColor
+            let color = trackerEntity.color as? UIColor // TODO: here nil
         else {
             return nil
         }

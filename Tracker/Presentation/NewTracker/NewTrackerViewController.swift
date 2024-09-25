@@ -151,8 +151,8 @@ extension NewTrackerViewController {
             !category.isEmpty,
             let name = data.name,
             !name.isEmpty,
-            let emoji = data.emoji,
-            let color = data.color
+            let _ = data.emoji,
+            let _ = data.color
         else {
             newTrackerView.doCreateButtonActive(false)
             return

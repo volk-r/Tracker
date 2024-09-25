@@ -11,18 +11,12 @@ class TrackerViewController: UIViewController {
     // MARK: PROPERTIES
     private lazy var trackerView = TrackerView()
     
-    private let trackerStore: TrackerStoreProtocol = TrackerStore()
+    private lazy var trackerStore: TrackerStoreProtocol = TrackerStore(delegate: self)
     private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
     private let trackerRecordStore: TrackerRecordStoreProtocol = TrackerRecordStore()
 
     private var completedTrackers: Set<TrackerRecord> = []
-    // TODO: Mock Data
-//    private var categories: [TrackerCategory] = TrackerCategory.mockData {
-//        didSet {
-//            showPlaceHolder()
-//        }
-//    }
-    private var categories = [TrackerCategory]() {
+    private var categories: [TrackerCategory] = [TrackerCategory]() {
         didSet {
             showPlaceHolder()
         }
@@ -72,6 +66,14 @@ class TrackerViewController: UIViewController {
         addTapGestureToHideKeyboard()
         
         getAllCategories()
+        
+        // TODO: Mock Data
+        if categories.isEmpty {
+            print("Load Mock Data")
+            trackerCategoryStore.createCategory(with: TrackerCategory(id: UUID(), title: "Важное", trackerList: []))
+            getAllCategories()
+        }
+        
         getCompletedTrackers()
     }
 }
@@ -232,21 +234,7 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
         referenceSizeForHeaderInSection section: Int) -> CGSize
     {
-        let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(
-            collectionView,
-            viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
-            at: indexPath
-        )
-        
-        return headerView.systemLayoutSizeFitting(
-            CGSize(
-                width: collectionView.frame.width,
-                height: UIView.layoutFittingExpandedSize.height
-            ),
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
+        CGSize(width: collectionView.bounds.width, height: 18)
     }
 }
 
@@ -254,19 +242,21 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
 extension TrackerViewController: TrackerCollectionViewCellDelegate {
     func didTapAddDayButton(for tracker: Tracker, in cell: TrackerCollectionViewCell) {
         if let completedTracker = completedTrackers.first(where: { $0.date == currentDate && $0.trackerId == tracker.id }) {
-//            completedTrackers.remove(completedTracker)
+            // TODO:
+            print("completedTracker decrease count")
+            print(completedTracker)
             trackerRecordStore.deleteRecord(for: completedTracker)
             cell.decreaseDayCount()
             cell.setupAddDayButton(isCompleted: false)
         } else {
-            let trackerRecord = TrackerRecord(id: tracker.id, trackerId: UUID(), date: currentDate)
-//            completedTrackers.insert(trackerRecord)
+            let trackerRecord = TrackerRecord(id: UUID(), trackerId: tracker.id, date: currentDate)
+            // TODO:
+            print("completedTracker increase count")
+            print(trackerRecord)
             trackerRecordStore.addTrackerRecord(with: trackerRecord)
             cell.increaseDayCount()
             cell.setupAddDayButton(isCompleted: true)
         }
-        
-        getCompletedTrackers()
     }
 }
 
@@ -275,16 +265,7 @@ extension TrackerViewController: NewTrackerViewControllerDelegate {
     func didTapConfirmButton(categoryTitle: String, trackerToAdd: Tracker) {
         guard let categoryIndex = categories.firstIndex(where: { $0.title == categoryTitle }) else { return }
         dismiss(animated: true)
-        
         trackerStore.addTracker(trackerToAdd, to: categories[categoryIndex])
-        // TODO:
-//        let updatedCategory = TrackerCategory(
-//            id: categories[categoryIndex].id,
-//            title: categoryTitle,
-//            trackerList: categories[categoryIndex].trackerList + [trackerToAdd]
-//        )
-//        categories[categoryIndex] = updatedCategory
-        trackerView.trackerCollectionView.reloadData()
     }
     
     func didTapCancelButton() {
@@ -298,6 +279,15 @@ extension TrackerViewController: UITextFieldDelegate {
         textField.endEditing(true)
         
         return true
+    }
+}
+
+extension TrackerViewController: TrackerStoreDelegate {
+    func didTrackersUpdate() {
+        print("didTrackersUpdate")
+        print(categories)
+        getAllCategories()
+        trackerView.trackerCollectionView.reloadData()
     }
 }
 

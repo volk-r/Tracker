@@ -11,11 +11,16 @@ import CoreData
 final class TrackerRecordStore: TrackerRecordStoreProtocol {
     private let coreDataStack = CoreDataStack.shared
     
+    private let trackerStore = TrackerStore()
+    
     func addTrackerRecord(with trackerRecord: TrackerRecord) {
         let trackerRecordEntity = TrackerRecordCoreData(context: coreDataStack.context)
         trackerRecordEntity.recordId = trackerRecord.id
         trackerRecordEntity.trackerId = trackerRecord.trackerId
         trackerRecordEntity.createdAt = trackerRecord.date
+        
+        let trackerCoreData = trackerStore.getTrackerCD(by: trackerRecord.trackerId)
+        trackerRecordEntity.tracker = trackerCoreData
         
         coreDataStack.saveContext()
     }

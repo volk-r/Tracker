@@ -64,8 +64,10 @@ extension TrackerCategoryStore {
         }
         
         let trackers = trackerCoreDataArray.compactMap { trackerCoreData -> Tracker? in
-            Tracker.init(from: trackerCoreData)
+            return Tracker.init(from: trackerCoreData)
         }
+        // TODO:
+        print("trackerCategoryCoreData.trackers", trackers)
         
         return TrackerCategory(id: id, title: title, trackerList: trackers)
     }

@@ -8,6 +8,7 @@
 import Foundation
 
 protocol TrackerStoreProtocol {
+    var delegate: TrackerStoreDelegate? { get set }
     var numberOfTrackers: Int { get }
     var numberOfSections: Int { get }
     func fetchTrackers() -> [Tracker]

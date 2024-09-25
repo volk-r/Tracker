@@ -9,6 +9,9 @@ import Foundation
 import CoreData
 
 final class TrackerStore: NSObject {
+    // MARK: PROPERTIES
+    weak var delegate: TrackerStoreDelegate?
+    
     private let coreDataStack = CoreDataStack.shared
     private let trackerCategoryStore = TrackerCategoryStore()
     
@@ -30,12 +33,23 @@ final class TrackerStore: NSObject {
         try? fetchedResultsController.performFetch()
         return fetchedResultsController
     }()
+    
+    // MARK: Lifestyle
+    init(delegate: TrackerStoreDelegate) {
+        self.delegate = delegate
+    }
+    
+    override init() {
+        self.delegate = nil
+        super.init()
+    }
 }
 
 extension TrackerStore {
     // MARK: - TrackerStoreError
     enum TrackerStoreError: Error {
         case decodeDataError
+        case fetchTrackerError
     }
 }
 
@@ -83,12 +97,38 @@ extension TrackerStore: TrackerStoreProtocol {
         trackerEntity.schedule = tracker.schedule as? NSArray
         trackerEntity.name = tracker.name
         trackerEntity.category = categoryCoreData
-        
+
         coreDataStack.saveContext()
+        // TODO: why not working NSFetchedResultsControllerDelegate?
+        delegate?.didTrackersUpdate()
+    }
+    
+    func getTrackerCD(by id: UUID) -> TrackerCoreData? {
+        fetchedResultsController.fetchRequest.predicate = NSPredicate(
+            format: "%K == %@",
+            #keyPath(TrackerCoreData.trackerId), id.uuidString
+        )
+        do {
+            try fetchedResultsController.performFetch()
+            guard let tracker = fetchedResultsController.fetchedObjects?.first else {
+                throw TrackerStoreError.fetchTrackerError
+            }
+            fetchedResultsController.fetchRequest.predicate = nil
+            try fetchedResultsController.performFetch()
+            
+            return tracker
+        } catch {
+            print("❌ Failed to fetch tracker by UUID: \(error)")
+            return nil
+        }
     }
 }
 
 // MARK: - NSFetchedResultsControllerDelegate
 extension TrackerStore: NSFetchedResultsControllerDelegate {
-    
+    // TODO: NOT Called
+//    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+//        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> controllerDidChangeContent")
+//        delegate?.didTrackersUpdate()
+//    }
 }
