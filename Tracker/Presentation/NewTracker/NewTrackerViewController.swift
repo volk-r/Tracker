@@ -231,8 +231,8 @@ extension NewTrackerViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        switch indexPath.section {
-        case CollectionViewCellTypes.emoji.rawValue:
+        switch CollectionViewCellTypes.allCases[indexPath.section] {
+        case .emoji:
             if let emojiCell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: EmojiCollectionViewCell.identifier,
                 for: indexPath
@@ -247,7 +247,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
                 
                 return emojiCell
             }
-        case CollectionViewCellTypes.color.rawValue:
+        case .color:
             if let colorCell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ColorCollectionViewCell.identifier,
                 for: indexPath
@@ -262,8 +262,6 @@ extension NewTrackerViewController: UICollectionViewDataSource {
                 
                 return colorCell
             }
-        default:
-            return UICollectionViewCell()
         }
         
         return UICollectionViewCell()
@@ -343,24 +341,7 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         referenceSizeForHeaderInSection section: Int
     ) -> CGSize {
-        let indexPath = IndexPath(
-            row: 0,
-            section: section
-        )
-        let headerView = self.collectionView(
-            collectionView,
-            viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
-            at: indexPath
-        )
-        
-        return headerView.systemLayoutSizeFitting(
-            CGSize(
-                width: collectionView.frame.width,
-                height: UIView.layoutFittingExpandedSize.height
-            ),
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
+        CGSize(width: collectionView.bounds.width, height: 18)
     }
 }
 
