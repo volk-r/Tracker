@@ -58,7 +58,7 @@ extension TrackerCategoryStore {
         guard
             let id = trackerCategoryCoreData.categoryId,
             let title = trackerCategoryCoreData.title,
-            let trackerCoreDataArray = trackerCategoryCoreData.trackers as? [TrackerCoreData]
+            let trackerCoreDataArray = trackerCategoryCoreData.trackers as? Set<TrackerCoreData>
         else {
             return nil
         }
