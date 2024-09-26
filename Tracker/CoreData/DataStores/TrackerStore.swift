@@ -92,7 +92,7 @@ extension TrackerStore: TrackerStoreProtocol {
         
         let trackerEntity = TrackerCoreData(context: coreDataStack.context)
         trackerEntity.trackerId = tracker.id
-        trackerEntity.color = tracker.color
+        trackerEntity.colorHEX = UIColorMarshalling.serialize(color: tracker.color)
         trackerEntity.emoji = tracker.emoji
         trackerEntity.schedule = tracker.schedule as? NSArray
         trackerEntity.name = tracker.name

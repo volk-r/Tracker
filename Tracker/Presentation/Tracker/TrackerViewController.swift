@@ -242,21 +242,18 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
 extension TrackerViewController: TrackerCollectionViewCellDelegate {
     func didTapAddDayButton(for tracker: Tracker, in cell: TrackerCollectionViewCell) {
         if let completedTracker = completedTrackers.first(where: { $0.date == currentDate && $0.trackerId == tracker.id }) {
-            // TODO:
-            print("completedTracker decrease count")
-            print(completedTracker)
             trackerRecordStore.deleteRecord(for: completedTracker)
             cell.decreaseDayCount()
             cell.setupAddDayButton(isCompleted: false)
         } else {
             let trackerRecord = TrackerRecord(id: UUID(), trackerId: tracker.id, date: currentDate)
-            // TODO:
-            print("completedTracker increase count")
-            print(trackerRecord)
             trackerRecordStore.addTrackerRecord(with: trackerRecord)
             cell.increaseDayCount()
             cell.setupAddDayButton(isCompleted: true)
         }
+        
+        // TODO: NSFetchedResultsControllerDelegate needed, ho to use it?
+        getCompletedTrackers()
     }
 }
 

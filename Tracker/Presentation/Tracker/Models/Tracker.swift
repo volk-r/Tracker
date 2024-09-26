@@ -29,16 +29,17 @@ extension Tracker {
             let id = trackerEntity.trackerId,
             let name = trackerEntity.name,
             let emoji = trackerEntity.emoji,
-            let color = trackerEntity.color as? UIColor // TODO: here nil
+            let colorHEX = trackerEntity.colorHEX
         else {
             return nil
         }
         
+        let color = UIColorMarshalling.deserialize(hexString: colorHEX)
         let schedule = trackerEntity.schedule as? [WeekDay]
         
         self.id = id
         self.name = name
-        self.color = color
+        self.color = color ?? UIColor()
         self.emoji = emoji
         self.schedule = schedule
     }
