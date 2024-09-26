@@ -50,7 +50,7 @@ class TrackerViewController: UIViewController {
     
     private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 2, leftInset: 16, rightInset: 16, topInset: 8, bottomInset: 16, height: 148, cellSpacing: 10)
     
-    // MARK: Lifestyle
+    // MARK: Lifecycle
     override func loadView() {
         super.loadView()
         view = trackerView
@@ -252,7 +252,6 @@ extension TrackerViewController: TrackerCollectionViewCellDelegate {
             cell.setupAddDayButton(isCompleted: true)
         }
         
-        // TODO: NSFetchedResultsControllerDelegate needed, ho to use it?
         getCompletedTrackers()
     }
 }

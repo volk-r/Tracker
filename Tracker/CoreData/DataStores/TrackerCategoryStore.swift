@@ -9,8 +9,10 @@ import Foundation
 import CoreData
 
 final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
+    // MARK: PROPERTIES
     private let coreDataStack = CoreDataStack.shared
     
+    // MARK: FUNCTIONS
     func createCategory(with category: TrackerCategory) {
         let categoryEntity = TrackerCategoryCoreData(context: coreDataStack.context)
         categoryEntity.categoryId = category.id
@@ -54,6 +56,7 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
 }
 
 extension TrackerCategoryStore {
+    // MARK: decodingCategory
     private func decodingCategory(from trackerCategoryCoreData: TrackerCategoryCoreData) -> TrackerCategory? {
         guard
             let id = trackerCategoryCoreData.categoryId,

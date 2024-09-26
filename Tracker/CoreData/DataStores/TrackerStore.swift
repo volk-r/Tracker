@@ -34,14 +34,9 @@ final class TrackerStore: NSObject {
         return fetchedResultsController
     }()
     
-    // MARK: Lifestyle
-    init(delegate: TrackerStoreDelegate) {
+    // MARK: Lifecycle
+    init(delegate: TrackerStoreDelegate? = nil) {
         self.delegate = delegate
-    }
-    
-    override init() {
-        self.delegate = nil
-        super.init()
     }
 }
 
@@ -99,8 +94,6 @@ extension TrackerStore: TrackerStoreProtocol {
         trackerEntity.category = categoryCoreData
 
         coreDataStack.saveContext()
-        // TODO: why not working NSFetchedResultsControllerDelegate?
-        delegate?.didTrackersUpdate()
     }
     
     func getTrackerCD(by id: UUID) -> TrackerCoreData? {
@@ -126,9 +119,7 @@ extension TrackerStore: TrackerStoreProtocol {
 
 // MARK: - NSFetchedResultsControllerDelegate
 extension TrackerStore: NSFetchedResultsControllerDelegate {
-    // TODO: NOT Called
-//    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> controllerDidChangeContent")
-//        delegate?.didTrackersUpdate()
-//    }
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        delegate?.didTrackersUpdate()
+    }
 }

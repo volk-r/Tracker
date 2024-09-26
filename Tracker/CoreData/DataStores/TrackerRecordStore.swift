@@ -9,10 +9,12 @@ import Foundation
 import CoreData
 
 final class TrackerRecordStore: TrackerRecordStoreProtocol {
+    // MARK: PROPERTIES
     private let coreDataStack = CoreDataStack.shared
     
     private let trackerStore = TrackerStore()
     
+    // MARK: FUNCTIONS
     func addTrackerRecord(with trackerRecord: TrackerRecord) {
         let trackerRecordEntity = TrackerRecordCoreData(context: coreDataStack.context)
         trackerRecordEntity.recordId = trackerRecord.id

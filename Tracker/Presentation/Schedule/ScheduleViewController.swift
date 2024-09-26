@@ -27,7 +27,7 @@ final class ScheduleViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Lifestyle
+    // MARK: Lifecycle
     override func loadView() {
         super.loadView()
         view = scheduleView

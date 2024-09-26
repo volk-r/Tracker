@@ -23,7 +23,7 @@ final class CreateTrackerViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Lifestyle
+    // MARK: Lifecycle
     override func loadView() {
         super.loadView()
         view = createTrackerView
