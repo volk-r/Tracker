@@ -15,11 +15,25 @@ struct Tracker: Hashable {
     let schedule: [WeekDay]?
     
     struct NewTrackerData {
-        var id: UUID? = nil
-        var name: String? = nil
-        var color: UIColor? = nil
-        var emoji: String? = nil
-        var schedule: [WeekDay]? = nil
+        let id: UUID?
+        let name: String?
+        let color: UIColor?
+        let emoji: String?
+        let schedule: [WeekDay]?
+        
+        init(
+            id: UUID? = nil,
+            name: String? = nil,
+            color: UIColor? = nil,
+            emoji: String? = nil,
+            schedule: [WeekDay]? = nil
+        ) {
+            self.id = id
+            self.name = name
+            self.color = color
+            self.emoji = emoji
+            self.schedule = schedule
+        }
     }
 }
 
