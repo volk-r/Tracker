@@ -26,9 +26,10 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
         let fetchRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         do {
             let categoriesCoreDataArray = try coreDataStack.context.fetch(fetchRequest)
-            let categories = categoriesCoreDataArray.compactMap { categoriesCoreData -> TrackerCategory? in
-                decodingCategory(from: categoriesCoreData)
-            }
+            let categories = categoriesCoreDataArray
+                .compactMap { categoriesCoreData -> TrackerCategory? in
+                    decodingCategory(from: categoriesCoreData)
+                }
             return categories
         } catch {
             print("❌ Failed to fetch categories: \(error)")
@@ -66,9 +67,10 @@ extension TrackerCategoryStore {
             return nil
         }
         
-        let trackers = trackerCoreDataSet.compactMap { trackerCoreData -> Tracker? in
-            return Tracker.init(from: trackerCoreData)
-        }
+        let trackers = trackerCoreDataSet
+            .compactMap { trackerCoreData -> Tracker? in
+                Tracker.init(from: trackerCoreData)
+            }
         
         return TrackerCategory(id: id, title: title, trackerList: trackers)
     }

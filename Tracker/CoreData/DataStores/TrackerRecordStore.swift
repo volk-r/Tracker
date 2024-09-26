@@ -32,10 +32,10 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
         let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
         do {
             let trackerRecordsCoreDataArray = try coreDataStack.context.fetch(fetchRequest)
-            let trackerRecords = trackerRecordsCoreDataArray.compactMap { trackerRecordsCoreData ->
-                TrackerRecord? in
-                return TrackerRecord(from: trackerRecordsCoreData)
-            }
+            let trackerRecords = trackerRecordsCoreDataArray
+                .compactMap { trackerRecordsCoreData -> TrackerRecord? in
+                    TrackerRecord(from: trackerRecordsCoreData)
+                }
             return trackerRecords
         } catch {
             print("❌ Failed to fetch tracker records: \(error)")

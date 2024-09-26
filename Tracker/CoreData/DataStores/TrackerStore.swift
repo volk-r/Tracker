@@ -66,13 +66,13 @@ extension TrackerStore: TrackerStoreProtocol {
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         do {
             let trackerCoreDataArray = try coreDataStack.context.fetch(fetchRequest)
-            let trackers = try trackerCoreDataArray.compactMap { trackerCoreData -> Tracker in
-                guard let tracker = Tracker.init(from: trackerCoreData) else {
-                    throw TrackerStoreError.decodeDataError
+            let trackers = try trackerCoreDataArray
+                .compactMap { trackerCoreData -> Tracker in
+                    guard let tracker = Tracker.init(from: trackerCoreData) else {
+                        throw TrackerStoreError.decodeDataError
+                    }
+                    return tracker
                 }
-                return tracker
-            }
-            
             return trackers
         } catch {
             print("❌ Failed to fetch trackers: \(error)")
