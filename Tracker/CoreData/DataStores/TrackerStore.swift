@@ -111,6 +111,7 @@ extension TrackerStore: TrackerStoreProtocol {
 
 // MARK: - NSFetchedResultsControllerDelegate
 extension TrackerStore: NSFetchedResultsControllerDelegate {
+    // TODO: not working, delegate == nil
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate?.didTrackersUpdate()
     }

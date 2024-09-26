@@ -34,6 +34,22 @@ struct Tracker: Hashable {
             self.emoji = emoji
             self.schedule = schedule
         }
+        
+        func update(newName: String?) -> Self {
+            .init(id: id, name: newName, color: color, emoji: emoji, schedule: schedule)
+        }
+        
+        func update(newSchedule: [WeekDay]?) -> Self {
+            .init(id: id, name: name, color: color, emoji: emoji, schedule: newSchedule)
+        }
+        
+        func update(newEmoji: String?) -> Self {
+            .init(id: id, name: name, color: color, emoji: newEmoji, schedule: schedule)
+        }
+        
+        func update(newColor: UIColor?) -> Self {
+            .init(id: id, name: name, color: newColor, emoji: emoji, schedule: schedule)
+        }
     }
 }
 

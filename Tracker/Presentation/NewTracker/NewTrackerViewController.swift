@@ -184,7 +184,7 @@ extension NewTrackerViewController {
     
     @objc private func editingChanged(_ sender: UITextField) {
         guard let text = sender.text else { return }
-        data.name = text
+        data = data.update(newName: text)
         let errorIsHidden = text.count < 38
         newTrackerView.showTrackerNameError(errorIsHidden)
     }
@@ -369,9 +369,9 @@ extension NewTrackerViewController: UICollectionViewDelegate {
         
         switch indexPath.section {
         case CollectionViewCellTypes.emoji.rawValue:
-            data.emoji = AppEmojis[indexPath.item]
+            data = data.update(newEmoji: AppEmojis[indexPath.item])
         case CollectionViewCellTypes.color.rawValue:
-            data.color = AppColorSettings.palette[indexPath.item]
+            data = data.update(newColor: AppColorSettings.palette[indexPath.item])
         default:
             break
         }
@@ -458,7 +458,7 @@ extension NewTrackerViewController: UITableViewDelegate {
 // MARK: ScheduleViewControllerDelegate
 extension NewTrackerViewController: ScheduleViewControllerDelegate {
     func didConfirmSchedule(_ schedule: [WeekDay]) {
-        data.schedule = schedule
+        data = data.update(newSchedule: schedule)
         let indexPathCell = indexPathCell?.filter( {
             $0.key == NewTrackerParam.schedule
         } )

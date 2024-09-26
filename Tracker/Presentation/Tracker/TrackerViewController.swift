@@ -262,6 +262,9 @@ extension TrackerViewController: NewTrackerViewControllerDelegate {
         guard let categoryIndex = categories.firstIndex(where: { $0.title == categoryTitle }) else { return }
         dismiss(animated: true)
         trackerStore.addTracker(trackerToAdd, to: categories[categoryIndex])
+        // TODO: didTrackersUpdate not working, delegate == nil
+        getAllCategories()
+        trackerView.trackerCollectionView.reloadData()
     }
     
     func didTapCancelButton() {
@@ -279,6 +282,7 @@ extension TrackerViewController: UITextFieldDelegate {
 }
 
 extension TrackerViewController: TrackerStoreDelegate {
+    // TODO: not working, delegate == nil
     func didTrackersUpdate() {
         print("didTrackersUpdate")
         print(categories)
