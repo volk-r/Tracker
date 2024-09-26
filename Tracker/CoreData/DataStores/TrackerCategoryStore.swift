@@ -45,7 +45,7 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
         
         do {
             let category = try coreDataStack.context.fetch(request)
-            return category[0]
+            return category.first
         } catch {
             print("❌ Failed to find category by ID: \(error)")
             return nil
@@ -58,16 +58,14 @@ extension TrackerCategoryStore {
         guard
             let id = trackerCategoryCoreData.categoryId,
             let title = trackerCategoryCoreData.title,
-            let trackerCoreDataArray = trackerCategoryCoreData.trackers as? Set<TrackerCoreData>
+            let trackerCoreDataSet = trackerCategoryCoreData.trackers as? Set<TrackerCoreData>
         else {
             return nil
         }
         
-        let trackers = trackerCoreDataArray.compactMap { trackerCoreData -> Tracker? in
+        let trackers = trackerCoreDataSet.compactMap { trackerCoreData -> Tracker? in
             return Tracker.init(from: trackerCoreData)
         }
-        // TODO:
-        print("trackerCategoryCoreData.trackers", trackers)
         
         return TrackerCategory(id: id, title: title, trackerList: trackers)
     }

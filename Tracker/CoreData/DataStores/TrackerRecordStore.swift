@@ -23,6 +23,7 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
         trackerRecordEntity.tracker = trackerCoreData
         
         coreDataStack.saveContext()
+        print("✅ Record added: \(trackerRecord)")
     }
     
     func fetchAllRecords() -> [TrackerRecord] {
@@ -53,7 +54,7 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
             let results = try coreDataStack.context.fetch(fetchRequest)
             if let recordToDelete = results.first {
                 coreDataStack.context.delete(recordToDelete)
-                try coreDataStack.context.save()
+                coreDataStack.saveContext()
                 print("✅ Record deleted: \(trackerRecord)")
             } else {
                 print("❕ Record not found: \(trackerRecord)")
