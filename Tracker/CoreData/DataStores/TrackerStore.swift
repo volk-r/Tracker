@@ -40,14 +40,6 @@ final class TrackerStore: NSObject {
     }
 }
 
-extension TrackerStore {
-    // MARK: - TrackerStoreError
-    enum TrackerStoreError: Error {
-        case decodeDataError
-        case fetchTrackerError
-    }
-}
-
 // MARK: - TrackerStoreProtocol
 extension TrackerStore: TrackerStoreProtocol {
     var numberOfTrackers: Int {
@@ -69,7 +61,7 @@ extension TrackerStore: TrackerStoreProtocol {
             let trackers = try trackerCoreDataArray
                 .compactMap { trackerCoreData -> Tracker in
                     guard let tracker = Tracker.init(from: trackerCoreData) else {
-                        throw TrackerStoreError.decodeDataError
+                        throw StoreErrors.decodeDataError
                     }
                     return tracker
                 }
@@ -104,7 +96,7 @@ extension TrackerStore: TrackerStoreProtocol {
         do {
             try fetchedResultsController.performFetch()
             guard let tracker = fetchedResultsController.fetchedObjects?.first else {
-                throw TrackerStoreError.fetchTrackerError
+                throw StoreErrors.fetchTrackerError
             }
             fetchedResultsController.fetchRequest.predicate = nil
             try fetchedResultsController.performFetch()
