@@ -79,7 +79,7 @@ class TrackerViewController: UIViewController {
 }
 
 extension TrackerViewController {
-    // MARK: getCompletedTrackers
+    // MARK: getAllCategories
     private func getAllCategories() {
         categories = trackerCategoryStore.fetchAllCategories()
         print("categories", categories)

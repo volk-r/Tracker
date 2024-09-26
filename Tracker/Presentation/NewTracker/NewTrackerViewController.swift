@@ -151,8 +151,8 @@ extension NewTrackerViewController {
             !category.isEmpty,
             let name = data.name,
             !name.isEmpty,
-            let _ = data.emoji,
-            let _ = data.color
+            data.emoji != nil,
+            data.color != nil
         else {
             newTrackerView.doCreateButtonActive(false)
             return
@@ -404,17 +404,19 @@ extension NewTrackerViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        // TODO: need to setup cell
         switch indexPath.row {
         case NewTrackerParam.category.rawValue:
             indexPathCell = [.category: indexPath]
-            newTrackerCell.setupCell(title: NewTrackerParam.category.description, description: category)
+            newTrackerCell.setupCell(
+                    title: NewTrackerParam.category.description,
+                    description: category
+                )
         case NewTrackerParam.schedule.rawValue:
             indexPathCell = [.schedule: indexPath]
             newTrackerCell.setupCell(
-                title: NewTrackerParam.schedule.description,
-                description: WeekDay.getScheduleString(from: data.schedule)
-            )
+                    title: NewTrackerParam.schedule.description,
+                    description: WeekDay.getScheduleString(from: data.schedule)
+                )
         default:
             return UITableViewCell()
         }
@@ -475,7 +477,6 @@ extension NewTrackerViewController: ScheduleViewControllerDelegate {
     let delegate = TrackerViewController()
     let viewController = NewTrackerViewController(trackerType: .habit, delegate: delegate)
     return viewController
-
 }
 
 @available(iOS 17, *)
