@@ -11,7 +11,7 @@ class TrackerViewController: UIViewController {
     // MARK: PROPERTIES
     private lazy var trackerView = TrackerView()
     
-    private lazy var trackerStore: TrackerStoreProtocol = TrackerStore(delegate: self)
+    private var trackerStore: TrackerStoreProtocol = TrackerStore()
     private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
     private let trackerRecordStore: TrackerRecordStoreProtocol = TrackerRecordStore()
 
@@ -51,6 +51,16 @@ class TrackerViewController: UIViewController {
     private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 2, leftInset: 16, rightInset: 16, topInset: 8, bottomInset: 16, height: 148, cellSpacing: 10)
     
     // MARK: Lifecycle
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        trackerStore.delegate = self
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func loadView() {
         super.loadView()
         view = trackerView
@@ -262,9 +272,6 @@ extension TrackerViewController: NewTrackerViewControllerDelegate {
         guard let categoryIndex = categories.firstIndex(where: { $0.title == categoryTitle }) else { return }
         dismiss(animated: true)
         trackerStore.addTracker(trackerToAdd, to: categories[categoryIndex])
-        // TODO: didTrackersUpdate not working, delegate == nil
-        getAllCategories()
-        trackerView.trackerCollectionView.reloadData()
     }
     
     func didTapCancelButton() {
@@ -282,10 +289,7 @@ extension TrackerViewController: UITextFieldDelegate {
 }
 
 extension TrackerViewController: TrackerStoreDelegate {
-    // TODO: not working, delegate == nil
     func didTrackersUpdate() {
-        print("didTrackersUpdate")
-        print(categories)
         getAllCategories()
         trackerView.trackerCollectionView.reloadData()
     }

@@ -25,18 +25,17 @@ final class TrackerStore: NSObject {
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: coreDataStack.context,
-            sectionNameKeyPath: nil,
+            sectionNameKeyPath: "category.title",
             cacheName: nil
         )
-        
-        fetchedResultsController.delegate = self
-        try? fetchedResultsController.performFetch()
         return fetchedResultsController
     }()
     
     // MARK: Lifecycle
-    init(delegate: TrackerStoreDelegate? = nil) {
-        self.delegate = delegate
+    override init() {
+        super.init()
+        try? fetchedResultsController.performFetch()
+        fetchedResultsController.delegate = self
     }
 }
 
@@ -111,7 +110,6 @@ extension TrackerStore: TrackerStoreProtocol {
 
 // MARK: - NSFetchedResultsControllerDelegate
 extension TrackerStore: NSFetchedResultsControllerDelegate {
-    // TODO: not working, delegate == nil
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate?.didTrackersUpdate()
     }
