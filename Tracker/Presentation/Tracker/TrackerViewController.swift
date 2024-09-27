@@ -11,9 +11,9 @@ class TrackerViewController: UIViewController {
     // MARK: PROPERTIES
     private lazy var trackerView = TrackerView()
     
-    private var trackerStore: TrackerStoreProtocol = TrackerStore()
     private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
-    private let trackerRecordStore: TrackerRecordStoreProtocol = TrackerRecordStore()
+    private var trackerStore: TrackerStoreProtocol = TrackerStore()
+    private var trackerRecordStore: TrackerRecordStoreProtocol = TrackerRecordStore()
 
     private var completedTrackers: Set<TrackerRecord> = []
     private var categories: [TrackerCategory] = [TrackerCategory]() {
@@ -55,6 +55,7 @@ class TrackerViewController: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         trackerStore.delegate = self
+        trackerRecordStore.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -261,8 +262,6 @@ extension TrackerViewController: TrackerCollectionViewCellDelegate {
             cell.increaseDayCount()
             cell.setupAddDayButton(isCompleted: true)
         }
-        
-        getCompletedTrackers()
     }
 }
 
@@ -291,6 +290,7 @@ extension TrackerViewController: UITextFieldDelegate {
 extension TrackerViewController: TrackerStoreDelegate {
     func didTrackersUpdate() {
         getAllCategories()
+        getCompletedTrackers()
         trackerView.trackerCollectionView.reloadData()
     }
 }

@@ -87,7 +87,7 @@ extension TrackerStore: TrackerStoreProtocol {
         coreDataStack.saveContext()
     }
     
-    func getTrackerCD(by id: UUID) -> TrackerCoreData? {
+    func getTrackerCoreData(by id: UUID) -> TrackerCoreData? {
         fetchedResultsController.fetchRequest.predicate = NSPredicate(
             format: "%K == %@",
             #keyPath(TrackerCoreData.trackerId), id.uuidString

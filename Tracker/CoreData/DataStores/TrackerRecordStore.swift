@@ -8,11 +8,34 @@
 import Foundation
 import CoreData
 
-final class TrackerRecordStore: TrackerRecordStoreProtocol {
+final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
     // MARK: PROPERTIES
-    private let coreDataStack = CoreDataStack.shared
+    weak var delegate: TrackerStoreDelegate?
     
+    private let coreDataStack = CoreDataStack.shared
     private let trackerStore = TrackerStore()
+    
+    private lazy var fetchedResultsController: NSFetchedResultsController<TrackerRecordCoreData> = {
+        let fetchRequest = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(keyPath: \TrackerRecordCoreData.createdAt, ascending: true),
+        ]
+        
+        let fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: coreDataStack.context,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        return fetchedResultsController
+    }()
+    
+    // MARK: Lifecycle
+    override init() {
+        super.init()
+        try? fetchedResultsController.performFetch()
+        fetchedResultsController.delegate = self
+    }
     
     // MARK: FUNCTIONS
     func addTrackerRecord(with trackerRecord: TrackerRecord) {
@@ -21,7 +44,7 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
         trackerRecordEntity.trackerId = trackerRecord.trackerId
         trackerRecordEntity.createdAt = trackerRecord.date
         
-        let trackerCoreData = trackerStore.getTrackerCD(by: trackerRecord.trackerId)
+        let trackerCoreData = trackerStore.getTrackerCoreData(by: trackerRecord.trackerId)
         trackerRecordEntity.tracker = trackerCoreData
         
         coreDataStack.saveContext()
@@ -64,5 +87,12 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
         } catch {
             print("❌ Failed to delete record: \(error)")
         }
+    }
+}
+
+// MARK: - NSFetchedResultsControllerDelegate
+extension TrackerRecordStore: NSFetchedResultsControllerDelegate {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        delegate?.didTrackersUpdate()
     }
 }
