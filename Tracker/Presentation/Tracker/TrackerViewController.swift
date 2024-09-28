@@ -35,7 +35,14 @@ class TrackerViewController: UIViewController {
             }
             
             if !filteredTrackers.isEmpty {
-                result.append(TrackerCategory(id: category.id, title: category.title, trackerList: filteredTrackers))
+                result
+                    .append(
+                        TrackerCategory(
+                            id: category.id,
+                            title: category.title,
+                            trackerList: filteredTrackers.sorted(by: {$0.name > $1.name})
+                        )
+                    )
             }
         }
         
