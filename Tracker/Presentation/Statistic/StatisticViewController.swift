@@ -11,7 +11,7 @@ final class StatisticViewController: UIViewController {
     // MARK: PROPERTIES
     private lazy var statisticView = StatisticView()
     
-    // MARK: Lifestyle
+    // MARK: Lifecycle
     override func loadView() {
         super.loadView()
         view = statisticView

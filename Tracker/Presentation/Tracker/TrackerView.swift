@@ -56,7 +56,7 @@ final class TrackerView: UIView {
             searchTextField.heightAnchor.constraint(equalToConstant: 36),
             searchTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
-            trackerCollectionView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 10),
+            trackerCollectionView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 24),
             trackerCollectionView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             trackerCollectionView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             trackerCollectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),

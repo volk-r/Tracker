@@ -94,7 +94,7 @@ final class NewTrackerView: UIView {
         return stackView
     }()
     
-    // MARK: Lifestyle
+    // MARK: Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white

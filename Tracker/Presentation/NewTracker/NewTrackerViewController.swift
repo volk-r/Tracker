@@ -55,7 +55,7 @@ final class NewTrackerViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Lifestyle
+    // MARK: Lifecycle
     override func loadView() {
         super.loadView()
         view = newTrackerView
@@ -151,8 +151,8 @@ extension NewTrackerViewController {
             !category.isEmpty,
             let name = data.name,
             !name.isEmpty,
-            let emoji = data.emoji,
-            let color = data.color
+            data.emoji != nil,
+            data.color != nil
         else {
             newTrackerView.doCreateButtonActive(false)
             return
@@ -184,7 +184,7 @@ extension NewTrackerViewController {
     
     @objc private func editingChanged(_ sender: UITextField) {
         guard let text = sender.text else { return }
-        data.name = text
+        data = data.update(newName: text)
         let errorIsHidden = text.count < 38
         newTrackerView.showTrackerNameError(errorIsHidden)
     }
@@ -201,6 +201,7 @@ extension NewTrackerViewController {
         }
 
         let newTracker = Tracker(
+            id: UUID(),
             name: name,
             color: color,
             emoji: emoji,
@@ -230,14 +231,12 @@ extension NewTrackerViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        switch indexPath.section {
-        case CollectionViewCellTypes.emoji.rawValue:
+        switch CollectionViewCellTypes.allCases[indexPath.section] {
+        case .emoji:
             if let emojiCell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: EmojiCollectionViewCell.identifier,
                 for: indexPath
             ) as? EmojiCollectionViewCell {
-                emojiCell.prepareForReuse()
-                
                 if selectedItems[indexPath.section] == indexPath {
                     emojiCell.select()
                 }
@@ -246,13 +245,11 @@ extension NewTrackerViewController: UICollectionViewDataSource {
                 
                 return emojiCell
             }
-        case CollectionViewCellTypes.color.rawValue:
+        case .color:
             if let colorCell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ColorCollectionViewCell.identifier,
                 for: indexPath
             ) as? ColorCollectionViewCell {
-                colorCell.prepareForReuse()
-                
                 if selectedItems[indexPath.section] == indexPath {
                     colorCell.select()
                 }
@@ -261,8 +258,6 @@ extension NewTrackerViewController: UICollectionViewDataSource {
                 
                 return colorCell
             }
-        default:
-            return UICollectionViewCell()
         }
         
         return UICollectionViewCell()
@@ -342,24 +337,7 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         referenceSizeForHeaderInSection section: Int
     ) -> CGSize {
-        let indexPath = IndexPath(
-            row: 0,
-            section: section
-        )
-        let headerView = self.collectionView(
-            collectionView,
-            viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader,
-            at: indexPath
-        )
-        
-        return headerView.systemLayoutSizeFitting(
-            CGSize(
-                width: collectionView.frame.width,
-                height: UIView.layoutFittingExpandedSize.height
-            ),
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
+        CGSize(width: collectionView.bounds.width, height: 18)
     }
 }
 
@@ -385,9 +363,9 @@ extension NewTrackerViewController: UICollectionViewDelegate {
         
         switch indexPath.section {
         case CollectionViewCellTypes.emoji.rawValue:
-            data.emoji = AppEmojis[indexPath.item]
+            data = data.update(newEmoji: AppEmojis[indexPath.item])
         case CollectionViewCellTypes.color.rawValue:
-            data.color = AppColorSettings.palette[indexPath.item]
+            data = data.update(newColor: AppColorSettings.palette[indexPath.item])
         default:
             break
         }
@@ -420,17 +398,19 @@ extension NewTrackerViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        // TODO: need to setup cell
         switch indexPath.row {
         case NewTrackerParam.category.rawValue:
             indexPathCell = [.category: indexPath]
-            newTrackerCell.setupCell(title: NewTrackerParam.category.description, description: category)
+            newTrackerCell.setupCell(
+                    title: NewTrackerParam.category.description,
+                    description: category
+                )
         case NewTrackerParam.schedule.rawValue:
             indexPathCell = [.schedule: indexPath]
             newTrackerCell.setupCell(
-                title: NewTrackerParam.schedule.description,
-                description: WeekDay.getScheduleString(from: data.schedule)
-            )
+                    title: NewTrackerParam.schedule.description,
+                    description: WeekDay.getScheduleString(from: data.schedule)
+                )
         default:
             return UITableViewCell()
         }
@@ -472,7 +452,7 @@ extension NewTrackerViewController: UITableViewDelegate {
 // MARK: ScheduleViewControllerDelegate
 extension NewTrackerViewController: ScheduleViewControllerDelegate {
     func didConfirmSchedule(_ schedule: [WeekDay]) {
-        data.schedule = schedule
+        data = data.update(newSchedule: schedule)
         let indexPathCell = indexPathCell?.filter( {
             $0.key == NewTrackerParam.schedule
         } )
@@ -491,7 +471,6 @@ extension NewTrackerViewController: ScheduleViewControllerDelegate {
     let delegate = TrackerViewController()
     let viewController = NewTrackerViewController(trackerType: .habit, delegate: delegate)
     return viewController
-
 }
 
 @available(iOS 17, *)

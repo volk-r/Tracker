@@ -31,7 +31,7 @@ final class ScheduleView: UIView {
         return button
     }()
     
-    // MARK: Lifestyle
+    // MARK: Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
