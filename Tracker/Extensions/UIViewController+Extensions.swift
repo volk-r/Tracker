@@ -1,5 +1,5 @@
 //
-//  UIViewController+Extension.swift
+//  UIViewController+Extensions.swift
 //  Tracker
 //
 //  Created by Roman Romanov on 12.09.2024.

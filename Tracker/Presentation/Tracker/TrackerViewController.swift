@@ -82,6 +82,7 @@ class TrackerViewController: UIViewController {
         showPlaceHolder()
         setupSearchTextField()
         addTapGestureToHideKeyboard()
+        showOnboarding()
         
         getAllCategories()
         
@@ -169,6 +170,17 @@ extension TrackerViewController {
     // MARK: showPlaceHolder
     private func showPlaceHolder() {
         trackerView.placeHolderView.isHidden = !filteredCategories.isEmpty
+    }
+    
+    private func showOnboarding() {
+        // TODO: for tests
+//        UserAppSettingsStorage.shared.clean()
+        guard !UserAppSettingsStorage.shared.isOnboardingVisited else { return }
+        
+        UserAppSettingsStorage.shared.isOnboardingVisited = true
+        let onboardingVC = OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        onboardingVC.modalPresentationStyle = .fullScreen
+        present(onboardingVC, animated: true)
     }
 }
 

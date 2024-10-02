@@ -1,5 +1,5 @@
 //
-//  UITextField+Extension.swift
+//  UITextField+Extensions.swift
 //  Tracker
 //
 //  Created by Roman Romanov on 07.09.2024.

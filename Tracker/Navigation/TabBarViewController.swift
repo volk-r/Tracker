@@ -8,15 +8,19 @@
 import UIKit
 
 final class TabBarViewController: UITabBarController {
+    // MARK: PROPERTIES
     private let trackerVC = TrackerViewController()
     private let statisticVC = StatisticViewController()
     
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupControllers()
     }
-    
+}
+
+private extension TabBarViewController {
+    // MARK: setupControllers
     private func setupControllers() {
         let navigationControllerTracker = UINavigationController(rootViewController: trackerVC)
         let navigationControllerStatistic = UINavigationController(rootViewController: statisticVC)
