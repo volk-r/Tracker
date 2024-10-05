@@ -8,7 +8,7 @@
 import UIKit
 
 final class NewTrackerTableViewCell: UITableViewCell {
-    // MARK: - PROPERTIES
+    // MARK: PROPERTIES
     static let identifier = "NewTrackerTableViewCell"
     
     private let nameLabel: UILabel = {
@@ -41,7 +41,7 @@ final class NewTrackerTableViewCell: UITableViewCell {
         return button
     }()
     
-    // MARK: - Lifecycle
+    // MARK: Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -57,7 +57,7 @@ final class NewTrackerTableViewCell: UITableViewCell {
 }
 
 extension NewTrackerTableViewCell {
-    // MARK: - SETUP LAYOUT
+    // MARK: setupLayout
     private func setupLayout() {
         [
             nameLabel,
@@ -88,7 +88,7 @@ extension NewTrackerTableViewCell {
         ])
     }
     
-    // MARK: - prepareForReuse
+    // MARK: prepareForReuse
     override func prepareForReuse() {
         super.prepareForReuse()
         nameLabel.text = nil

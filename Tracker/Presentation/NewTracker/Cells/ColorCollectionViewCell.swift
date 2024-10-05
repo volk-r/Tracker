@@ -8,7 +8,7 @@
 import UIKit
 
 final class ColorCollectionViewCell: UICollectionViewCell {
-    // MARK: - PROPERTIES
+    // MARK: PROPERTIES
     static let identifier = "ColorCollectionViewCell"
     
     private let colorView: UIView = {
@@ -18,7 +18,7 @@ final class ColorCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    // MARK: - Lifecycle
+    // MARK: Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()

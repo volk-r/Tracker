@@ -39,7 +39,7 @@ final class TrackerStore: NSObject {
     }
 }
 
-// MARK: - TrackerStoreProtocol
+// MARK: TrackerStoreProtocol
 extension TrackerStore: TrackerStoreProtocol {
     var numberOfTrackers: Int {
         fetchedResultsController.fetchedObjects?.count ?? 0
@@ -108,7 +108,7 @@ extension TrackerStore: TrackerStoreProtocol {
     }
 }
 
-// MARK: - NSFetchedResultsControllerDelegate
+// MARK: NSFetchedResultsControllerDelegate
 extension TrackerStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate?.didTrackersUpdate()

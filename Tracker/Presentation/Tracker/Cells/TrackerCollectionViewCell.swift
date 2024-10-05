@@ -64,7 +64,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    // MARK: - Lifecycle
+    // MARK: Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -75,7 +75,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     }
 }
 
-// MARK: - Layout methods
 extension TrackerCollectionViewCell {
     // MARK: prepareForReuse
     override func prepareForReuse() {

@@ -9,6 +9,7 @@ import Foundation
 
 protocol TrackerCategoryStoreProtocol {
     func createCategory(with category: TrackerCategory)
+    func updateCategory(with data: TrackerCategory)
     func fetchAllCategories() -> [TrackerCategory]
     func getCategoryById(_ id: UUID) -> TrackerCategoryCoreData?
 }

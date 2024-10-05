@@ -82,7 +82,13 @@ extension CategoryViewController {
     }
     
     @objc private func createButtonTapAction() {
-        print("open CreateCategoryController")
+        let createCategoryVC = CreateCategoryViewController(
+            mode: .create,
+            delegate: self,
+            editingCategory: nil
+        )
+        let navigationController = UINavigationController(rootViewController: createCategoryVC)
+        present(navigationController, animated: true)
     }
 }
 
@@ -141,7 +147,16 @@ extension CategoryViewController: UITableViewDataSource {
     }
 }
 
-// MARK: - SHOW PREVIEW
+// MARK: CategoryViewController
+extension CategoryViewController: CreateCategoryViewControllerDelegate {
+    func acceptChanges() {
+        getAllCategories()
+        categoryView.tableView.reloadData()
+        dismiss(animated: true)
+    }
+}
+
+// MARK: SHOW PREVIEW
 #if DEBUG
 
 @available(iOS 17, *)

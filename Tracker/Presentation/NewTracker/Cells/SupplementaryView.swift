@@ -8,7 +8,7 @@
 import UIKit
 
 final class SupplementaryView: UICollectionReusableView {
-    // MARK: - PROPERTIES
+    // MARK: PROPERTIES
     static let identifier = "SupplementaryView"
     
     private let titleLabel: UILabel = {
@@ -17,7 +17,7 @@ final class SupplementaryView: UICollectionReusableView {
         return label
     }()
     
-    // MARK: - Lifecycle
+    // MARK: Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -29,7 +29,7 @@ final class SupplementaryView: UICollectionReusableView {
 }
 
 extension SupplementaryView {
-    // MARK: - setupLayout
+    // MARK: setupLayout
     private func setupLayout() {
         addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false

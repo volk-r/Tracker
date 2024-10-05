@@ -8,7 +8,7 @@
 import UIKit
 
 final class CategoryTableViewCell: UITableViewCell {
-    // MARK: - PROPERTIES
+    // MARK: PROPERTIES
     static let identifier = "CategoryTableViewCell"
     
     private let nameLabel: UILabel = {
@@ -24,7 +24,7 @@ final class CategoryTableViewCell: UITableViewCell {
         return stack
     }()
     
-    // MARK: - Lifecycle
+    // MARK: Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -40,7 +40,7 @@ final class CategoryTableViewCell: UITableViewCell {
 }
 
 extension CategoryTableViewCell {
-    // MARK: - SETUP LAYOUT
+    // MARK: setupLayout
     private func setupLayout() {
         [
             nameLabel,
@@ -64,7 +64,7 @@ extension CategoryTableViewCell {
         ])
     }
     
-    // MARK: - prepareForReuse
+    // MARK: prepareForReuse
     override func prepareForReuse() {
         super.prepareForReuse()
         nameLabel.text = nil

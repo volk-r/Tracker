@@ -117,7 +117,7 @@ extension ScheduleViewController: ScheduleViewControllerCellDelegate {
     }
 }
 
-// MARK: - SHOW PREVIEW
+// MARK: SHOW PREVIEW
 #if DEBUG
 
 @available(iOS 17, *)

@@ -185,7 +185,7 @@ extension NewTrackerViewController {
     @objc private func editingChanged(_ sender: UITextField) {
         guard let text = sender.text else { return }
         data = data.update(newName: text)
-        let errorIsHidden = text.count < 38
+        let errorIsHidden = text.count < AppConstants.nameLengthRestriction
         newTrackerView.showTrackerNameError(errorIsHidden)
     }
 
@@ -264,7 +264,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
+// MARK: UICollectionViewDelegateFlowLayout
 extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
@@ -486,7 +486,7 @@ extension NewTrackerViewController: CategoryViewControllerDelegate {
     }
 }
 
-// MARK: - SHOW PREVIEW
+// MARK: SHOW PREVIEW
 #if DEBUG
 
 @available(iOS 17, *)

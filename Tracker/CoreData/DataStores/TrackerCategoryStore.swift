@@ -22,6 +22,12 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
         coreDataStack.saveContext()
     }
     
+    func updateCategory(with data: TrackerCategory) {
+        let category = getCategoryById(data.id)
+        category?.title = data.title
+        coreDataStack.saveContext()
+    }
+    
     func fetchAllCategories() -> [TrackerCategory] {
         let fetchRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         do {

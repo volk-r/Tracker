@@ -8,7 +8,7 @@
 import UIKit
 
 final class ScheduleTableViewCell: UITableViewCell {
-    // MARK: - PROPERTIES
+    // MARK: PROPERTIES
     static let identifier = "ScheduleTableViewCell"
     
     weak var delegate: ScheduleViewControllerCellDelegate?
@@ -28,7 +28,7 @@ final class ScheduleTableViewCell: UITableViewCell {
         return switchView
     }()
     
-    // MARK: - Lifecycle
+    // MARK: Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -44,7 +44,7 @@ final class ScheduleTableViewCell: UITableViewCell {
 }
 
 extension ScheduleTableViewCell {
-    // MARK: - SETUP LAYOUT
+    // MARK: setupLayout
     private func setupLayout() {
         [
             nameLabel,
@@ -64,7 +64,7 @@ extension ScheduleTableViewCell {
         ])
     }
     
-    // MARK: - prepareForReuse
+    // MARK: prepareForReuse
     override func prepareForReuse() {
         super.prepareForReuse()
         nameLabel.text = nil
