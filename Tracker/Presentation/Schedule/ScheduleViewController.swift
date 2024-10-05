@@ -121,7 +121,7 @@ extension ScheduleViewController: ScheduleViewControllerCellDelegate {
 #if DEBUG
 
 @available(iOS 17, *)
-#Preview("Event") {
+#Preview {
     let delegate = NewTrackerViewController(trackerType: TrackerType.habit, delegate: TrackerViewController())
     let viewController = ScheduleViewController(selectedWeekdays: [], delegate: delegate)
     return viewController

@@ -104,11 +104,10 @@ final class NewTrackerView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
  
 extension NewTrackerView {
-    // MARK: LAYOUT
+    // MARK: setupLayout
     private func setupLayout() {
         [
             scrollView,

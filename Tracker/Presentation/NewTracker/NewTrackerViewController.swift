@@ -432,7 +432,10 @@ extension NewTrackerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case NewTrackerParam.category.rawValue:
-            print("Открыть контроллер выбора Категории")
+            let categoryViewController = CategoryViewController(delegate: self)
+
+            let navigationController = UINavigationController(rootViewController: categoryViewController)
+            present(navigationController, animated: true)
         case NewTrackerParam.schedule.rawValue:
             let schedule = data.schedule ?? []
             let scheduleViewController = ScheduleViewController(selectedWeekdays: schedule, delegate: self)
@@ -460,6 +463,12 @@ extension NewTrackerViewController: ScheduleViewControllerDelegate {
         guard let indexPath = indexPathCell?.values.first else { return }
         newTrackerView.tableView.reloadRows(at: [indexPath], with: .automatic)
         dismiss(animated: true)
+    }
+}
+
+extension NewTrackerViewController: CategoryViewControllerDelegate {
+    func didCreateCategory(_ category: TrackerCategory) {
+        print("did Create Category")
     }
 }
 

@@ -13,6 +13,7 @@ final class DummyView: UIView {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center
+        label.numberOfLines = 0
         return label
     }()
     
