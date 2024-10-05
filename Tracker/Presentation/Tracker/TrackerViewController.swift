@@ -169,7 +169,7 @@ extension TrackerViewController {
     
     // MARK: showPlaceHolder
     private func showPlaceHolder() {
-        trackerView.placeHolderView.isHidden = !filteredCategories.isEmpty
+        trackerView.showPlaceHolder(isVisible: !filteredCategories.isEmpty)
     }
     
     private func showOnboarding() {

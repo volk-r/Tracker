@@ -25,7 +25,12 @@ final class TrackerView: UIView {
         return collectionView
     }()
     
-    lazy var placeHolderView: UIView = DummyView(description: "Что будем отслеживать?", imageName: AppImages.trackerEmptyPage)
+    private lazy var placeHolderView: UIView = DummyView(
+        model: DummyModel(
+            description: "Что будем отслеживать?",
+            imageName: AppImages.trackerEmptyPage
+        )
+    )
     
     // MARK: Init
     override init(frame: CGRect) {
@@ -37,6 +42,13 @@ final class TrackerView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension TrackerView {
+    // MARK: showPlaceHolder
+    func showPlaceHolder(isVisible: Bool) {
+        placeHolderView.isHidden = isVisible
     }
     
     // MARK: setupLayout
@@ -65,5 +77,4 @@ final class TrackerView: UIView {
             placeHolderView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
-
 }

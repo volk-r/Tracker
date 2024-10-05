@@ -19,7 +19,12 @@ final class StatisticView: UIView {
         return collectionView
     }()
     
-    private lazy var placeHolderView: UIView = DummyView(description: "Анализировать пока нечего", imageName: AppImages.statisticEmptyPage)
+    private lazy var placeHolderView: UIView = DummyView(
+        model: DummyModel(
+            description: "Анализировать пока нечего",
+            imageName: AppImages.statisticEmptyPage
+        )
+    )
     
     // MARK: Init
     override init(frame: CGRect) {

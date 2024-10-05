@@ -22,10 +22,10 @@ final class DummyView: UIView {
     }()
     
     // MARK: Init
-    init(description: String, imageName: String) {
+    init(model: DummyModel) {
         super.init(frame: .zero)
-        self.descriptionLabel.text  = description
-        self.descriptionImage.image = UIImage(named: imageName)
+        self.descriptionLabel.text  = model.description
+        self.descriptionImage.image = UIImage(named: model.imageName)
         
         setupLayout()
     }

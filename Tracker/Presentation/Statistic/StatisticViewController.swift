@@ -15,16 +15,18 @@ final class StatisticViewController: UIViewController {
     override func loadView() {
         super.loadView()
         view = statisticView
-        
-        setupNavBar()
-    }
-    
-    private func setupNavBar() {
-        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavBar()
+    }
+}
+
+extension StatisticViewController {
+    // MARK: setupNavBar
+    private func setupNavBar() {
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
 }
 
