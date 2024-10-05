@@ -8,5 +8,5 @@
 import Foundation
 
 protocol CategoryViewControllerDelegate: AnyObject {
-    func didCreateCategory(_ category: TrackerCategory)
+    func didSelectCategory(_ selectedCategory: TrackerCategory)
 }

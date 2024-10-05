@@ -21,6 +21,7 @@
 		3C165B3E2CB11D9C00824FD9 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C165B3D2CB11D9C00824FD9 /* CategoryViewController.swift */; };
 		3C165B402CB11DC400824FD9 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C165B3F2CB11DC400824FD9 /* CategoryView.swift */; };
 		3C165B442CB1264C00824FD9 /* CategoryViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C165B432CB1264C00824FD9 /* CategoryViewControllerDelegate.swift */; };
+		3C165B482CB1729200824FD9 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C165B472CB1729200824FD9 /* CategoryTableViewCell.swift */; };
 		3C1EBC942C99E1E8006E0D02 /* TrackersDataBase.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3C1EBC922C99E1E8006E0D02 /* TrackersDataBase.xcdatamodeld */; };
 		3C1EBC962C99E5B5006E0D02 /* DaysValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C1EBC952C99E5B5006E0D02 /* DaysValueTransformer.swift */; };
 		3C1EBCBB2C9A0012006E0D02 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C1EBCBA2C9A0012006E0D02 /* CoreDataStack.swift */; };
@@ -91,6 +92,7 @@
 		3C165B3D2CB11D9C00824FD9 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		3C165B3F2CB11DC400824FD9 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		3C165B432CB1264C00824FD9 /* CategoryViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewControllerDelegate.swift; sourceTree = "<group>"; };
+		3C165B472CB1729200824FD9 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 		3C1EBC932C99E1E8006E0D02 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		3C1EBC952C99E5B5006E0D02 /* DaysValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysValueTransformer.swift; sourceTree = "<group>"; };
 		3C1EBCBA2C9A0012006E0D02 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 			children = (
 				3C165B3D2CB11D9C00824FD9 /* CategoryViewController.swift */,
 				3C165B3F2CB11DC400824FD9 /* CategoryView.swift */,
+				3C165B462CB1727B00824FD9 /* Cell */,
 				3C165B422CB1263900824FD9 /* Protocols */,
 			);
 			path = Category;
@@ -227,6 +230,14 @@
 				3C165B432CB1264C00824FD9 /* CategoryViewControllerDelegate.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		3C165B462CB1727B00824FD9 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				3C165B472CB1729200824FD9 /* CategoryTableViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		3C62898C2C8AE6EF003CE842 /* NewTracker */ = {
@@ -593,6 +604,7 @@
 				3C165B0F2CAC746E00824FD9 /* OnboardingViewController.swift in Sources */,
 				3C1EBC962C99E5B5006E0D02 /* DaysValueTransformer.swift in Sources */,
 				3C6289AB2C8D8117003CE842 /* ScheduleViewController.swift in Sources */,
+				3C165B482CB1729200824FD9 /* CategoryTableViewCell.swift in Sources */,
 				3C165B3E2CB11D9C00824FD9 /* CategoryViewController.swift in Sources */,
 				3C165B112CAC78B900824FD9 /* OnboardingPageViewController.swift in Sources */,
 				3C165B192CADAC3800824FD9 /* OnboardingPage.swift in Sources */,
