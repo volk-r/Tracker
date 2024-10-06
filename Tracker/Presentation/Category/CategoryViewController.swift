@@ -12,19 +12,11 @@ final class CategoryViewController: UIViewController {
     weak var delegate: CategoryViewControllerDelegate?
     
     // TODO: edit/delete Category
-    // TODO: refactoring to MVVM
     
     private lazy var categoryView = CategoryView()
-    
-    private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
+    private lazy var viewModel = CategoryViewModel()
     
     private var selectedCategory: TrackerCategory?
-    private var categories: [TrackerCategory] = [TrackerCategory]() {
-        didSet {
-            showPlaceHolder()
-        }
-    }
-    private var selectedIndexPath: IndexPath?
     
     // MARK: INIT
     init(selectedCategory: TrackerCategory?, delegate: CategoryViewControllerDelegate) {
@@ -46,22 +38,36 @@ final class CategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getAllCategories()
         setupButtons()
         setupTableView()
+        setupBindings()
+        getAllCategories()
     }
 }
 
 extension CategoryViewController {
+    // MARK: setupBindings
+    private func setupBindings() {
+        viewModel.onCategoriesChanged = { [weak self] categories in
+            guard let self else { return }
+            self.categoryView.tableView.reloadData()
+            self.showPlaceHolder()
+        }
+        
+        viewModel.onCategorySelected = { [weak self] category in
+            guard let self = self else { return }
+            self.delegate?.didSelectCategory(category)
+        }
+    }
+    
     // MARK: getAllCategories
     private func getAllCategories() {
-        categories = trackerCategoryStore.fetchAllCategories()
-        print("categories", categories)
+        viewModel.loadCategories()
     }
     
     // MARK: showPlaceHolder
     private func showPlaceHolder() {
-        categoryView.showPlaceHolder(isVisible: !categories.isEmpty)
+        categoryView.showPlaceHolder(isVisible: viewModel.numberOfCategories() != 0)
     }
     
     // MARK: setupButtons
@@ -79,7 +85,7 @@ extension CategoryViewController {
             forCellReuseIdentifier: CategoryTableViewCell.identifier
         )
         
-        categoryView.tableView.separatorStyle = categories.count == 1
+        categoryView.tableView.separatorStyle = viewModel.numberOfCategories() == 1
             ? .none
             : .singleLine
     }
@@ -104,7 +110,7 @@ extension CategoryViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if
-            let selectedIndexPath,
+            let selectedIndexPath = viewModel.selectedIndexPath,
             selectedIndexPath != indexPath
         {
             let previousCell = tableView.cellForRow(at: selectedIndexPath)
@@ -114,11 +120,8 @@ extension CategoryViewController: UITableViewDelegate {
         
         let currentCell = tableView.cellForRow(at: indexPath)
         currentCell?.accessoryType = .checkmark
-        selectedIndexPath = indexPath
-        
         tableView.deselectRow(at: indexPath, animated: true)
-        let category = categories[indexPath.row]
-        delegate?.didSelectCategory(category)
+        viewModel.selectCategoryBy(indexPath: indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -129,7 +132,7 @@ extension CategoryViewController: UITableViewDelegate {
 // MARK: setupTableView
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        categories.count
+        viewModel.numberOfCategories()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -142,9 +145,13 @@ extension CategoryViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let category = categories[indexPath.row]
+        let category = viewModel.categoryBy(index: indexPath.row)
         let isSelected = category.id == selectedCategory?.id
-        selectedIndexPath = isSelected ? indexPath : selectedIndexPath
+        
+        if isSelected {
+            viewModel.saveSelected(indexPath: indexPath)
+        }
+
         categoryCell.setupCell(title: category.title, isSelected: isSelected)
         categoryView.tableView.reloadRows(at: [indexPath], with: .automatic)
 
@@ -156,7 +163,6 @@ extension CategoryViewController: UITableViewDataSource {
 extension CategoryViewController: CreateCategoryViewControllerDelegate {
     func acceptChanges() {
         getAllCategories()
-        categoryView.tableView.reloadData()
         dismiss(animated: true)
     }
 }
