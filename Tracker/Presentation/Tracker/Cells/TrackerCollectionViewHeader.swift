@@ -11,7 +11,7 @@ final class TrackerCollectionViewHeader: UICollectionReusableView {
     // MARK: PROPERTIES
     static let identifier = "TrackerCollectionViewHeader"
     
-    private let titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         return label

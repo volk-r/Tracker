@@ -264,7 +264,19 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
         referenceSizeForHeaderInSection section: Int) -> CGSize
     {
-        CGSize(width: collectionView.bounds.width, height: 18)
+        // dynamic sizing instead of hard code like as
+        // CGSize(width: collectionView.bounds.width, height: 18)
+        let headerView = TrackerCollectionViewHeader(frame: .zero)
+        headerView.titleLabel.text = filteredCategories[section].title
+        return headerView
+            .systemLayoutSizeFitting(
+                CGSize(
+                    width: collectionView.frame.width,
+                    height: collectionView.frame.height
+                ),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel
+            )
     }
 }
 
