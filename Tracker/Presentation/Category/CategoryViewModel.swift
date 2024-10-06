@@ -42,4 +42,9 @@ final class CategoryViewModel {
         let selectedCategory = categories[indexPath.row]
         onCategorySelected?(selectedCategory)
     }
+    
+    func deleteCategory(_ category: TrackerCategory) {
+        trackerCategoryStore.deleteCategory(category)
+        loadCategories()
+    }
 }

@@ -12,4 +12,5 @@ protocol TrackerCategoryStoreProtocol {
     func updateCategory(with data: TrackerCategory)
     func fetchAllCategories() -> [TrackerCategory]
     func getCategoryById(_ id: UUID) -> TrackerCategoryCoreData?
+    func deleteCategory(_ category: TrackerCategory)
 }

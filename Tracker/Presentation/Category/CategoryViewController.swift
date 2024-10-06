@@ -15,6 +15,7 @@ final class CategoryViewController: UIViewController {
     
     private lazy var categoryView = CategoryView()
     private lazy var viewModel = CategoryViewModel()
+    private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
     
     private var selectedCategory: TrackerCategory?
     
@@ -90,6 +91,7 @@ extension CategoryViewController {
             : .singleLine
     }
     
+    // MARK: createButtonTapAction
     @objc private func createButtonTapAction() {
         let createCategoryVC = CreateCategoryViewController(
             mode: .create,
@@ -98,6 +100,33 @@ extension CategoryViewController {
         )
         let navigationController = UINavigationController(rootViewController: createCategoryVC)
         present(navigationController, animated: true)
+    }
+    
+    // MARK: editCategory
+    private func editCategory(_ category: TrackerCategory) {
+        let createCategoryVC = CreateCategoryViewController(
+            mode: .edit,
+            delegate: self,
+            editingCategory: category
+        )
+        let navigationController = UINavigationController(rootViewController: createCategoryVC)
+        present(navigationController, animated: true)
+    }
+    
+    // MARK: deleteCategory
+    private func deleteCategory(_ category: TrackerCategory) {
+        let alert = AlertModel(
+            title: nil,
+            message: "Эта категория точно не нужна?",
+            buttonText: "Удалить",
+            cancelButtonText: "Отменить"
+        ) { [weak self] in
+            guard let self = self else { return }
+            
+            self.viewModel.deleteCategory(category)
+        }
+        
+        alertPresenter.callAlert(with: alert)
     }
 }
 
@@ -127,6 +156,27 @@ extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
+    
+    func tableView(
+            _ tableView: UITableView,
+            contextMenuConfigurationForRowAt indexPath: IndexPath,
+            point: CGPoint
+        ) -> UIContextMenuConfiguration? {
+            let category = viewModel.categoryBy(index: indexPath.row)
+            
+            return UIContextMenuConfiguration(actionProvider:  { _ in
+                UIMenu(children: [
+                    UIAction(title: "Редактировать") { [weak self] _ in
+                        guard let self else { return }
+                        self.editCategory(category)
+                    },
+                    UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+                        guard let self else { return }
+                        self.deleteCategory(category)
+                    }
+                ])
+            })
+        }
 }
 
 // MARK: setupTableView

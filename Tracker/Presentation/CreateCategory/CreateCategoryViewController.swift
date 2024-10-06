@@ -52,6 +52,7 @@ extension CreateCategoryViewController {
     // MARK: setupTextField
     func setupTextField() {
         createCategoryView.categoryNameTextField.delegate = self
+        createCategoryView.categoryNameTextField.text = editingCategory?.title
     }
     
     // MARK: setupButtons
