@@ -482,7 +482,10 @@ extension NewTrackerViewController: CategoryViewControllerDelegate {
         
         guard let indexPath = indexPathCell.values.first else { return }
         newTrackerView.tableView.reloadRows(at: [indexPath], with: .automatic)
-        dismiss(animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            guard let self else { return }
+            self.dismiss(animated: true)
+        }
     }
 }
 

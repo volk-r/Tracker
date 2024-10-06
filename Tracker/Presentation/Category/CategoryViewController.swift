@@ -11,6 +11,9 @@ final class CategoryViewController: UIViewController {
     // MARK: PROPERTIES
     weak var delegate: CategoryViewControllerDelegate?
     
+    // TODO: edit/delete Category
+    // TODO: refactoring to MVVM
+    
     private lazy var categoryView = CategoryView()
     
     private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
@@ -106,6 +109,7 @@ extension CategoryViewController: UITableViewDelegate {
         {
             let previousCell = tableView.cellForRow(at: selectedIndexPath)
             previousCell?.accessoryType = .none
+            tableView.deselectRow(at: selectedIndexPath, animated: true)
         }
         
         let currentCell = tableView.cellForRow(at: indexPath)
@@ -140,6 +144,7 @@ extension CategoryViewController: UITableViewDataSource {
         
         let category = categories[indexPath.row]
         let isSelected = category.id == selectedCategory?.id
+        selectedIndexPath = isSelected ? indexPath : selectedIndexPath
         categoryCell.setupCell(title: category.title, isSelected: isSelected)
         categoryView.tableView.reloadRows(at: [indexPath], with: .automatic)
 
