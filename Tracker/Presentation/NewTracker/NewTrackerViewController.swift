@@ -178,7 +178,6 @@ extension NewTrackerViewController {
     }
     
     @objc private func cancelTapAction() {
-        dismiss(animated: true)
         delegate?.didTapCancelButton()
     }
     

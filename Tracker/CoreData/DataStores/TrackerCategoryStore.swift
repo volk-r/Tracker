@@ -29,35 +29,11 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
     }
     
     func deleteCategory(_ category: TrackerCategory) {
-        let categoryToDelete = getCategoryById(category.id)
-        
-        guard let categoryToDelete, let categoryId = categoryToDelete.categoryId else {
-            print("❌ Failed to fetch category: \(category)")
+        guard let categoryToDelete = getCategoryById(category.id) else {
             return
         }
-
-        // TODO: remove all records
-        // TODO: remove all trackers
-        
-        let fetchRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
-        fetchRequest.predicate = NSPredicate(
-            format: "%K == %@",
-            #keyPath(TrackerCategoryCoreData.categoryId),
-            categoryId.uuidString
-        )
-
-        do {
-            let results = try coreDataStack.context.fetch(fetchRequest)
-            if let recordToDelete = results.first {
-                coreDataStack.context.delete(recordToDelete)
-                coreDataStack.saveContext()
-                print("✅ Category deleted: \(category)")
-            } else {
-                print("❕ Category not found: \(category)")
-            }
-        } catch {
-            print("❌ Failed to delete category: \(error)")
-        }
+        coreDataStack.context.delete(categoryToDelete)
+        coreDataStack.saveContext()
     }
     
     func fetchAllCategories() -> [TrackerCategory] {

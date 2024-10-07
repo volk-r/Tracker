@@ -8,10 +8,10 @@
 import UIKit
 
 final class CategoryViewController: UIViewController {
-    // MARK: PROPERTIES
-    weak var delegate: CategoryViewControllerDelegate?
     
-    // TODO: edit/delete Category
+    // MARK: - Properties
+    
+    weak var delegate: CategoryViewControllerDelegate?
     
     private lazy var categoryView = CategoryView()
     private lazy var viewModel = CategoryViewModel()
@@ -19,7 +19,8 @@ final class CategoryViewController: UIViewController {
     
     private var selectedCategory: TrackerCategory?
     
-    // MARK: INIT
+    // MARK: - init
+    
     init(selectedCategory: TrackerCategory?, delegate: CategoryViewControllerDelegate) {
         self.delegate = delegate
         self.selectedCategory = selectedCategory
@@ -30,7 +31,8 @@ final class CategoryViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override func loadView() {
         super.loadView()
         view = categoryView
@@ -47,7 +49,9 @@ final class CategoryViewController: UIViewController {
 }
 
 extension CategoryViewController {
-    // MARK: setupBindings
+    
+    // MARK: - setupBindings
+    
     private func setupBindings() {
         viewModel.onCategoriesChanged = { [weak self] categories in
             guard let self else { return }
@@ -61,22 +65,26 @@ extension CategoryViewController {
         }
     }
     
-    // MARK: getAllCategories
+    // MARK: - getAllCategories
+    
     private func getAllCategories() {
         viewModel.loadCategories()
     }
     
-    // MARK: showPlaceHolder
+    // MARK: - showPlaceHolder
+    
     private func showPlaceHolder() {
         categoryView.showPlaceHolder(isVisible: viewModel.numberOfCategories() != 0)
     }
     
-    // MARK: setupButtons
+    // MARK: - setupButtons
+    
     private func setupButtons() {
         categoryView.createButton.addTarget(self, action: #selector(createButtonTapAction), for: .touchUpInside)
     }
     
-    // MARK: setupTableView
+    // MARK: - setupTableView
+    
     private func setupTableView() {
         categoryView.tableView.delegate = self
         categoryView.tableView.dataSource = self
@@ -91,7 +99,8 @@ extension CategoryViewController {
             : .singleLine
     }
     
-    // MARK: createButtonTapAction
+    // MARK: - createButtonTapAction
+    
     @objc private func createButtonTapAction() {
         let createCategoryVC = CreateCategoryViewController(
             mode: .create,
@@ -102,7 +111,8 @@ extension CategoryViewController {
         present(navigationController, animated: true)
     }
     
-    // MARK: editCategory
+    // MARK: - editCategory
+    
     private func editCategory(_ category: TrackerCategory) {
         let createCategoryVC = CreateCategoryViewController(
             mode: .edit,
@@ -113,7 +123,8 @@ extension CategoryViewController {
         present(navigationController, animated: true)
     }
     
-    // MARK: deleteCategory
+    // MARK: - deleteCategory
+    
     private func deleteCategory(_ category: TrackerCategory) {
         let alert = AlertModel(
             title: nil,
@@ -158,28 +169,29 @@ extension CategoryViewController: UITableViewDelegate {
     }
     
     func tableView(
-            _ tableView: UITableView,
-            contextMenuConfigurationForRowAt indexPath: IndexPath,
-            point: CGPoint
-        ) -> UIContextMenuConfiguration? {
-            let category = viewModel.categoryBy(index: indexPath.row)
-            
-            return UIContextMenuConfiguration(actionProvider:  { _ in
-                UIMenu(children: [
-                    UIAction(title: "Редактировать") { [weak self] _ in
-                        guard let self else { return }
-                        self.editCategory(category)
-                    },
-                    UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
-                        guard let self else { return }
-                        self.deleteCategory(category)
-                    }
-                ])
-            })
-        }
+        _ tableView: UITableView,
+        contextMenuConfigurationForRowAt indexPath: IndexPath,
+        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        let category = viewModel.categoryBy(index: indexPath.row)
+        
+        return UIContextMenuConfiguration(actionProvider:  { _ in
+            UIMenu(children: [
+                UIAction(title: "Редактировать") { [weak self] _ in
+                    guard let self else { return }
+                    self.editCategory(category)
+                },
+                UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+                    guard let self else { return }
+                    self.deleteCategory(category)
+                }
+            ])
+        })
+    }
 }
 
-// MARK: setupTableView
+// MARK: - UITableViewDataSource
+
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.numberOfCategories()
@@ -201,15 +213,16 @@ extension CategoryViewController: UITableViewDataSource {
         if isSelected {
             viewModel.saveSelected(indexPath: indexPath)
         }
-
+        
         categoryCell.setupCell(title: category.title, isSelected: isSelected)
         categoryView.tableView.reloadRows(at: [indexPath], with: .automatic)
-
+        
         return categoryCell
     }
 }
 
-// MARK: CategoryViewController
+// MARK: - CategoryViewController
+
 extension CategoryViewController: CreateCategoryViewControllerDelegate {
     func acceptChanges() {
         getAllCategories()
@@ -217,7 +230,8 @@ extension CategoryViewController: CreateCategoryViewControllerDelegate {
     }
 }
 
-// MARK: SHOW PREVIEW
+// MARK: - Preview
+
 #if DEBUG
 
 @available(iOS 17, *)
