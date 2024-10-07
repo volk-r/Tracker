@@ -87,11 +87,11 @@ class TrackerViewController: UIViewController {
         getAllCategories()
         
         // TODO: Mock Data
-        if categories.isEmpty {
-            print("Load Mock Data")
-            trackerCategoryStore.createCategory(with: TrackerCategory(id: UUID(), title: "Важное", trackerList: []))
-            getAllCategories()
-        }
+//        if categories.isEmpty {
+//            print("Load Mock Data")
+//            trackerCategoryStore.createCategory(with: TrackerCategory(id: UUID(), title: "Важное", trackerList: []))
+//            getAllCategories()
+//        }
         
         getCompletedTrackers()
     }
@@ -299,6 +299,7 @@ extension TrackerViewController: TrackerCollectionViewCellDelegate {
 // MARK: NewTrackerViewControllerDelegate
 extension TrackerViewController: NewTrackerViewControllerDelegate {
     func didTapConfirmButton(categoryTitle: String, trackerToAdd: Tracker) {
+        getAllCategories()
         guard let categoryIndex = categories.firstIndex(where: { $0.title == categoryTitle }) else { return }
         dismiss(animated: true)
         trackerStore.addTracker(trackerToAdd, to: categories[categoryIndex])
