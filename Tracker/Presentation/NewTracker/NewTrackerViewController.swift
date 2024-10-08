@@ -178,7 +178,7 @@ extension NewTrackerViewController {
     }
     
     @objc private func cancelTapAction() {
-        delegate?.didTapCancelButton()
+        dismiss(animated: true)
     }
     
     @objc private func editingChanged(_ sender: UITextField) {
@@ -207,6 +207,7 @@ extension NewTrackerViewController {
             schedule: data.schedule
         )
         delegate?.didTapConfirmButton(categoryTitle: category, trackerToAdd: newTracker)
+        dismiss(animated: true)
     }
 }
 

@@ -8,6 +8,5 @@
 import Foundation
 
 protocol NewTrackerViewControllerDelegate: AnyObject {
-    func didTapCancelButton()
     func didTapConfirmButton(categoryTitle: String, trackerToAdd: Tracker)
 }

@@ -312,12 +312,7 @@ extension TrackerViewController: NewTrackerViewControllerDelegate {
     func didTapConfirmButton(categoryTitle: String, trackerToAdd: Tracker) {
         getAllCategories()
         guard let categoryIndex = categories.firstIndex(where: { $0.title == categoryTitle }) else { return }
-        dismiss(animated: true)
         trackerStore.addTracker(trackerToAdd, to: categories[categoryIndex])
-    }
-    
-    func didTapCancelButton() {
-        dismiss(animated: true)
     }
 }
 
