@@ -10,6 +10,7 @@ import UIKit
 final class CreateCategoryViewController: UIViewController {
     
     // MARK: - Properties
+    static let didChangeNotification = Notification.Name(rawValue: "CategoryNameDidChange")
     
     weak var delegate: CreateCategoryViewControllerDelegate?
     
@@ -95,6 +96,13 @@ extension CreateCategoryViewController {
                         title: categoryName,
                         trackerList: editingCategory.trackerList
                     )
+                )
+            
+            NotificationCenter.default
+                .post(
+                    name: CreateCategoryViewController.didChangeNotification,
+                    object: self,
+                    userInfo: ["NewCategoryName": categoryName]
                 )
             break
         }

@@ -86,6 +86,13 @@ class TrackerViewController: UIViewController {
         addTapGestureToHideKeyboard()
         showOnboarding()
         
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didTrackersUpdate),
+            name: CreateCategoryViewController.didChangeNotification,
+            object: nil
+        )
+        
         getAllCategories()
         
         getCompletedTrackers()
@@ -329,7 +336,7 @@ extension TrackerViewController: UITextFieldDelegate {
 // MARK: - TrackerStoreDelegate
 
 extension TrackerViewController: TrackerStoreDelegate {
-    func didTrackersUpdate() {
+    @objc func didTrackersUpdate() {
         getAllCategories()
         getCompletedTrackers()
         trackerView.trackerCollectionView.reloadData()
