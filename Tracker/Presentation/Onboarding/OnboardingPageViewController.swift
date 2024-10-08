@@ -8,11 +8,14 @@
 import UIKit
 
 final class OnboardingPageViewController: UIViewController {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     private lazy var onboardingPageView = OnboardingPageView()
     private let pageNumber: OnboardingPage
     
-    // MARK: INIT
+    // MARK: - Init
+    
     init(pageNumber: OnboardingPage) {
         self.pageNumber = pageNumber
         super.init(nibName: nil, bundle: nil)
@@ -22,7 +25,8 @@ final class OnboardingPageViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view = onboardingPageView
@@ -32,12 +36,15 @@ final class OnboardingPageViewController: UIViewController {
 }
 
 extension OnboardingPageViewController {
-    // MARK: didTapButton
+    
+    // MARK: - didTapButton
+    
     private func setupButtons() {
         onboardingPageView.skipTourButton.addTarget(nil, action: #selector(didTapButton), for: .touchUpInside)
     }
     
-    // MARK: didTapButton
+    // MARK: - didTapButton
+    
     @objc private func didTapButton() {
         dismiss(animated: true)
     }

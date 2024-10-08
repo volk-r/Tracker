@@ -8,10 +8,13 @@
 import UIKit
 
 final class StatisticViewController: UIViewController {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     private lazy var statisticView = StatisticView()
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override func loadView() {
         super.loadView()
         view = statisticView
@@ -24,13 +27,16 @@ final class StatisticViewController: UIViewController {
 }
 
 extension StatisticViewController {
-    // MARK: setupNavBar
+    
+    // MARK: - setupNavBar
+    
     private func setupNavBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
     }
 }
 
-// MARK: SHOW PREVIEW
+// MARK: - Preview
+
 #if DEBUG
 
 @available(iOS 17, *)

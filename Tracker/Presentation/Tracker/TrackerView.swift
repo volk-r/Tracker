@@ -8,7 +8,9 @@
 import UIKit
 
 final class TrackerView: UIView {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     lazy var searchTextField: UISearchTextField = {
         let textField = UISearchTextField()
         textField.placeholder = "Поиск"
@@ -32,7 +34,8 @@ final class TrackerView: UIView {
         )
     )
     
-    // MARK: Init
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
@@ -45,13 +48,14 @@ final class TrackerView: UIView {
     }
 }
 
+// MARK: - Layout
+
 extension TrackerView {
-    // MARK: showPlaceHolder
+
     func showPlaceHolder(isVisible: Bool) {
         placeHolderView.isHidden = isVisible
     }
     
-    // MARK: setupLayout
     private func setupLayout() {
         [
             searchTextField,

@@ -8,7 +8,9 @@
 import UIKit
 
 final class CreateCategoryViewController: UIViewController {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     weak var delegate: CreateCategoryViewControllerDelegate?
     
     private lazy var createCategoryView = CreateCategoryView()
@@ -18,7 +20,8 @@ final class CreateCategoryViewController: UIViewController {
     private var createCategoryMode: CreateCategoryMode
     private var editingCategory: TrackerCategory?
     
-    // MARK: INIT
+    // MARK: - Init
+    
     init(
         mode: CreateCategoryMode,
         delegate: CreateCategoryViewControllerDelegate,
@@ -34,7 +37,8 @@ final class CreateCategoryViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override func loadView() {
         super.loadView()
         view = createCategoryView
@@ -49,20 +53,24 @@ final class CreateCategoryViewController: UIViewController {
 }
 
 extension CreateCategoryViewController {
-    // MARK: setupTextField
+    
+    // MARK: - setupTextField
+    
     func setupTextField() {
         createCategoryView.categoryNameTextField.delegate = self
         createCategoryView.categoryNameTextField.text = editingCategory?.title
     }
     
-    // MARK: setupButtons
+    // MARK: - setupButtons
+    
     private func setupButtons() {
         createCategoryView.doneButton.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
 
         createCategoryView.categoryNameTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
     }
     
-    // MARK: didTapDoneButton
+    // MARK: - didTapDoneButton
+    
     @objc private func didTapDoneButton() {
         guard let categoryName = createCategoryView.categoryNameTextField.text else { return }
         
@@ -94,7 +102,8 @@ extension CreateCategoryViewController {
         delegate?.acceptChanges()
     }
     
-    // MARK: editingChanged
+    // MARK: - editingChanged
+    
     @objc private func editingChanged(_ sender: UITextField) {
         guard let text = sender.text else { return }
         let errorIsHidden = text.count < AppConstants.nameLengthRestriction
@@ -104,7 +113,8 @@ extension CreateCategoryViewController {
     }
 }
 
-// MARK: UITextFieldDelegate
+// MARK: - UITextFieldDelegate
+
 extension CreateCategoryViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
@@ -113,7 +123,8 @@ extension CreateCategoryViewController: UITextFieldDelegate {
     }
 }
 
-// MARK: SHOW PREVIEW
+// MARK: - Preview
+
 #if DEBUG
 
 @available(iOS 17, *)

@@ -8,7 +8,9 @@
 import UIKit
 
 final class CategoryView: UIView {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
@@ -37,7 +39,8 @@ final class CategoryView: UIView {
         )
     )
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
@@ -49,13 +52,14 @@ final class CategoryView: UIView {
     }
 }
 
+// MARK: - Layout
+
 extension CategoryView {
-    // MARK: showPlaceHolder
+    
     func showPlaceHolder(isVisible: Bool) {
         placeHolderView.isHidden = isVisible
     }
     
-    // MARK: setupLayout
     private func setupLayout() {
         addSubviews(
             placeHolderView,

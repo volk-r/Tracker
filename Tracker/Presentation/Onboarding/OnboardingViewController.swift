@@ -8,7 +8,9 @@
 import UIKit
 
 final class OnboardingViewController: UIPageViewController {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     private lazy var pages: [UIViewController] = [
         OnboardingPageViewController(pageNumber: OnboardingPage.first),
         OnboardingPageViewController(pageNumber: OnboardingPage.second)
@@ -23,7 +25,8 @@ final class OnboardingViewController: UIPageViewController {
         return control
     }()
         
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupPageControl()
@@ -32,7 +35,9 @@ final class OnboardingViewController: UIPageViewController {
 }
 
 private extension OnboardingViewController {
-    // MARK: setupUIPageViewController
+    
+    // MARK: - setupUIPageViewController
+    
     func setupUIPageViewController() {
         dataSource = self
         delegate = self
@@ -41,7 +46,8 @@ private extension OnboardingViewController {
         }
     }
     
-    // MARK: setupPageControl
+    // MARK: - setupPageControl
+    
     func setupPageControl() {
         view.addSubviews(pageControl)
         
@@ -52,7 +58,8 @@ private extension OnboardingViewController {
     }
 }
 
-// MARK: UIPageViewControllerDataSource
+// MARK: - UIPageViewControllerDataSource
+
 extension OnboardingViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let viewControllerIndex = pages.firstIndex(of: viewController) else { return nil }
@@ -69,7 +76,8 @@ extension OnboardingViewController: UIPageViewControllerDataSource {
     }
 }
 
-// MARK: UIPageViewControllerDelegate
+// MARK: - UIPageViewControllerDelegate
+
 extension OnboardingViewController: UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         guard

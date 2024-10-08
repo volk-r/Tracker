@@ -9,10 +9,13 @@ import Foundation
 import CoreData
 
 final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     private let coreDataStack = CoreDataStack.shared
     
-    // MARK: FUNCTIONS
+    // MARK: - createCategory
+    
     func createCategory(with category: TrackerCategory) {
         let categoryEntity = TrackerCategoryCoreData(context: coreDataStack.context)
         categoryEntity.categoryId = category.id
@@ -22,11 +25,15 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
         coreDataStack.saveContext()
     }
     
+    // MARK: - updateCategory
+    
     func updateCategory(with data: TrackerCategory) {
         let category = getCategoryById(data.id)
         category?.title = data.title
         coreDataStack.saveContext()
     }
+    
+    // MARK: - deleteCategory
     
     func deleteCategory(_ category: TrackerCategory) {
         guard let categoryToDelete = getCategoryById(category.id) else {
@@ -35,6 +42,8 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
         coreDataStack.context.delete(categoryToDelete)
         coreDataStack.saveContext()
     }
+    
+    // MARK: - fetchAllCategories
     
     func fetchAllCategories() -> [TrackerCategory] {
         let fetchRequest = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
@@ -50,6 +59,8 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
             return []
         }
     }
+    
+    // MARK: - getCategoryById
     
     func getCategoryById(_ id: UUID) -> TrackerCategoryCoreData? {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
@@ -71,7 +82,9 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
 }
 
 extension TrackerCategoryStore {
-    // MARK: decodingCategory
+    
+    // MARK: - decodingCategory
+    
     private func decodingCategory(from trackerCategoryCoreData: TrackerCategoryCoreData) -> TrackerCategory? {
         guard
             let id = trackerCategoryCoreData.categoryId,

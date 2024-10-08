@@ -8,7 +8,9 @@
 import UIKit
 
 final class OnboardingPageView: UIView {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     private lazy var backgroundImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage()
@@ -35,7 +37,8 @@ final class OnboardingPageView: UIView {
         return button
     }()
     
-    // MARK: Init
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -47,8 +50,10 @@ final class OnboardingPageView: UIView {
     }
 }
 
+// MARK: - Layout
+
 extension OnboardingPageView {
-    // MARK: setupLayout
+    
     private func setupLayout() {
         addSubviews(
             backgroundImage,

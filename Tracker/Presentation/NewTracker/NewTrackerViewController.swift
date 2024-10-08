@@ -462,9 +462,7 @@ extension NewTrackerViewController: UITableViewDelegate {
 extension NewTrackerViewController: ScheduleViewControllerDelegate {
     func didConfirmSchedule(_ schedule: [WeekDay]) {
         data = data.update(newSchedule: schedule)
-        let indexPathCell = indexPathCell.filter( {
-            $0.key == NewTrackerParam.schedule
-        } )
+        let indexPathCell = indexPathCell.filter{ $0.key == NewTrackerParam.schedule }
         
         guard let indexPath = indexPathCell.values.first else { return }
         newTrackerView.tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -476,9 +474,7 @@ extension NewTrackerViewController: ScheduleViewControllerDelegate {
 extension NewTrackerViewController: CategoryViewControllerDelegate {
     func didSelectCategory(_ selectedCategory: TrackerCategory) {
         category = selectedCategory
-        let indexPathCell = indexPathCell.filter( {
-            $0.key == NewTrackerParam.category
-        } )
+        let indexPathCell = indexPathCell.filter{ $0.key == NewTrackerParam.category }
         
         guard let indexPath = indexPathCell.values.first else { return }
         newTrackerView.tableView.reloadRows(at: [indexPath], with: .automatic)

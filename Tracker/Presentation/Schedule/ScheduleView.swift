@@ -8,7 +8,9 @@
 import UIKit
 
 final class ScheduleView: UIView {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
@@ -31,7 +33,8 @@ final class ScheduleView: UIView {
         return button
     }()
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
@@ -43,16 +46,15 @@ final class ScheduleView: UIView {
     }
 }
 
+// MARK: - Layout
+
 extension ScheduleView {
-    // MARK: setupLayout
+    
     func setupLayout() {
-        [
+        addSubviews(
             tableView,
-            doneButton,
-        ].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            addSubview($0)
-        }
+            doneButton
+        )
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 24),

@@ -8,14 +8,17 @@
 import UIKit
 
 final class AlertPresenter: AlertPresenterProtocol {
-    weak var delegate: UIViewController?
+    private weak var delegate: UIViewController?
     
     init(delegate: UIViewController) {
         self.delegate = delegate
     }
         
-    func callAlert(with model: AlertModel) {
-        guard let delegate else { return }
+    func showAlert(with model: AlertModel) {
+        guard let delegate else {
+            assertionFailure("delegate is nullable")
+            return
+        }
         
         let alert = UIAlertController(
             title: model.title,
@@ -23,9 +26,7 @@ final class AlertPresenter: AlertPresenterProtocol {
             preferredStyle: .actionSheet)
         
         let action = UIAlertAction(title: model.buttonText, style: .destructive) { _ in
-            if let completion = model.completion {
-                completion()
-            }
+            model.completion?()
         }
         
         alert.addAction(action)

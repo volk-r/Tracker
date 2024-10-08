@@ -9,7 +9,9 @@ import Foundation
 import CoreData
 
 final class TrackerStore: NSObject {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     weak var delegate: TrackerStoreDelegate?
     
     private let coreDataStack = CoreDataStack.shared
@@ -31,7 +33,8 @@ final class TrackerStore: NSObject {
         return fetchedResultsController
     }()
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override init() {
         super.init()
         try? fetchedResultsController.performFetch()
@@ -39,7 +42,8 @@ final class TrackerStore: NSObject {
     }
 }
 
-// MARK: TrackerStoreProtocol
+// MARK: - TrackerStoreProtocol
+
 extension TrackerStore: TrackerStoreProtocol {
     var numberOfTrackers: Int {
         fetchedResultsController.fetchedObjects?.count ?? 0
@@ -108,7 +112,8 @@ extension TrackerStore: TrackerStoreProtocol {
     }
 }
 
-// MARK: NSFetchedResultsControllerDelegate
+// MARK: - NSFetchedResultsControllerDelegate
+
 extension TrackerStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate?.didTrackersUpdate()

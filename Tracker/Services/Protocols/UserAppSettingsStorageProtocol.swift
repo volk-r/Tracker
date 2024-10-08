@@ -9,5 +9,5 @@ import Foundation
 
 protocol UserAppSettingsStorageProtocol {
     var isOnboardingVisited: Bool { get set }
-    func clean() -> Void
+    func clean()
 }

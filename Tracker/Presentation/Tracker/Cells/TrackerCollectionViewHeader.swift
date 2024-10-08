@@ -8,7 +8,9 @@
 import UIKit
 
 final class TrackerCollectionViewHeader: UICollectionReusableView {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     static let identifier = "TrackerCollectionViewHeader"
     
     let titleLabel: UILabel = {
@@ -17,7 +19,8 @@ final class TrackerCollectionViewHeader: UICollectionReusableView {
         return label
     }()
 
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -29,7 +32,9 @@ final class TrackerCollectionViewHeader: UICollectionReusableView {
 }
 
 extension TrackerCollectionViewHeader {
-    // MARK: setupLayout
+    
+    // MARK: - setupLayout
+    
     private func setupLayout() {
         addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +46,8 @@ extension TrackerCollectionViewHeader {
         ])
     }
     
-    // MARK: setupHeaderCell
+    // MARK: - setupHeaderCell
+    
     func setupHeaderCell(with label: String) {
         titleLabel.text = label
     }

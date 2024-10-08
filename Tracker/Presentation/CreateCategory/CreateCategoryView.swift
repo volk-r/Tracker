@@ -8,7 +8,9 @@
 import UIKit
 
 final class CreateCategoryView: UIView {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     lazy var categoryNameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Введите название категории"
@@ -39,7 +41,8 @@ final class CreateCategoryView: UIView {
         return label
     }()
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
@@ -51,8 +54,10 @@ final class CreateCategoryView: UIView {
     }
 }
 
+// MARK: - Layout
+
 extension CreateCategoryView {
-    // MARK: setupLayout
+    
     private func setupLayout() {
         addSubviews(
             categoryNameTextField,
@@ -77,12 +82,10 @@ extension CreateCategoryView {
         ])
     }
     
-    // MARK: showTrackerNameError
     func showTrackerNameError(_ show: Bool) {
         errorLabel.isHidden = show
     }
     
-    // MARK: doDoneButtonActive
     func doDoneButtonActive(_ isEnabled: Bool) {
         doneButton.isEnabled = isEnabled
         doneButton.backgroundColor = isEnabled

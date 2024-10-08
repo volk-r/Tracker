@@ -9,7 +9,9 @@ import Foundation
 import CoreData
 
 final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     weak var delegate: TrackerStoreDelegate?
     
     private let coreDataStack = CoreDataStack.shared
@@ -30,14 +32,16 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         return fetchedResultsController
     }()
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override init() {
         super.init()
         try? fetchedResultsController.performFetch()
         fetchedResultsController.delegate = self
     }
     
-    // MARK: FUNCTIONS
+    // MARK: - addTrackerRecord
+    
     func addTrackerRecord(with trackerRecord: TrackerRecord) {
         let trackerRecordEntity = TrackerRecordCoreData(context: coreDataStack.context)
         trackerRecordEntity.recordId = trackerRecord.id
@@ -50,6 +54,8 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
         coreDataStack.saveContext()
         print("✅ Record added: \(trackerRecord)")
     }
+    
+    // MARK: - fetchAllRecords
     
     func fetchAllRecords() -> [TrackerRecord] {
         let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
@@ -65,6 +71,8 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
             return []
         }
     }
+    
+    // MARK: - deleteRecord
     
     func deleteRecord(for trackerRecord: TrackerRecord) {
         let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
@@ -90,7 +98,8 @@ final class TrackerRecordStore: NSObject, TrackerRecordStoreProtocol {
     }
 }
 
-// MARK: NSFetchedResultsControllerDelegate
+// MARK: - NSFetchedResultsControllerDelegate
+
 extension TrackerRecordStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate?.didTrackersUpdate()

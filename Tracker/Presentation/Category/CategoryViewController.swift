@@ -132,12 +132,11 @@ extension CategoryViewController {
             buttonText: "Удалить",
             cancelButtonText: "Отменить"
         ) { [weak self] in
-            guard let self = self else { return }
-            
+            guard let self else { return }
             self.viewModel.deleteCategory(category)
         }
         
-        alertPresenter.callAlert(with: alert)
+        alertPresenter.showAlert(with: alert)
     }
 }
 

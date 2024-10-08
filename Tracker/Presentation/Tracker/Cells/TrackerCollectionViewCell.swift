@@ -8,7 +8,9 @@
 import UIKit
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     static let identifier = "TrackerCollectionViewCell"
     
     weak var delegate: TrackerCollectionViewCellDelegate?
@@ -64,7 +66,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -76,7 +79,9 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
 }
 
 extension TrackerCollectionViewCell {
-    // MARK: prepareForReuse
+    
+    // MARK: - prepareForReuse
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         tracker = nil
@@ -85,7 +90,8 @@ extension TrackerCollectionViewCell {
         addDayButton.layer.opacity = 1
     }
     
-    // MARK: setupCell
+    // MARK: - setupCell
+    
     func setupCell(with tracker: Tracker, days: Int, isCompleted: Bool) {
         self.tracker = tracker
         self.days = days
@@ -96,7 +102,8 @@ extension TrackerCollectionViewCell {
         setupAddDayButton(isCompleted: isCompleted)
     }
     
-    // MARK: setupAddDayButton
+    // MARK: - setupAddDayButton
+    
     func setupAddDayButton(isCompleted: Bool) {
         if isCompleted {
             addDayButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
@@ -107,23 +114,27 @@ extension TrackerCollectionViewCell {
         }
     }
     
-    // MARK: increaseDayCount
+    // MARK: - increaseDayCount
+    
     func increaseDayCount() {
         days += 1
     }
     
-    // MARK: decreaseDayCount
+    // MARK: - decreaseDayCount
+    
     func decreaseDayCount() {
         days -= 1
     }
     
-    // MARK: didTapAddDayButton
+    // MARK: - didTapAddDayButton
+    
     @objc private func didTapAddDayButton() {
         guard let tracker else { return }
         delegate?.didTapAddDayButton(for: tracker, in: self)
     }
     
-    // MARK: formatWordingFor
+    // MARK: - formatWordingFor
+    
     private func formatWordingFor(day: Int) {
         var wording: String
 
@@ -138,7 +149,8 @@ extension TrackerCollectionViewCell {
         daysCountLabel.text = "\(day) \(wording)"
     }
     
-    // MARK: setupLayout
+    // MARK: - setupLayout
+    
     private func setupLayout() {
         // card
         [

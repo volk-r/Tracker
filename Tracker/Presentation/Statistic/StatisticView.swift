@@ -8,7 +8,9 @@
 import UIKit
 
 final class StatisticView: UIView {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     private lazy var statisticCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -26,7 +28,8 @@ final class StatisticView: UIView {
         )
     )
     
-    // MARK: Init
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
@@ -37,16 +40,17 @@ final class StatisticView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+// MARK: - Layout
+
+extension StatisticView {
     
-    // MARK: setupLayout
     private func setupLayout() {
-        [
+        addSubviews(
             statisticCollectionView,
             placeHolderView
-        ].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            addSubview($0)
-        }
+        )
         
         NSLayoutConstraint.activate([
             statisticCollectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),

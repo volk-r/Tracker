@@ -8,7 +8,9 @@
 import UIKit
 
 final class DummyView: UIView {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
@@ -22,7 +24,8 @@ final class DummyView: UIView {
         return imageView
     }()
     
-    // MARK: Init
+    // MARK: - Init
+    
     init(model: DummyModel) {
         super.init(frame: .zero)
         self.descriptionLabel.text  = model.description
@@ -34,16 +37,17 @@ final class DummyView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+// MARK: - Layout
+
+extension DummyView {
     
-    // MARK: setupLayout
     private func setupLayout() {
-        [
+        addSubviews(
             descriptionLabel,
             descriptionImage
-        ].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            addSubview($0)
-        }
+        )
         
         NSLayoutConstraint.activate([
             descriptionImage.centerXAnchor.constraint(equalTo: centerXAnchor),
