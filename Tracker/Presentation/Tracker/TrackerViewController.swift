@@ -89,7 +89,7 @@ class TrackerViewController: UIViewController {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(didTrackersUpdate),
-            name: CreateCategoryViewController.didChangeNotification,
+            name: .categoryNameChanged,
             object: nil
         )
         
