@@ -8,27 +8,35 @@
 import UIKit
 
 final class StatisticViewController: UIViewController {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     private lazy var statisticView = StatisticView()
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override func loadView() {
         super.loadView()
         view = statisticView
-        
-        setupNavBar()
-    }
-    
-    private func setupNavBar() {
-        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavBar()
     }
 }
 
-// MARK: - SHOW PREVIEW
+extension StatisticViewController {
+    
+    // MARK: - setupNavBar
+    
+    private func setupNavBar() {
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+}
+
+// MARK: - Preview
+
 #if DEBUG
 
 @available(iOS 17, *)

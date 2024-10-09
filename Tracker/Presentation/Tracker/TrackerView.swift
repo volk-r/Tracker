@@ -8,7 +8,9 @@
 import UIKit
 
 final class TrackerView: UIView {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     lazy var searchTextField: UISearchTextField = {
         let textField = UISearchTextField()
         textField.placeholder = "Поиск"
@@ -25,9 +27,15 @@ final class TrackerView: UIView {
         return collectionView
     }()
     
-    lazy var placeHolderView: UIView = DummyView(description: "Что будем отслеживать?", imageName: AppImages.trackerEmptyPage)
+    private lazy var placeHolderView: UIView = DummyView(
+        model: DummyModel(
+            description: "Что будем отслеживать?",
+            imageName: AppImages.trackerEmptyPage
+        )
+    )
     
-    // MARK: Init
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
@@ -38,8 +46,16 @@ final class TrackerView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+// MARK: - Layout
+
+extension TrackerView {
+
+    func showPlaceHolder(isVisible: Bool) {
+        placeHolderView.isHidden = isVisible
+    }
     
-    // MARK: setupLayout
     private func setupLayout() {
         [
             searchTextField,
@@ -65,5 +81,4 @@ final class TrackerView: UIView {
             placeHolderView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
-
 }

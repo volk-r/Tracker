@@ -8,7 +8,7 @@
 import UIKit
 
 final class EmojiCollectionViewCell: UICollectionViewCell {
-    // MARK: - PROPERTIES
+    // MARK: PROPERTIES
     static let identifier = "EmojiCollectionViewCell"
     
     private let emojiLabel: UILabel = {
@@ -17,7 +17,7 @@ final class EmojiCollectionViewCell: UICollectionViewCell {
         return label
     }()
         
-    // MARK: - Lifecycle
+    // MARK: Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()

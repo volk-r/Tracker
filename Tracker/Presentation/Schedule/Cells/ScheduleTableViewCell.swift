@@ -8,7 +8,9 @@
 import UIKit
 
 final class ScheduleTableViewCell: UITableViewCell {
-    // MARK: - PROPERTIES
+    
+    // MARK: - Properties
+    
     static let identifier = "ScheduleTableViewCell"
     
     weak var delegate: ScheduleViewControllerCellDelegate?
@@ -29,6 +31,7 @@ final class ScheduleTableViewCell: UITableViewCell {
     }()
     
     // MARK: - Lifecycle
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -44,7 +47,9 @@ final class ScheduleTableViewCell: UITableViewCell {
 }
 
 extension ScheduleTableViewCell {
-    // MARK: - SETUP LAYOUT
+    
+    // MARK: - setupLayout
+    
     private func setupLayout() {
         [
             nameLabel,
@@ -65,20 +70,23 @@ extension ScheduleTableViewCell {
     }
     
     // MARK: - prepareForReuse
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         nameLabel.text = nil
         switchView.isOn = false
     }
     
-    // MARK: setupCell
+    // MARK: - setupCell
+    
     func setupCell(with model: WeekDayModel) {
         self.weekday = model.day
         nameLabel.text = model.day.description
         switchView.isOn = model.isSelected
     }
     
-    // MARK: didToggleSwitchView
+    // MARK: - didToggleSwitchView
+    
     @objc private func didToggleSwitchView(_ sender: UISwitch) {
         guard let weekday else { return }
         delegate?.didToggleSwitchView(to: sender.isOn, of: weekday)

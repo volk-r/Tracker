@@ -8,7 +8,9 @@
 import UIKit
 
 class TrackerViewController: UIViewController {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     private lazy var trackerView = TrackerView()
     
     private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
@@ -57,7 +59,7 @@ class TrackerViewController: UIViewController {
     
     private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 2, leftInset: 16, rightInset: 16, topInset: 8, bottomInset: 16, height: 148, cellSpacing: 10)
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -82,39 +84,43 @@ class TrackerViewController: UIViewController {
         showPlaceHolder()
         setupSearchTextField()
         addTapGestureToHideKeyboard()
+        showOnboarding()
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didTrackersUpdate),
+            name: .categoryNameChanged,
+            object: nil
+        )
         
         getAllCategories()
-        
-        // TODO: Mock Data
-        if categories.isEmpty {
-            print("Load Mock Data")
-            trackerCategoryStore.createCategory(with: TrackerCategory(id: UUID(), title: "Важное", trackerList: []))
-            getAllCategories()
-        }
         
         getCompletedTrackers()
     }
 }
 
 extension TrackerViewController {
-    // MARK: getAllCategories
+    
+    // MARK: - getAllCategories
+    
     private func getAllCategories() {
         categories = trackerCategoryStore.fetchAllCategories()
-        print("categories", categories)
     }
     
-    // MARK: getCompletedTrackers
+    // MARK: - getCompletedTrackers
+    
     private func getCompletedTrackers() {
         completedTrackers = Set(trackerRecordStore.fetchAllRecords())
-        print("completedTrackers", completedTrackers)
     }
     
-    // MARK: setupSearchTextField
+    // MARK: - setupSearchTextField
+    
     private func setupSearchTextField() {
         trackerView.searchTextField.delegate = self
     }
     
-    // MARK: setupDatePicker
+    // MARK: - setupDatePicker
+    
     private func setupDatePicker() {
         datePicker.maximumDate = Date()
         datePicker.datePickerMode = .date
@@ -127,7 +133,8 @@ extension TrackerViewController {
         ])
     }
     
-    // MARK: setupNavBar
+    // MARK: - setupNavBar
+    
     private func setupNavBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
 
@@ -137,14 +144,16 @@ extension TrackerViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
     }
     
-    // MARK: datePickerValueChanged
+    // MARK: - datePickerValueChanged
+    
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
         showPlaceHolder()
         trackerView.trackerCollectionView.reloadData()
     }
     
-    // MARK: setupCollectionView
+    // MARK: - setupCollectionView
+    
     private func setupCollectionView() {
         trackerView.trackerCollectionView.dataSource = self
         trackerView.trackerCollectionView.delegate = self
@@ -160,19 +169,35 @@ extension TrackerViewController {
         )
     }
     
-    // MARK: setupButtons
+    // MARK: - setupButtons
+    
     @objc private func addAction() {
         let createTrackerVC = CreateTrackerViewController(delegate: self)
         present(UINavigationController(rootViewController: createTrackerVC), animated: true)
     }
     
-    // MARK: showPlaceHolder
+    // MARK: - showPlaceHolder
+    
     private func showPlaceHolder() {
-        trackerView.placeHolderView.isHidden = !filteredCategories.isEmpty
+        trackerView.showPlaceHolder(isVisible: !filteredCategories.isEmpty)
+    }
+    
+    // MARK: - showOnboarding
+    
+    private func showOnboarding() {
+        // TODO: for tests
+//        UserAppSettingsStorage.shared.clean()
+        guard !UserAppSettingsStorage.shared.isOnboardingVisited else { return }
+        
+        UserAppSettingsStorage.shared.isOnboardingVisited = true
+        let onboardingVC = OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        onboardingVC.modalPresentationStyle = .fullScreen
+        present(onboardingVC, animated: true)
     }
 }
 
-// MARK: UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource
+
 extension TrackerViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         filteredCategories.count
@@ -182,7 +207,8 @@ extension TrackerViewController: UICollectionViewDataSource {
         filteredCategories[section].trackerList.count
     }
     
-    // MARK: SETUP Collection CELLS
+    // MARK: - SETUP Collection CELLS
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard 
@@ -205,7 +231,8 @@ extension TrackerViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: UICollectionViewDelegate
+// MARK: - UICollectionViewDelegate
+
 extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize
@@ -230,7 +257,8 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
         return 9
     }
     
-    // MARK: SETUP Collection HEADER
+    // MARK: - SETUP Collection HEADER
+    
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard
             kind == UICollectionView.elementKindSectionHeader,
@@ -252,11 +280,24 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
         referenceSizeForHeaderInSection section: Int) -> CGSize
     {
-        CGSize(width: collectionView.bounds.width, height: 18)
+        // dynamic sizing instead of hard code like as
+        // CGSize(width: collectionView.bounds.width, height: 18)
+        let headerView = TrackerCollectionViewHeader(frame: .zero)
+        headerView.titleLabel.text = filteredCategories[section].title
+        return headerView
+            .systemLayoutSizeFitting(
+                CGSize(
+                    width: collectionView.frame.width,
+                    height: collectionView.frame.height
+                ),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel
+            )
     }
 }
 
-// MARK: TrackerCollectionViewCellDelegate
+// MARK: - TrackerCollectionViewCellDelegate
+
 extension TrackerViewController: TrackerCollectionViewCellDelegate {
     func didTapAddDayButton(for tracker: Tracker, in cell: TrackerCollectionViewCell) {
         if let completedTracker = completedTrackers.first(where: { $0.date == currentDate && $0.trackerId == tracker.id }) {
@@ -272,20 +313,18 @@ extension TrackerViewController: TrackerCollectionViewCellDelegate {
     }
 }
 
-// MARK: NewTrackerViewControllerDelegate
+// MARK: - NewTrackerViewControllerDelegate
+
 extension TrackerViewController: NewTrackerViewControllerDelegate {
     func didTapConfirmButton(categoryTitle: String, trackerToAdd: Tracker) {
+        getAllCategories()
         guard let categoryIndex = categories.firstIndex(where: { $0.title == categoryTitle }) else { return }
-        dismiss(animated: true)
         trackerStore.addTracker(trackerToAdd, to: categories[categoryIndex])
-    }
-    
-    func didTapCancelButton() {
-        dismiss(animated: true)
     }
 }
 
-// MARK: UITextFieldDelegate
+// MARK: - UITextFieldDelegate
+
 extension TrackerViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
@@ -294,15 +333,18 @@ extension TrackerViewController: UITextFieldDelegate {
     }
 }
 
+// MARK: - TrackerStoreDelegate
+
 extension TrackerViewController: TrackerStoreDelegate {
-    func didTrackersUpdate() {
+    @objc func didTrackersUpdate() {
         getAllCategories()
         getCompletedTrackers()
         trackerView.trackerCollectionView.reloadData()
     }
 }
 
-// MARK: CreateTrackerViewControllerDelegate
+// MARK: - CreateTrackerViewControllerDelegate
+
 extension TrackerViewController: CreateTrackerViewControllerDelegate {
     func didSelectedTypeTracker(trackerType: TrackerType) {
         dismiss(animated: true)
@@ -311,7 +353,8 @@ extension TrackerViewController: CreateTrackerViewControllerDelegate {
     }
 }
 
-// MARK: - SHOW PREVIEW
+// MARK: - Preview
+
 #if DEBUG
 
 @available(iOS 17, *)

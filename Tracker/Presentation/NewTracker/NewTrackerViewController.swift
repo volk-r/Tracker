@@ -26,7 +26,7 @@ final class NewTrackerViewController: UIViewController {
     private var trackerType: TrackerType
     private lazy var newTrackerView = NewTrackerView()
     
-    private var indexPathCell: [NewTrackerParam: IndexPath]?
+    private var indexPathCell: [NewTrackerParam: IndexPath] = [:]
     
     private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 6, leftInset: 18, rightInset: 18, topInset: 24, bottomInset: 24, height: 52, cellSpacing: 5)
     
@@ -37,8 +37,8 @@ final class NewTrackerViewController: UIViewController {
             checkDataValidation()
         }
     }
-    // TODO: gag
-    private var category: String? = "Важное" {
+
+    private var category: TrackerCategory? {
         didSet {
             checkDataValidation()
         }
@@ -148,7 +148,7 @@ extension NewTrackerViewController {
     private func checkDataValidation() {
         guard
             let category,
-            !category.isEmpty,
+            !category.title.isEmpty,
             let name = data.name,
             !name.isEmpty,
             data.emoji != nil,
@@ -179,19 +179,18 @@ extension NewTrackerViewController {
     
     @objc private func cancelTapAction() {
         dismiss(animated: true)
-        delegate?.didTapCancelButton()
     }
     
     @objc private func editingChanged(_ sender: UITextField) {
         guard let text = sender.text else { return }
         data = data.update(newName: text)
-        let errorIsHidden = text.count < 38
+        let errorIsHidden = text.count < AppConstants.nameLengthRestriction
         newTrackerView.showTrackerNameError(errorIsHidden)
     }
 
     @objc private func didTapCreateButton() {
         guard
-            let category,
+            let category = category?.title,
             let name = data.name,
             !name.isEmpty,
             let emoji = data.emoji,
@@ -208,6 +207,7 @@ extension NewTrackerViewController {
             schedule: data.schedule
         )
         delegate?.didTapConfirmButton(categoryTitle: category, trackerToAdd: newTracker)
+        dismiss(animated: true)
     }
 }
 
@@ -264,7 +264,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
+// MARK: UICollectionViewDelegateFlowLayout
 extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
@@ -400,13 +400,13 @@ extension NewTrackerViewController: UITableViewDataSource {
         
         switch indexPath.row {
         case NewTrackerParam.category.rawValue:
-            indexPathCell = [.category: indexPath]
+            indexPathCell[.category] = indexPath
             newTrackerCell.setupCell(
                     title: NewTrackerParam.category.description,
-                    description: category
+                    description: category?.title
                 )
         case NewTrackerParam.schedule.rawValue:
-            indexPathCell = [.schedule: indexPath]
+            indexPathCell[.schedule] = indexPath
             newTrackerCell.setupCell(
                     title: NewTrackerParam.schedule.description,
                     description: WeekDay.getScheduleString(from: data.schedule)
@@ -432,10 +432,19 @@ extension NewTrackerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case NewTrackerParam.category.rawValue:
-            print("Открыть контроллер выбора Категории")
+            let categoryViewController = CategoryViewController(
+                selectedCategory: category,
+                delegate: self
+            )
+
+            let navigationController = UINavigationController(rootViewController: categoryViewController)
+            present(navigationController, animated: true)
         case NewTrackerParam.schedule.rawValue:
             let schedule = data.schedule ?? []
-            let scheduleViewController = ScheduleViewController(selectedWeekdays: schedule, delegate: self)
+            let scheduleViewController = ScheduleViewController(
+                selectedWeekdays: schedule,
+                delegate: self
+            )
 
             let navigationController = UINavigationController(rootViewController: scheduleViewController)
             present(navigationController, animated: true)
@@ -453,17 +462,30 @@ extension NewTrackerViewController: UITableViewDelegate {
 extension NewTrackerViewController: ScheduleViewControllerDelegate {
     func didConfirmSchedule(_ schedule: [WeekDay]) {
         data = data.update(newSchedule: schedule)
-        let indexPathCell = indexPathCell?.filter( {
-            $0.key == NewTrackerParam.schedule
-        } )
+        let indexPathCell = indexPathCell.filter{ $0.key == NewTrackerParam.schedule }
         
-        guard let indexPath = indexPathCell?.values.first else { return }
+        guard let indexPath = indexPathCell.values.first else { return }
         newTrackerView.tableView.reloadRows(at: [indexPath], with: .automatic)
         dismiss(animated: true)
     }
 }
 
-// MARK: - SHOW PREVIEW
+// MARK: CategoryViewControllerDelegate
+extension NewTrackerViewController: CategoryViewControllerDelegate {
+    func didSelectCategory(_ selectedCategory: TrackerCategory) {
+        category = selectedCategory
+        let indexPathCell = indexPathCell.filter{ $0.key == NewTrackerParam.category }
+        
+        guard let indexPath = indexPathCell.values.first else { return }
+        newTrackerView.tableView.reloadRows(at: [indexPath], with: .automatic)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            guard let self else { return }
+            self.dismiss(animated: true)
+        }
+    }
+}
+
+// MARK: SHOW PREVIEW
 #if DEBUG
 
 @available(iOS 17, *)

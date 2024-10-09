@@ -8,7 +8,9 @@
 import UIKit
 
 final class ScheduleViewController: UIViewController {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     weak var cellDelegate: ScheduleViewControllerCellDelegate?
     weak var delegate: ScheduleViewControllerDelegate?
     
@@ -16,7 +18,8 @@ final class ScheduleViewController: UIViewController {
     
     private var selectedWeekdays: Set<WeekDay>
     
-    // MARK: INIT
+    // MARK: - Init
+    
     init(selectedWeekdays: [WeekDay], delegate: ScheduleViewControllerDelegate) {
         self.selectedWeekdays = Set(selectedWeekdays)
         self.delegate = delegate
@@ -27,7 +30,8 @@ final class ScheduleViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override func loadView() {
         super.loadView()
         view = scheduleView
@@ -42,7 +46,9 @@ final class ScheduleViewController: UIViewController {
 }
 
 extension ScheduleViewController {
-    // MARK: setupTableView
+    
+    // MARK: - setupTableView
+    
     func setupTableView() {
         scheduleView.tableView.delegate = self
         scheduleView.tableView.dataSource = self
@@ -52,7 +58,8 @@ extension ScheduleViewController {
         )
     }
     
-    // MARK: setupButtons
+    // MARK: - setupButtons
+    
     func setupButtons() {
         scheduleView.doneButton.addTarget(self, action: #selector(doneButtonTapAction), for: .touchUpInside)
     }
@@ -62,6 +69,8 @@ extension ScheduleViewController {
         delegate?.didConfirmSchedule(weekdays)
     }
 }
+
+// MARK: - UITableViewDelegate
 
 extension ScheduleViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -78,6 +87,8 @@ extension ScheduleViewController: UITableViewDelegate {
         return 75
     }
 }
+
+// MARK: - UITableViewDataSource
 
 extension ScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -107,6 +118,8 @@ extension ScheduleViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - ScheduleViewControllerCellDelegate
+
 extension ScheduleViewController: ScheduleViewControllerCellDelegate {
     func didToggleSwitchView(to isSelected: Bool, of weekday: WeekDay) {
         if isSelected {
@@ -117,11 +130,12 @@ extension ScheduleViewController: ScheduleViewControllerCellDelegate {
     }
 }
 
-// MARK: - SHOW PREVIEW
+// MARK: - Preview
+
 #if DEBUG
 
 @available(iOS 17, *)
-#Preview("Event") {
+#Preview {
     let delegate = NewTrackerViewController(trackerType: TrackerType.habit, delegate: TrackerViewController())
     let viewController = ScheduleViewController(selectedWeekdays: [], delegate: delegate)
     return viewController

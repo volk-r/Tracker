@@ -80,7 +80,7 @@ final class NewTrackerView: UIView {
     private lazy var errorLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .regular)
-        label.text = "Ограничение 38 символов"
+        label.text = "Ограничение \(AppConstants.nameLengthRestriction) символов"
         label.textColor = AppColorSettings.redColor
         label.isHidden = true
         return label
@@ -104,11 +104,10 @@ final class NewTrackerView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
  
 extension NewTrackerView {
-    // MARK: LAYOUT
+    // MARK: setupLayout
     private func setupLayout() {
         [
             scrollView,
