@@ -1,0 +1,40 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Roman Romanov on 09.10.2024.
+  
+*/
+"statistic.screen.title" = "Statistic";
+"trackers.screen.title" = "Trackers";
+"createTracker.screen.title" = "Create Tracker";
+
+"datePicker" = "en_GB";
+
+"habit" = "Habit";
+"irregularEvent" = "Irregular event";
+"category" = "Category";
+"schedule" = "Schedule";
+"color" = "Color";
+"unknown" = "Unknown";
+
+"cancel" = "Cancel";
+"create" = "Сreate";
+
+"habit.new" = "New habit";
+"irregularEvent.new" = "New irregular event";
+
+"onboarding.screen.skipButton" = "This is technology!";
+
+"onboarding.screen.message.first" = "Only track what you want";
+"onboarding.screen.message.second" = "Even if it not liters of water and yoga";
+
+"searchPlaceholder" = "Search";
+
+"tracker.screen.dummyPlaceHolder" = "What will we track?";
+
+"statistic.screen.dummyPlaceHolder" = "There is nothing to analyze yet";
+
+"newTracker.screen.textFieldPlaceholder" = "Enter the name of the tracker";
+
+"validation.title.message" = "%d character limit";

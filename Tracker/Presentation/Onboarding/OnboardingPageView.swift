@@ -30,7 +30,7 @@ final class OnboardingPageView: UIView {
     lazy var skipTourButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = AppColorSettings.fontColor
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(Constants.onboardingSkipTourButton, for: .normal)
         button.setTitleColor(AppColorSettings.cellIconFontColor, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
@@ -82,5 +82,13 @@ extension OnboardingPageView {
     func setupView(for page: OnboardingPage) {
         backgroundImage.image = UIImage(named: page.backGroundImageName)
         messageLabel.text = page.message
+    }
+}
+
+// MARK: - Constants
+
+private extension OnboardingPageView {
+    enum Constants {
+        static let onboardingSkipTourButton = NSLocalizedString("onboarding.screen.skipButton", comment: "")
     }
 }

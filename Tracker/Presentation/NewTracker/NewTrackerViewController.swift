@@ -8,7 +8,9 @@
 import UIKit
 
 final class NewTrackerViewController: UIViewController {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     weak var delegate: NewTrackerViewControllerDelegate?
     
     private enum NewTrackerParam: Int {
@@ -17,8 +19,8 @@ final class NewTrackerViewController: UIViewController {
         
         var description: String {
             switch self {
-            case .category: return "Категория"
-            case .schedule: return "Расписание"
+            case .category: return Constants.categoryTitle
+            case .schedule: return Constants.scheduleTitle
             }
         }
     }
@@ -44,7 +46,8 @@ final class NewTrackerViewController: UIViewController {
         }
     }
     
-    // MARK: INIT
+    // MARK: - Init
+    
     init(trackerType: TrackerType, delegate: NewTrackerViewControllerDelegate) {
         self.trackerType = trackerType
         self.delegate = delegate
@@ -55,11 +58,12 @@ final class NewTrackerViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override func loadView() {
         super.loadView()
         view = newTrackerView
-        title = trackerType.rawValue
+        title = trackerType.title
     }
     
     override func viewDidLoad() {
@@ -75,7 +79,9 @@ final class NewTrackerViewController: UIViewController {
 }
 
 extension NewTrackerViewController {
-    // MARK: CollectionViewCellTypes
+    
+    // MARK: - CollectionViewCellTypes
+    
     private enum CollectionViewCellTypes: Int, CaseIterable {
         case emoji = 0
         case color = 1
@@ -94,21 +100,23 @@ extension NewTrackerViewController {
         static func getTitleSection(_ number: Int) -> String {
             switch number {
             case self.emoji.rawValue:
-                return "Emoji"
+                return Constants.emoji
             case self.color.rawValue:
-                return "Цвет"
+                return Constants.color
             default:
-                return "Unknown"
+                return Constants.unknown
             }
         }
     }
     
-    // MARK: setupTextField
+    // MARK: - setupTextField
+    
     func setupTextField() {
         newTrackerView.trackerNameTextField.delegate = self
     }
     
-    // MARK: setupTableView
+    // MARK: - setupTableView
+    
     func setupTableView() {
         newTrackerView.tableView.delegate = self
         newTrackerView.tableView.dataSource = self
@@ -123,7 +131,8 @@ extension NewTrackerViewController {
         newTrackerView.setHeightTableView(cellsCount: CGFloat(trackerType.paramsCellsCount))
     }
     
-    // MARK: setupCollectionView
+    // MARK: - setupCollectionView
+    
     func setupCollectionView() {
         newTrackerView.collectionView.dataSource = self
         newTrackerView.collectionView.delegate = self
@@ -169,7 +178,8 @@ extension NewTrackerViewController {
         newTrackerView.doCreateButtonActive(true)
     }
     
-    // MARK: setupButtons
+    // MARK: - setupButtons
+    
     private func setupButtons() {
         newTrackerView.cancelButton.addTarget(self, action: #selector(cancelTapAction), for: .touchUpInside)
         newTrackerView.createButton.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
@@ -211,7 +221,8 @@ extension NewTrackerViewController {
     }
 }
 
-// MARK: UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource
+
 extension NewTrackerViewController: UICollectionViewDataSource {
     func numberOfSections(
         in collectionView: UICollectionView
@@ -226,7 +237,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
         CollectionViewCellTypes.getNumberOfItemsInSection(section)
     }
     
-    // MARK: SETUP Collection CELLS
+    // MARK: - Setup Collection cells
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -264,7 +275,8 @@ extension NewTrackerViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: UICollectionViewDelegateFlowLayout
+// MARK: - UICollectionViewDelegateFlowLayout
+
 extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
@@ -309,7 +321,8 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         0
     }
     
-    // MARK: collectionView Header
+    // MARK: - collectionView Header
+    
     func collectionView(
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,
@@ -341,7 +354,8 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// MARK: UICollectionViewDelegate
+// MARK: - UICollectionViewDelegate
+
 extension NewTrackerViewController: UICollectionViewDelegate {
     func collectionView(
         _ collectionView: UICollectionView,
@@ -372,7 +386,8 @@ extension NewTrackerViewController: UICollectionViewDelegate {
     }
 }
 
-// MARK: UITextFieldDelegate
+// MARK: - UITextFieldDelegate
+
 extension NewTrackerViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
@@ -381,13 +396,15 @@ extension NewTrackerViewController: UITextFieldDelegate {
     }
 }
 
-// MARK: UITableViewDataSource
+// MARK: - UITableViewDataSource
+
 extension NewTrackerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         trackerType.paramsCellsCount
     }
     
-    // MARK: SETUP TableView CELLS
+    // MARK: - Setup TableView cells
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
             withIdentifier: NewTrackerTableViewCell.identifier,
@@ -421,7 +438,8 @@ extension NewTrackerViewController: UITableViewDataSource {
     }
 }
 
-// MARK: UITableViewDataSource
+// MARK: - UITableViewDataSource
+
 extension NewTrackerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1 {
@@ -458,7 +476,8 @@ extension NewTrackerViewController: UITableViewDelegate {
     }
 }
 
-// MARK: ScheduleViewControllerDelegate
+// MARK: - ScheduleViewControllerDelegate
+
 extension NewTrackerViewController: ScheduleViewControllerDelegate {
     func didConfirmSchedule(_ schedule: [WeekDay]) {
         data = data.update(newSchedule: schedule)
@@ -470,7 +489,8 @@ extension NewTrackerViewController: ScheduleViewControllerDelegate {
     }
 }
 
-// MARK: CategoryViewControllerDelegate
+// MARK: - CategoryViewControllerDelegate
+
 extension NewTrackerViewController: CategoryViewControllerDelegate {
     func didSelectCategory(_ selectedCategory: TrackerCategory) {
         category = selectedCategory
@@ -485,7 +505,20 @@ extension NewTrackerViewController: CategoryViewControllerDelegate {
     }
 }
 
-// MARK: SHOW PREVIEW
+// MARK: - Constants
+
+private extension NewTrackerViewController {
+    enum Constants {
+        static let categoryTitle = NSLocalizedString("category", comment: "")
+        static let scheduleTitle = NSLocalizedString("schedule", comment: "")
+        static let emoji = "Emoji"
+        static let color = NSLocalizedString("color", comment: "")
+        static let unknown = NSLocalizedString("unknown", comment: "")
+    }
+}
+
+// MARK: - Preview
+
 #if DEBUG
 
 @available(iOS 17, *)

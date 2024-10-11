@@ -11,7 +11,7 @@ final class NewTrackerView: UIView {
     // MARK: PROPERTIES
     lazy var trackerNameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = Constants.trackerNameTextFieldPlaceholder
         textField.backgroundColor = AppColorSettings.chosenItemBackgroundColor.withAlphaComponent(0.3)
         textField.layer.cornerRadius = 16
         textField.clearButtonMode = .whileEditing
@@ -55,7 +55,7 @@ final class NewTrackerView: UIView {
     
     lazy var cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(Constants.cancelCreateTrackerTitle, for: .normal)
         button.setTitleColor(AppColorSettings.redColor, for: .normal)
         button.backgroundColor = .white
         button.layer.borderWidth = 1
@@ -68,7 +68,7 @@ final class NewTrackerView: UIView {
     
     lazy var createButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(Constants.createTrackerTitle, for: .normal)
         button.backgroundColor = AppColorSettings.notActiveFontColor
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.layer.cornerRadius = 16
@@ -80,7 +80,7 @@ final class NewTrackerView: UIView {
     private lazy var errorLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .regular)
-        label.text = "Ограничение \(AppConstants.nameLengthRestriction) символов"
+        label.text = String(format: Constants.validationTitleMessage, AppConstants.nameLengthRestriction)
         label.textColor = AppColorSettings.redColor
         label.isHidden = true
         return label
@@ -197,5 +197,16 @@ extension NewTrackerView {
         createButton.backgroundColor = isEnabled
             ? AppColorSettings.fontColor
             : AppColorSettings.notActiveFontColor
+    }
+}
+
+// MARK: - Constants
+
+private extension NewTrackerView {
+    enum Constants {
+        static let trackerNameTextFieldPlaceholder = NSLocalizedString("newTracker.screen.textFieldPlaceholder", comment: "")
+        static let cancelCreateTrackerTitle = NSLocalizedString("cancel", comment: "")
+        static let createTrackerTitle = NSLocalizedString("create", comment: "")
+        static let validationTitleMessage = NSLocalizedString("validation.title.message", comment: "")
     }
 }

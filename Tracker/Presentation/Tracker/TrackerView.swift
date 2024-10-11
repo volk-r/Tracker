@@ -13,7 +13,7 @@ final class TrackerView: UIView {
     
     lazy var searchTextField: UISearchTextField = {
         let textField = UISearchTextField()
-        textField.placeholder = "Поиск"
+        textField.placeholder = Constants.searchPlaceholder
         return textField
     }()
     
@@ -29,7 +29,7 @@ final class TrackerView: UIView {
     
     private lazy var placeHolderView: UIView = DummyView(
         model: DummyModel(
-            description: "Что будем отслеживать?",
+            description: Constants.dummyViewPlaceHolder,
             imageName: AppImages.trackerEmptyPage
         )
     )
@@ -80,5 +80,14 @@ extension TrackerView {
             placeHolderView.centerXAnchor.constraint(equalTo: centerXAnchor),
             placeHolderView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
+    }
+}
+
+// MARK: - Constants
+
+private extension TrackerView {
+    enum Constants {
+        static let searchPlaceholder = NSLocalizedString("searchPlaceholder", comment: "")
+        static let dummyViewPlaceHolder = NSLocalizedString("tracker.screen.dummyPlaceHolder", comment: "")
     }
 }

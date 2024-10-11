@@ -27,7 +27,7 @@ final class CreateTrackerViewController: UIViewController {
     override func loadView() {
         super.loadView()
         view = createTrackerView
-        title = "Создание трекера"
+        title = Constants.pageTitle
     }
     
     override func viewDidLoad() {
@@ -41,6 +41,14 @@ extension CreateTrackerViewController {
         createTrackerView.trackerCallback = { [weak delegate] type in
             delegate?.didSelectedTypeTracker(trackerType: type)
         }
+    }
+}
+
+// MARK: - Constants
+
+private extension CreateTrackerViewController {
+    enum Constants {
+        static let pageTitle = NSLocalizedString("createTracker.screen.title", comment: "")
     }
 }
 

@@ -125,11 +125,11 @@ extension TrackerViewController {
         datePicker.maximumDate = Date()
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
-        datePicker.locale = Locale(identifier: "ru_CH")
+        datePicker.locale = Locale(identifier: Constants.dataPickerLocal)
         datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
         // datePicker Layout by design
         NSLayoutConstraint.activate([
-            datePicker.widthAnchor.constraint(equalToConstant: 90)
+            datePicker.widthAnchor.constraint(equalToConstant: 100)
         ])
     }
     
@@ -350,6 +350,14 @@ extension TrackerViewController: CreateTrackerViewControllerDelegate {
         dismiss(animated: true)
         let newTrackerVC = NewTrackerViewController(trackerType: trackerType, delegate: self)
         present(UINavigationController(rootViewController: newTrackerVC), animated: true)
+    }
+}
+
+// MARK: - Constants
+
+private extension TrackerViewController {
+    enum Constants {
+        static let dataPickerLocal = NSLocalizedString("datePicker", comment: "")
     }
 }
 

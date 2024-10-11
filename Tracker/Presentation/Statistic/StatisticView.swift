@@ -23,7 +23,7 @@ final class StatisticView: UIView {
     
     private lazy var placeHolderView: UIView = DummyView(
         model: DummyModel(
-            description: "Анализировать пока нечего",
+            description: Constants.dummyViewPlaceHolder,
             imageName: AppImages.statisticEmptyPage
         )
     )
@@ -63,4 +63,12 @@ extension StatisticView {
         ])
     }
 
+}
+
+// MARK: - Constants
+
+private extension StatisticView {
+    enum Constants {
+        static let dummyViewPlaceHolder = NSLocalizedString("statistic.screen.dummyPlaceHolder", comment: "")
+    }
 }

@@ -22,7 +22,7 @@ final class CreateTrackerView: UIView {
     
     private lazy var habitButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Привычка", for: .normal)
+        button.setTitle(Constants.habitTitle, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
         button.setTitleColor(.white, for: .normal)
@@ -37,7 +37,7 @@ final class CreateTrackerView: UIView {
     
     private lazy var eventButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Нерегулярные событие", for: .normal)
+        button.setTitle(Constants.eventTitle, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
         button.setTitleColor(.white, for: .normal)
@@ -99,5 +99,15 @@ extension CreateTrackerView {
     // MARK: didEventTapped
     @objc private func didEventTapped() {
         trackerCallback?(.event)
+    }
+}
+
+// MARK: - Constants
+
+private extension CreateTrackerView {
+    enum Constants {
+        static let pageTitle = NSLocalizedString("createTracker.screen.title", comment: "")
+        static let habitTitle = NSLocalizedString("habit", comment: "")
+        static let eventTitle = NSLocalizedString("irregularEvent", comment: "")
     }
 }

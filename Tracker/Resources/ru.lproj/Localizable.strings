@@ -1,0 +1,40 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Roman Romanov on 09.10.2024.
+  
+*/
+"statistic.screen.title" = "Статистика";
+"trackers.screen.title" = "Трекеры";
+"createTracker.screen.title" = "Создание трекера";
+
+"datePicker" = "ru_CH";
+
+"habit" = "Привычка";
+"irregularEvent" = "Нерегулярные событие";
+"category" = "Категория";
+"schedule" = "Расписание";
+"color" = "Цвет";
+"unknown" = "Неизвестный";
+
+"cancel" = "Отменить";
+"create" = "Создать";
+
+"habit.new" = "Новая привычка";
+"irregularEvent.new" = "Новое нерегулярное событие";
+
+"onboarding.screen.skipButton" = "Вот это технологии!";
+
+"onboarding.screen.message.first" = "Отслеживайте только то, что хотите";
+"onboarding.screen.message.second" = "Даже если это не литры воды и йога";
+
+"searchPlaceholder" = "Поиск";
+
+"tracker.screen.dummyPlaceHolder" = "Что будем отслеживать?";
+
+"statistic.screen.dummyPlaceHolder" = "Анализировать пока нечего";
+
+"newTracker.screen.textFieldPlaceholder" = "Введите название трекера";
+
+"validation.title.message" = "Ограничение %d символов";
