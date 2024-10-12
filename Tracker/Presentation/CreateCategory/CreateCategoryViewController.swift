@@ -42,7 +42,7 @@ final class CreateCategoryViewController: UIViewController {
     override func loadView() {
         super.loadView()
         view = createCategoryView
-        title = createCategoryMode.rawValue
+        title = createCategoryMode.title
     }
     
     override func viewDidLoad() {

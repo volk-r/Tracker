@@ -7,7 +7,21 @@
 
 import Foundation
 
-enum CreateCategoryMode: String {
-    case create = "Новая категория"
-    case edit = "Редактирование категории"
+enum CreateCategoryMode {
+    case create
+    case edit
+    
+    var title: String {
+        switch self {
+            case .create: Constants.createTitle
+            case .edit: Constants.editTitle
+        }
+    }
+}
+
+private extension CreateCategoryMode {
+    enum Constants {
+        static let createTitle = NSLocalizedString("category.new", comment: "")
+        static let editTitle = NSLocalizedString("category.edit", comment: "")
+    }
 }

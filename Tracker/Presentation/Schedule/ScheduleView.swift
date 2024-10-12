@@ -25,7 +25,7 @@ final class ScheduleView: UIView {
     
     lazy var doneButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(Constants.doneMessage, for: .normal)
         button.backgroundColor = AppColorSettings.fontColor
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.layer.cornerRadius = 16
@@ -67,5 +67,13 @@ extension ScheduleView {
             doneButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
             doneButton.heightAnchor.constraint(equalToConstant: 60),
         ])
+    }
+}
+
+// MARK: - Constants
+
+private extension ScheduleView {
+    enum Constants {
+        static let doneMessage = NSLocalizedString("done", comment: "")
     }
 }

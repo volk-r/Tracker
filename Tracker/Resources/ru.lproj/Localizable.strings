@@ -5,9 +5,13 @@
   Created by Roman Romanov on 09.10.2024.
   
 */
+
+// MARK: - TabBarViewController
+
 "statistic.screen.title" = "Статистика";
 "trackers.screen.title" = "Трекеры";
-"createTracker.screen.title" = "Создание трекера";
+
+// MARK: - General
 
 "datePicker" = "ru_CH";
 
@@ -20,21 +24,69 @@
 
 "cancel" = "Отменить";
 "create" = "Создать";
+"delete" = "Удалить";
+"edit" = "Редактировать";
+"done" = "Готово";
+"save" = "Сохранить";
+"unpin" = "Открепить";
+"pin" = "Закрепить";
 
+"searchPlaceholder" = "Поиск";
+"validation.title.message" = "Ограничение %d символов";
+
+// MARK: - CreateTrackerViewController
+
+"createTracker.screen.title" = "Создание трекера";
 "habit.new" = "Новая привычка";
 "irregularEvent.new" = "Новое нерегулярное событие";
 
-"onboarding.screen.skipButton" = "Вот это технологии!";
+// MARK: - OnboardingViewController
 
+"onboarding.screen.skipButton" = "Вот это технологии!";
 "onboarding.screen.message.first" = "Отслеживайте только то, что хотите";
 "onboarding.screen.message.second" = "Даже если это не литры воды и йога";
 
-"searchPlaceholder" = "Поиск";
+// MARK: - TrackerViewController
 
 "tracker.screen.dummyPlaceHolder" = "Что будем отслеживать?";
 
+// MARK: - StatisticViewController
+
 "statistic.screen.dummyPlaceHolder" = "Анализировать пока нечего";
+
+// MARK: - NewTrackerViewController
 
 "newTracker.screen.textFieldPlaceholder" = "Введите название трекера";
 
-"validation.title.message" = "Ограничение %d символов";
+// MARK: - CategoryViewController
+
+"category.screen.alertMessage" = "Эта категория точно не нужна?";
+"category.screen.dummyPlaceHolder" = "Привычки и события можно\n объединить по смыслу";
+"category.screen.addCategory" = "Добавить категорию";
+
+// MARK: - CreateCategoryViewController
+
+"createCategory.screen.textFieldPlaceholder" = "Введите название категории";
+
+"category.new" = "Новая категория";
+"category.edit" = "Редактирование категории";
+
+// MARK: - WeekDay
+
+"monday" = "Понедельник";
+"tuesday" = "Вторник";
+"wednesday" = "Среда";
+"thursday" = "Четверг";
+"friday" = "Пятница";
+"saturday" = "Суббота";
+"sunday" = "Воскресенье";
+
+"monday.short" = "Пн";
+"tuesday.short" = "Вт";
+"wednesday.short" = "Ср";
+"thursday.short" = "Чт";
+"friday.short" = "Пт";
+"saturday.short" = "Сб";
+"sunday.short" = "Вс";
+
+"everyDay" = "Каждый день";

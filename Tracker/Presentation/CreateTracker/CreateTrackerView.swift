@@ -106,7 +106,6 @@ extension CreateTrackerView {
 
 private extension CreateTrackerView {
     enum Constants {
-        static let pageTitle = NSLocalizedString("createTracker.screen.title", comment: "")
         static let habitTitle = NSLocalizedString("habit", comment: "")
         static let eventTitle = NSLocalizedString("irregularEvent", comment: "")
     }

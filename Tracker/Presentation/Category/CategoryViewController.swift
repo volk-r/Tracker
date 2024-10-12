@@ -36,7 +36,7 @@ final class CategoryViewController: UIViewController {
     override func loadView() {
         super.loadView()
         view = categoryView
-        title = "Категория"
+        title = Constants.pageTitle
     }
     
     override func viewDidLoad() {
@@ -128,9 +128,9 @@ extension CategoryViewController {
     private func deleteCategory(_ category: TrackerCategory) {
         let alert = AlertModel(
             title: nil,
-            message: "Эта категория точно не нужна?",
-            buttonText: "Удалить",
-            cancelButtonText: "Отменить"
+            message: Constants.alertMessage,
+            buttonText: Constants.deleteMessage,
+            cancelButtonText: Constants.cancelMessage
         ) { [weak self] in
             guard let self else { return }
             self.viewModel.deleteCategory(category)
@@ -176,11 +176,11 @@ extension CategoryViewController: UITableViewDelegate {
         
         return UIContextMenuConfiguration(actionProvider:  { _ in
             UIMenu(children: [
-                UIAction(title: "Редактировать") { [weak self] _ in
+                UIAction(title: Constants.editMessage) { [weak self] _ in
                     guard let self else { return }
                     self.editCategory(category)
                 },
-                UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+                UIAction(title: Constants.deleteMessage, attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
                     self.deleteCategory(category)
                 }
@@ -226,6 +226,18 @@ extension CategoryViewController: CreateCategoryViewControllerDelegate {
     func acceptChanges() {
         getAllCategories()
         dismiss(animated: true)
+    }
+}
+
+// MARK: - Constants
+
+private extension CategoryViewController {
+    enum Constants {
+        static let pageTitle = NSLocalizedString("category", comment: "")
+        static let cancelMessage = NSLocalizedString("cancel", comment: "")
+        static let deleteMessage = NSLocalizedString("delete", comment: "")
+        static let editMessage = NSLocalizedString("edit", comment: "")
+        static let alertMessage = NSLocalizedString("category.screen.alertMessage", comment: "")
     }
 }
 

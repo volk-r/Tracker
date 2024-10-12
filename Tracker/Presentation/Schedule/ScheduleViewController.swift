@@ -35,7 +35,7 @@ final class ScheduleViewController: UIViewController {
     override func loadView() {
         super.loadView()
         view = scheduleView
-        title = "Расписание"
+        title = Constants.pageTitle
     }
     
     override func viewDidLoad() {
@@ -127,6 +127,14 @@ extension ScheduleViewController: ScheduleViewControllerCellDelegate {
         } else {
             selectedWeekdays.remove(weekday)
         }
+    }
+}
+
+// MARK: - Constants
+
+private extension ScheduleViewController {
+    enum Constants {
+        static let pageTitle = NSLocalizedString("schedule", comment: "")
     }
 }
 

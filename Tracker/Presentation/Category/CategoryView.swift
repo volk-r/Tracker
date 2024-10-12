@@ -24,7 +24,7 @@ final class CategoryView: UIView {
     
     lazy var createButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(Constants.addCategoryMessage, for: .normal)
         button.backgroundColor = AppColorSettings.fontColor
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.layer.cornerRadius = 16
@@ -34,7 +34,7 @@ final class CategoryView: UIView {
     
     private lazy var placeHolderView: UIView = DummyView(
         model: DummyModel(
-            description: "Привычки и события можно\n объединить по смыслу",
+            description: Constants.dummyViewPlaceHolder,
             imageName: AppImages.trackerEmptyPage
         )
     )
@@ -81,5 +81,14 @@ extension CategoryView {
             createButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
             createButton.heightAnchor.constraint(equalToConstant: 60),
         ])
+    }
+}
+
+// MARK: - Constants
+
+private extension CategoryView {
+    enum Constants {
+        static let dummyViewPlaceHolder = NSLocalizedString("category.screen.dummyPlaceHolder", comment: "")
+        static let addCategoryMessage = NSLocalizedString("category.screen.addCategory", comment: "")
     }
 }

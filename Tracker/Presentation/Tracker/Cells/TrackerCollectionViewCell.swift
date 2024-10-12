@@ -18,7 +18,10 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     private var tracker: Tracker?
     private var days = 0 {
         willSet {
-            formatWordingFor(day: newValue)
+            daysCountLabel.text = String.localizedStringWithFormat(
+                Constants.numberOfDays,
+                newValue
+            )
         }
     }
     
@@ -133,27 +136,6 @@ extension TrackerCollectionViewCell {
         delegate?.didTapAddDayButton(for: tracker, in: self)
     }
     
-    // MARK: - formatWordingFor
-    
-    private func formatWordingFor(day: Int) {
-//        var wording: String
-
-        // TODO:
-//        switch (day % 10) {
-//            case 1:
-//            wording = "день";
-//            case 2...4:
-//            wording = "дня";
-//            default:
-//            wording = "дней";
-//        }
-//        daysCountLabel.text = "\(day) \(wording)"
-        daysCountLabel.text = String.localizedStringWithFormat(
-            Constants.numberOfTasks,
-            day
-        )
-    }
-    
     // MARK: - setupLayout
     
     private func setupLayout() {
@@ -211,6 +193,6 @@ extension TrackerCollectionViewCell {
 
 private extension TrackerCollectionViewCell {
     enum Constants {
-        static let numberOfTasks = NSLocalizedString("numberOfTasks", comment: "Number of completed habbits/events in days")
+        static let numberOfDays = NSLocalizedString("numberOfDays", comment: "Number of completed habbits/events in days")
     }
 }
