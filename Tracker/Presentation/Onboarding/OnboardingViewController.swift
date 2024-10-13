@@ -20,8 +20,8 @@ final class OnboardingViewController: UIPageViewController {
         let control = UIPageControl()
         control.numberOfPages = pages.count
         control.currentPage = 0
-        control.currentPageIndicatorTintColor = AppColorSettings.fontColor
-        control.pageIndicatorTintColor = AppColorSettings.fontColor.withAlphaComponent(0.3)
+        control.currentPageIndicatorTintColor = AppColorSettings.onboardingFontColor
+        control.pageIndicatorTintColor = AppColorSettings.onboardingFontColor.withAlphaComponent(0.3)
         return control
     }()
         

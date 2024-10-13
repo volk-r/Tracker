@@ -18,6 +18,7 @@ final class CategoryView: UIView {
         tableView.layer.masksToBounds = true
         tableView.layer.cornerRadius = 10
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        tableView.separatorColor = AppColorSettings.notActiveFontColor
         tableView.isEmptyHeaderHidden = true
         return tableView
     }()
@@ -25,6 +26,7 @@ final class CategoryView: UIView {
     lazy var createButton: UIButton = {
         let button = UIButton()
         button.setTitle(Constants.addCategoryMessage, for: .normal)
+        button.setTitleColor(AppColorSettings.backgroundColor, for: .normal)
         button.backgroundColor = AppColorSettings.fontColor
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.layer.cornerRadius = 16
@@ -43,7 +45,7 @@ final class CategoryView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = AppColorSettings.backgroundColor
         setupLayout()
     }
     

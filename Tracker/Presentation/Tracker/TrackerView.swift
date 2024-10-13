@@ -23,6 +23,7 @@ final class TrackerView: UIView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         let collectionViewLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout // casting is required because UICollectionViewLayout doesn't offer header pin. Its feature of UICollectionViewFlowLayout
         collectionViewLayout?.sectionHeadersPinToVisibleBounds = true
+        collectionViewLayout?.collectionView?.backgroundColor = AppColorSettings.backgroundColor
         
         return collectionView
     }()
@@ -38,7 +39,7 @@ final class TrackerView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = AppColorSettings.backgroundColor
         
         setupLayout()
     }

@@ -21,7 +21,7 @@ final class OnboardingPageView: UIView {
     private lazy var messageLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        label.textColor = AppColorSettings.fontColor
+        label.textColor = AppColorSettings.onboardingFontColor
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -29,9 +29,9 @@ final class OnboardingPageView: UIView {
     
     lazy var skipTourButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = AppColorSettings.fontColor
+        button.backgroundColor = AppColorSettings.onboardingFontColor
         button.setTitle(Constants.onboardingSkipTourButton, for: .normal)
-        button.setTitleColor(AppColorSettings.cellIconFontColor, for: .normal)
+        button.setTitleColor(AppColorSettings.onboardingCellIconFontColor, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         return button

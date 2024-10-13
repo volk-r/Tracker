@@ -8,12 +8,35 @@
 import UIKit
 
 enum AppColorSettings {
-    static let launchScreenBackgroundColor = UIColor(hexString: "#3772E7")
-    static let fontColor = UIColor(hexString: "#1A1B22")
+    static let switchBackgroundColor = UIColor(hexString: "#3772E7")
+    
+    static let backgroundColor = UIColor { (traits) -> UIColor in
+        let isDarkMode = traits.userInterfaceStyle == .dark
+        return isDarkMode ? UIColor(hexString: "#1A1B22") : UIColor(hexString: "#FFFFFF")
+    }
+    
+    static let fontColor = UIColor { (traits) -> UIColor in
+        let isDarkMode = traits.userInterfaceStyle == .dark
+        return isDarkMode ? UIColor(hexString: "#FFFFFF") : UIColor(hexString: "#1A1B22")
+    }
+    
+    static let onboardingFontColor = UIColor(hexString: "#1A1B22")
+    static let onboardingCellIconFontColor = UIColor(hexString: "#FFFFFF")
+    
     static let cellIconFontColor = UIColor(hexString: "#FFFFFF")
-    static let notActiveFontColor = UIColor(hexString: "#AEAFB4")
+    static let notActiveFontColor = UIColor { (traits) -> UIColor in
+        let isDarkMode = traits.userInterfaceStyle == .dark
+        return isDarkMode ? UIColor(hexString: "#AEAFB4") : UIColor(hexString: "#AEAFB4")
+    }
+
     static let redColor = UIColor(hexString: "#F56B6C")
-    static let chosenItemBackgroundColor = UIColor(hexString: "#E6E8EB")
+
+    static let chosenItemBackgroundColor = UIColor { (traits) -> UIColor in
+        let isDarkMode = traits.userInterfaceStyle == .dark
+        return isDarkMode ? UIColor(hexString: "#414141") : UIColor(hexString: "#E6E8EB").withAlphaComponent(0.3)
+    }
+    
+    static let chosenEmojiItemBackgroundColor = UIColor(hexString: "#E6E8EB")
     
     static let palette: [UIColor] = [
         UIColor(hexString: "#FD4C49"),

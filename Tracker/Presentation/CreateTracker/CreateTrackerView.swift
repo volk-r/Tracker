@@ -25,7 +25,7 @@ final class CreateTrackerView: UIView {
         button.setTitle(Constants.habitTitle, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(AppColorSettings.backgroundColor, for: .normal)
         button.layer.cornerRadius = 16
         button.backgroundColor = AppColorSettings.fontColor
         button.addTarget(self, action: #selector(didHabitTapped), for: .touchUpInside)
@@ -40,7 +40,7 @@ final class CreateTrackerView: UIView {
         button.setTitle(Constants.eventTitle, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(AppColorSettings.backgroundColor, for: .normal)
         button.layer.cornerRadius = 16
         button.backgroundColor = AppColorSettings.fontColor
         button.addTarget(self, action: #selector(didEventTapped), for: .touchUpInside)
@@ -53,7 +53,7 @@ final class CreateTrackerView: UIView {
     // MARK: INIT
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = AppColorSettings.backgroundColor
         setupLayout()
     }
     

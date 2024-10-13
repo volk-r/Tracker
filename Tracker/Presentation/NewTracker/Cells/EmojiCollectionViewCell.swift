@@ -56,7 +56,7 @@ extension EmojiCollectionViewCell {
 
 extension EmojiCollectionViewCell: CellSelectProtocol {
     func select() {
-        contentView.backgroundColor = AppColorSettings.chosenItemBackgroundColor
+        contentView.backgroundColor = AppColorSettings.chosenEmojiItemBackgroundColor
     }
     
     func deselect() {

@@ -31,7 +31,7 @@ final class CategoryTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        backgroundColor = AppColorSettings.chosenItemBackgroundColor.withAlphaComponent(0.3)
+        backgroundColor = AppColorSettings.chosenItemBackgroundColor
         selectionStyle = .none
         
         setupLayout()

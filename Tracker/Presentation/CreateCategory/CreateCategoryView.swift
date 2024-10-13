@@ -14,7 +14,7 @@ final class CreateCategoryView: UIView {
     lazy var categoryNameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = Constants.textFieldPlaceholder
-        textField.backgroundColor = AppColorSettings.chosenItemBackgroundColor.withAlphaComponent(0.3)
+        textField.backgroundColor = AppColorSettings.chosenItemBackgroundColor
         textField.layer.cornerRadius = 16
         textField.clearButtonMode = .whileEditing
         textField.setLeftPaddingPoints(16)
@@ -24,6 +24,7 @@ final class CreateCategoryView: UIView {
     lazy var doneButton: UIButton = {
         let button = UIButton()
         button.setTitle(Constants.doneMessage, for: .normal)
+        button.setTitleColor(AppColorSettings.backgroundColor, for: .normal)
         button.backgroundColor = AppColorSettings.notActiveFontColor
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.layer.cornerRadius = 16
@@ -45,7 +46,7 @@ final class CreateCategoryView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = AppColorSettings.backgroundColor
         setupLayout()
     }
     

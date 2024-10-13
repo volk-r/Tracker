@@ -25,7 +25,7 @@ final class ScheduleTableViewCell: UITableViewCell {
     
     private lazy var switchView: UISwitch = {
         let switchView = UISwitch()
-        switchView.onTintColor = AppColorSettings.launchScreenBackgroundColor
+        switchView.onTintColor = AppColorSettings.switchBackgroundColor
         switchView.addTarget(self, action: #selector(didToggleSwitchView), for: .valueChanged)
         return switchView
     }()
@@ -35,7 +35,7 @@ final class ScheduleTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        backgroundColor = AppColorSettings.chosenItemBackgroundColor.withAlphaComponent(0.3)
+        backgroundColor = AppColorSettings.chosenItemBackgroundColor
         selectionStyle = .none
         
         setupLayout()
