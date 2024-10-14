@@ -225,7 +225,6 @@ extension CategoryViewController: UITableViewDataSource {
 extension CategoryViewController: CreateCategoryViewControllerDelegate {
     func acceptChanges() {
         getAllCategories()
-        dismiss(animated: true)
     }
 }
 

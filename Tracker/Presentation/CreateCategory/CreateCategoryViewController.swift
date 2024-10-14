@@ -107,6 +107,7 @@ extension CreateCategoryViewController {
         }
         
         delegate?.acceptChanges()
+        dismiss(animated: true)
     }
     
     // MARK: - editingChanged
