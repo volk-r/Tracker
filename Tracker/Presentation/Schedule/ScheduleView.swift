@@ -62,7 +62,7 @@ extension ScheduleView {
             tableView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 24),
             tableView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            tableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            tableView.heightAnchor.constraint(equalToConstant: CGFloat(WeekDay.allCases.count * 75)),
             
             doneButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             doneButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
