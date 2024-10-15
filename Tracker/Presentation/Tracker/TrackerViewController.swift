@@ -18,37 +18,12 @@ class TrackerViewController: UIViewController {
     private var trackerRecordStore: TrackerRecordStoreProtocol = TrackerRecordStore()
 
     private var completedTrackers: Set<TrackerRecord> = []
+    private var filteredCategories: [TrackerCategory] = [TrackerCategory]()
     private var categories: [TrackerCategory] = [TrackerCategory]() {
         didSet {
+            updateFilteredCategories()
             showPlaceHolder()
         }
-    }
-    
-    private var filteredCategories: [TrackerCategory] {
-        let weekday = Calendar.current.component(.weekday, from: currentDate)
-        var result = [TrackerCategory]()
-        
-        guard let selectedWeekday = WeekDay(rawValue: weekday) else { return result }
-        
-        for category in categories {
-            let filteredTrackers = category.trackerList.filter { tracker in
-                guard let schedule = tracker.schedule else { return true }
-                return schedule.contains(selectedWeekday)
-            }
-            
-            if !filteredTrackers.isEmpty {
-                result
-                    .append(
-                        TrackerCategory(
-                            id: category.id,
-                            title: category.title,
-                            trackerList: filteredTrackers.sorted(by: {$0.name > $1.name})
-                        )
-                    )
-            }
-        }
-        
-        return result
     }
     
     private var datePicker = UIDatePicker()
@@ -116,7 +91,7 @@ extension TrackerViewController {
     // MARK: - setupSearchTextField
     
     private func setupSearchTextField() {
-        trackerView.searchTextField.delegate = self
+        trackerView.searchTextField.addTarget(self, action: #selector(searchTextChanged), for: .editingChanged)
     }
     
     // MARK: - setupDatePicker
@@ -149,6 +124,7 @@ extension TrackerViewController {
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
         showPlaceHolder()
+        updateFilteredCategories()
         trackerView.trackerCollectionView.reloadData()
     }
     
@@ -174,6 +150,46 @@ extension TrackerViewController {
     @objc private func addAction() {
         let createTrackerVC = CreateTrackerViewController(delegate: self)
         present(UINavigationController(rootViewController: createTrackerVC), animated: true)
+    }
+    
+    @objc private func searchTextChanged() {
+        updateFilteredCategories()
+        trackerView.trackerCollectionView.reloadData()
+    }
+    
+    private func updateFilteredCategories() {
+        let weekday = Calendar.current.component(.weekday, from: currentDate)
+        var result = [TrackerCategory]()
+        
+        guard
+            let selectedWeekday = WeekDay(rawValue: weekday)
+        else {
+            return filteredCategories = result
+        }
+        
+        let filterText = (trackerView.searchTextField.text ?? "").lowercased()
+        
+        for category in categories {
+            let filteredTrackers = category.trackerList.filter { tracker in
+                let isFilteredByText = filterText.isEmpty || tracker.name.localizedCaseInsensitiveContains(filterText)
+                
+                guard let schedule = tracker.schedule else { return isFilteredByText }
+                return schedule.contains(selectedWeekday) && isFilteredByText
+            }
+            
+            if !filteredTrackers.isEmpty {
+                result
+                    .append(
+                        TrackerCategory(
+                            id: category.id,
+                            title: category.title,
+                            trackerList: filteredTrackers.sorted(by: {$0.name > $1.name})
+                        )
+                    )
+            }
+        }
+        
+        filteredCategories = result
     }
     
     // MARK: - showPlaceHolder
@@ -317,7 +333,6 @@ extension TrackerViewController: TrackerCollectionViewCellDelegate {
 
 extension TrackerViewController: NewTrackerViewControllerDelegate {
     func didTapConfirmButton(categoryTitle: String, trackerToAdd: Tracker) {
-        getAllCategories()
         guard let categoryIndex = categories.firstIndex(where: { $0.title == categoryTitle }) else { return }
         trackerStore.addTracker(trackerToAdd, to: categories[categoryIndex])
     }

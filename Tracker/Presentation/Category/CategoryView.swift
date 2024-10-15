@@ -11,6 +11,8 @@ final class CategoryView: UIView {
     
     // MARK: - Properties
     
+    // TODO: need to fixed tableView
+    
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
