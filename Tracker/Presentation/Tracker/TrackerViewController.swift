@@ -325,28 +325,43 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
             )
     }
     
+    // MARK: - Tracker context menu
+    
     func collectionView(
         _ collectionView: UICollectionView,
         contextMenuConfigurationForItemAt indexPath: IndexPath,
         point: CGPoint
     ) -> UIContextMenuConfiguration? {
+        
+        // TODO: need to fix when 0 pinned trackers
         let pinUnpinMessage = indexPath.section == 0 ? Constants.unpinMessage : Constants.pinMessage
+        let tracker = filteredCategories[indexPath.section].trackerList[indexPath.row]
+        
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { actions in
-            return UIMenu(children: [
-                UIAction(title: pinUnpinMessage) { _ in
-                    // TODO: pin/unpin tracker
-                    print(pinUnpinMessage)
-                },
-                UIAction(title: Constants.editMessage) { _ in
-                    // TODO: edit tracker
-                    print(Constants.editMessage)
-                },
-                UIAction(title: Constants.deleteMessage, attributes: .destructive) { [weak self] _ in
-                    guard let self else { return }
-                    let tracker = filteredCategories[indexPath.section].trackerList[indexPath.row]
-                    self.deleteTracker(tracker)
-                }
-            ])
+            return UIMenu(
+                children: [
+                    UIAction(title: pinUnpinMessage) { _ in
+                        // TODO: pin/unpin tracker
+                        print(pinUnpinMessage)
+                    },
+                    UIAction(title: Constants.editMessage) { _ in
+                        let daysCount = self.completedTrackers.filter { $0.trackerId == tracker.id }.count
+                        let trackerType = (tracker.schedule != nil) ? TrackerType.habit : TrackerType.event
+                        let newTrackerVC = NewTrackerViewController(
+                            trackerType: trackerType,
+                            delegate: self,
+                            trackerData: tracker,
+                            category: self.filteredCategories[indexPath.section],
+                            daysCount: daysCount
+                        )
+                        self.present(UINavigationController(rootViewController: newTrackerVC), animated: true)
+                    },
+                    UIAction(title: Constants.deleteMessage, attributes: .destructive) { [weak self] _ in
+                        guard let self else { return }
+                        self.deleteTracker(tracker)
+                    }
+                ]
+            )
         }
     }
     
@@ -387,8 +402,14 @@ extension TrackerViewController: TrackerCollectionViewCellDelegate {
 // MARK: - NewTrackerViewControllerDelegate
 
 extension TrackerViewController: NewTrackerViewControllerDelegate {
-    func didTapConfirmButton(categoryTitle: String, trackerToAdd: Tracker) {
+    func didTapConfirmButton(categoryTitle: String, trackerToAdd: Tracker, isEditMode: Bool) {
         guard let categoryIndex = categories.firstIndex(where: { $0.title == categoryTitle }) else { return }
+        
+        if isEditMode {
+            trackerStore.updateTracker(trackerToAdd, from: categories[categoryIndex])
+            return
+        }
+        
         trackerStore.addTracker(trackerToAdd, to: categories[categoryIndex])
     }
 }

@@ -8,7 +8,9 @@
 import UIKit
 
 final class NewTrackerView: UIView {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     lazy var trackerNameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = Constants.trackerNameTextFieldPlaceholder
@@ -39,6 +41,22 @@ final class NewTrackerView: UIView {
         collectionViewLayout?.sectionHeadersPinToVisibleBounds = true
         collectionViewLayout?.collectionView?.isScrollEnabled = false
         return collectionView
+    }()
+    
+    private lazy var daysCountLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 32, weight: .bold)
+        label.isHidden = true
+        return label
+    }()
+    
+    private lazy var headerStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = 40
+        return stackView
     }()
     
     private var tableViewTopConstraint: NSLayoutConstraint?
@@ -96,7 +114,8 @@ final class NewTrackerView: UIView {
         return stackView
     }()
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = AppColorSettings.backgroundColor
@@ -109,7 +128,9 @@ final class NewTrackerView: UIView {
 }
  
 extension NewTrackerView {
-    // MARK: setupLayout
+    
+    // MARK: - setupLayout
+    
     private func setupLayout() {
         [
             scrollView,
@@ -119,6 +140,14 @@ extension NewTrackerView {
         }
         addSubview(scrollView)
         scrollView.addSubview(contentView)
+        // header body
+        [
+            daysCountLabel,
+            trackerNameTextField
+        ].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            headerStackView.addArrangedSubview($0)
+        }
         // footer body
         [
             cancelButton,
@@ -129,7 +158,7 @@ extension NewTrackerView {
         }
         // body
         [
-            trackerNameTextField,
+            headerStackView,
             errorLabel,
             tableView,
             collectionView,
@@ -157,9 +186,9 @@ extension NewTrackerView {
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
             
-            trackerNameTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
-            trackerNameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            trackerNameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            headerStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            headerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            headerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             trackerNameTextField.heightAnchor.constraint(equalToConstant: 63),
             
             errorLabel.topAnchor.constraint(equalTo: trackerNameTextField.bottomAnchor, constant: 8),
@@ -182,23 +211,37 @@ extension NewTrackerView {
         ])
     }
     
-    // MARK: setHeightTableView
+    // MARK: - setHeightTableView
+    
     func setHeightTableView(cellsCount multiplier: CGFloat) {
         tableViewHeightConstraint?.constant = 75 * multiplier
     }
     
-    // MARK: showTrackerNameError
+    // MARK: - showTrackerNameError
+    
     func showTrackerNameError(_ show: Bool) {
         errorLabel.isHidden = show
         tableViewTopConstraint?.constant = show ? 2 : 32
     }
     
-    // MARK: doCreateButtonActive
+    // MARK: - doCreateButtonActive
+    
     func doCreateButtonActive(_ isEnabled: Bool) {
         createButton.isEnabled = isEnabled
         createButton.backgroundColor = isEnabled
             ? AppColorSettings.fontColor
             : AppColorSettings.notActiveFontColor
+    }
+    
+    // MARK: - setupDayCount
+    
+    func setupDaysCount(_ dayCount: Int) {
+        daysCountLabel.isHidden = false
+        let dayString = String.localizedStringWithFormat(
+            Constants.numberOfDaysMessage,
+            dayCount
+        )
+        daysCountLabel.text = dayString
     }
 }
 
@@ -210,5 +253,6 @@ private extension NewTrackerView {
         static let cancelCreateTrackerTitle = NSLocalizedString("cancel", comment: "")
         static let createTrackerTitle = NSLocalizedString("create", comment: "")
         static let validationTitleMessage = NSLocalizedString("validation.title.message", comment: "")
+        static let numberOfDaysMessage = NSLocalizedString("numberOfDays", comment: "Number of days completed")
     }
 }

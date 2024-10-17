@@ -39,12 +39,14 @@ final class NewTrackerViewController: UIViewController {
             checkDataValidation()
         }
     }
-
+    
     private var category: TrackerCategory? {
         didSet {
             checkDataValidation()
         }
     }
+    
+    private var isEditMode = false
     
     // MARK: - Init
     
@@ -52,6 +54,21 @@ final class NewTrackerViewController: UIViewController {
         self.trackerType = trackerType
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
+    }
+    
+    init(
+        trackerType: TrackerType,
+        delegate: NewTrackerViewControllerDelegate,
+        trackerData: Tracker,
+        category: TrackerCategory,
+        daysCount: Int
+    ) {
+        self.trackerType = trackerType
+        self.delegate = delegate
+        super.init(nibName: nil, bundle: nil)
+        
+        isEditMode = true
+        setDataToEdit(trackerData: trackerData, category: category, daysCount: daysCount)
     }
     
     required init?(coder: NSCoder) {
@@ -154,6 +171,33 @@ extension NewTrackerViewController {
         )
     }
     
+    // MARK: - setDataToEdit
+    
+    func setDataToEdit(trackerData: Tracker, category: TrackerCategory, daysCount: Int) {
+        data = Tracker.NewTrackerData(
+            id: trackerData.id,
+            name: trackerData.name,
+            color: trackerData.color,
+            emoji: trackerData.emoji,
+            schedule: trackerData.schedule
+        )
+        newTrackerView.setupDaysCount(daysCount)
+        newTrackerView.trackerNameTextField.text = data.name
+        self.category = category
+        
+        let emojiCellIndexPath = IndexPath(
+            row: AppEmojis.firstIndex(of: trackerData.emoji) ?? 0,
+            section: CollectionViewCellTypes.emoji.rawValue
+        )
+        selectedItems[CollectionViewCellTypes.emoji.rawValue] = emojiCellIndexPath
+
+        let colorCellIndexPath = IndexPath(
+            row: AppColorSettings.palette.firstIndex(of: trackerData.color) ?? 0,
+            section: CollectionViewCellTypes.color.rawValue
+        )
+        selectedItems[CollectionViewCellTypes.color.rawValue] = colorCellIndexPath
+    }
+    
     private func checkDataValidation() {
         guard
             let category,
@@ -210,13 +254,20 @@ extension NewTrackerViewController {
         }
 
         let newTracker = Tracker(
-            id: UUID(),
+            id: data.id ?? UUID(),
             name: name,
             color: color,
             emoji: emoji,
             schedule: data.schedule
         )
-        delegate?.didTapConfirmButton(categoryTitle: category, trackerToAdd: newTracker)
+        
+        delegate?
+            .didTapConfirmButton(
+                categoryTitle: category,
+                trackerToAdd: newTracker,
+                isEditMode: isEditMode
+            )
+        
         dismiss(animated: true)
     }
 }
@@ -248,11 +299,11 @@ extension NewTrackerViewController: UICollectionViewDataSource {
                 withReuseIdentifier: EmojiCollectionViewCell.identifier,
                 for: indexPath
             ) as? EmojiCollectionViewCell {
+                emojiCell.setupCell(with: AppEmojis[indexPath.item])
+                
                 if selectedItems[indexPath.section] == indexPath {
                     emojiCell.select()
                 }
-                
-                emojiCell.setupCell(with: AppEmojis[indexPath.item])
                 
                 return emojiCell
             }
@@ -261,11 +312,11 @@ extension NewTrackerViewController: UICollectionViewDataSource {
                 withReuseIdentifier: ColorCollectionViewCell.identifier,
                 for: indexPath
             ) as? ColorCollectionViewCell {
+                colorCell.setupCell(with: AppColorSettings.palette[indexPath.item])
+                
                 if selectedItems[indexPath.section] == indexPath {
                     colorCell.select()
                 }
-                
-                colorCell.setupCell(with: AppColorSettings.palette[indexPath.item])
                 
                 return colorCell
             }

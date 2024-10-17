@@ -91,6 +91,24 @@ extension TrackerStore: TrackerStoreProtocol {
         coreDataStack.saveContext()
     }
     
+    func updateTracker(_ tracker: Tracker, from category: TrackerCategory) {
+        guard
+            let categoryCoreData = trackerCategoryStore.getCategoryById(category.id),
+            let trackerToUpdate = getTrackerCoreData(by: tracker.id)
+        else {
+            return
+        }
+        
+        trackerToUpdate.trackerId = tracker.id
+        trackerToUpdate.colorHEX = UIColorMarshalling.serialize(color: tracker.color)
+        trackerToUpdate.emoji = tracker.emoji
+        trackerToUpdate.schedule = tracker.schedule as? NSArray
+        trackerToUpdate.name = tracker.name
+        trackerToUpdate.category = categoryCoreData
+        
+        coreDataStack.saveContext()
+    }
+    
     func deleteTracker(_ tracker: Tracker) {
         guard let trackerToDelete = getTrackerCoreData(by: tracker.id) else {
             return
