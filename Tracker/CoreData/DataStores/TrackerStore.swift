@@ -91,6 +91,14 @@ extension TrackerStore: TrackerStoreProtocol {
         coreDataStack.saveContext()
     }
     
+    func deleteTracker(_ tracker: Tracker) {
+        guard let trackerToDelete = getTrackerCoreData(by: tracker.id) else {
+            return
+        }
+        coreDataStack.context.delete(trackerToDelete)
+        coreDataStack.saveContext()
+    }
+    
     func getTrackerCoreData(by id: UUID) -> TrackerCoreData? {
         fetchedResultsController.fetchRequest.predicate = NSPredicate(
             format: "%K == %@",

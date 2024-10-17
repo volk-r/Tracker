@@ -12,6 +12,7 @@ class TrackerViewController: UIViewController {
     // MARK: - Properties
     
     private lazy var trackerView = TrackerView()
+    private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
     
     private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
     private var trackerStore: TrackerStoreProtocol = TrackerStore()
@@ -250,16 +251,22 @@ extension TrackerViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 
 extension TrackerViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize
     {
         let availableSpace = collectionView.frame.width - collectionViewParams.paddingWidth
         let cellWidth = availableSpace / collectionViewParams.cellCount
         return CGSize(width: cellWidth, height: collectionViewParams.height)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int
+    ) -> UIEdgeInsets
     {
         UIEdgeInsets(
             top: collectionViewParams.topInset,
@@ -275,7 +282,11 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     
     // MARK: - SETUP Collection HEADER
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
         guard
             kind == UICollectionView.elementKindSectionHeader,
             let view = collectionView.dequeueReusableSupplementaryView(
@@ -293,8 +304,11 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
         return view
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-        referenceSizeForHeaderInSection section: Int) -> CGSize
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        referenceSizeForHeaderInSection section: Int
+    ) -> CGSize
     {
         // dynamic sizing instead of hard code like as
         // CGSize(width: collectionView.bounds.width, height: 18)
@@ -309,6 +323,47 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
                 withHorizontalFittingPriority: .required,
                 verticalFittingPriority: .fittingSizeLevel
             )
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        contextMenuConfigurationForItemAt indexPath: IndexPath,
+        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        let pinUnpinMessage = indexPath.section == 0 ? Constants.unpinMessage : Constants.pinMessage
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { actions in
+            return UIMenu(children: [
+                UIAction(title: pinUnpinMessage) { _ in
+                    // TODO: pin/unpin tracker
+                    print(pinUnpinMessage)
+                },
+                UIAction(title: Constants.editMessage) { _ in
+                    // TODO: edit tracker
+                    print(Constants.editMessage)
+                },
+                UIAction(title: Constants.deleteMessage, attributes: .destructive) { [weak self] _ in
+                    guard let self else { return }
+                    let tracker = filteredCategories[indexPath.section].trackerList[indexPath.row]
+                    self.deleteTracker(tracker)
+                }
+            ])
+        }
+    }
+    
+    // MARK: - deleteCategory
+    
+    private func deleteTracker(_ tracker: Tracker) {
+        let alert = AlertModel(
+            title: nil,
+            message: Constants.alertMessage,
+            buttonText: Constants.deleteMessage,
+            cancelButtonText: Constants.cancelMessage
+        ) { [weak self] in
+            guard let self else { return }
+            self.trackerStore.deleteTracker(tracker)
+        }
+        
+        alertPresenter.showAlert(with: alert)
     }
 }
 
@@ -373,6 +428,13 @@ extension TrackerViewController: CreateTrackerViewControllerDelegate {
 private extension TrackerViewController {
     enum Constants {
         static let dataPickerLocal = NSLocalizedString("datePicker", comment: "")
+        static let pinMessage = NSLocalizedString("pin", comment: "")
+        static let unpinMessage = NSLocalizedString("unpin", comment: "")
+        static let editMessage = NSLocalizedString("edit", comment: "")
+        static let deleteMessage = NSLocalizedString("delete", comment: "")
+        
+        static let cancelMessage = NSLocalizedString("cancel", comment: "")
+        static let alertMessage = NSLocalizedString("tracker.screen.alertMessage", comment: "")
     }
 }
 
