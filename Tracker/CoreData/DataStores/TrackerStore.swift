@@ -87,6 +87,7 @@ extension TrackerStore: TrackerStoreProtocol {
         trackerEntity.schedule = tracker.schedule as? NSArray
         trackerEntity.name = tracker.name
         trackerEntity.category = categoryCoreData
+        trackerEntity.isPinned = tracker.isPinned
 
         coreDataStack.saveContext()
     }
@@ -105,6 +106,14 @@ extension TrackerStore: TrackerStoreProtocol {
         trackerToUpdate.schedule = tracker.schedule as? NSArray
         trackerToUpdate.name = tracker.name
         trackerToUpdate.category = categoryCoreData
+        trackerToUpdate.isPinned = tracker.isPinned
+        
+        coreDataStack.saveContext()
+    }
+    
+    func updateTrackerPin(_ tracker: Tracker) {
+        guard let trackerToUpdate = getTrackerCoreData(by: tracker.id) else { return }
+        trackerToUpdate.isPinned = tracker.isPinned
         
         coreDataStack.saveContext()
     }

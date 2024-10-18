@@ -22,6 +22,7 @@ class TrackerViewController: UIViewController {
     private var filteredCategories: [TrackerCategory] = [TrackerCategory]()
     private var categories: [TrackerCategory] = [TrackerCategory]() {
         didSet {
+            getCompletedTrackers()
             updateFilteredCategories()
             showPlaceHolder()
         }
@@ -126,7 +127,6 @@ extension TrackerViewController {
         currentDate = sender.date
         showPlaceHolder()
         updateFilteredCategories()
-        trackerView.trackerCollectionView.reloadData()
     }
     
     // MARK: - setupCollectionView
@@ -155,7 +155,6 @@ extension TrackerViewController {
     
     @objc private func searchTextChanged() {
         updateFilteredCategories()
-        trackerView.trackerCollectionView.reloadData()
     }
     
     private func updateFilteredCategories() {
@@ -190,7 +189,58 @@ extension TrackerViewController {
             }
         }
         
-        filteredCategories = result
+        filteredCategories = sortCategories(result)
+        
+        trackerView.trackerCollectionView.reloadData()
+    }
+    
+    private func sortCategories(_ categories: [TrackerCategory]) -> [TrackerCategory] {
+        print("sortCategories")
+        var cleanCategories: [TrackerCategory] = []
+        var pinnedTrackerList: [Tracker] = []
+        
+        categories.forEach { category in
+            var trackers: [Tracker] = []
+            var pinnedTrackers: [Tracker] = []
+            
+            category.trackerList.forEach { trackerData in
+                let isPinned = trackerData.isPinned
+                
+                isPinned
+                ? pinnedTrackers.append(trackerData)
+                : trackers.append(trackerData)
+                
+                if trackerData.isPinned {
+                    
+                }
+            }
+            
+            if !pinnedTrackers.isEmpty {
+                pinnedTrackerList.append(contentsOf: pinnedTrackers)
+            }
+            
+            if !trackers.isEmpty {
+                cleanCategories
+                    .append(
+                        TrackerCategory(
+                            id: category.id,
+                            title: category.title,
+                            trackerList: trackers
+                        )
+                    )
+            }
+        }
+        
+        if !pinnedTrackerList.isEmpty {
+            let pinnedCategory = TrackerCategory(
+                id: UUID(),
+                title: Constants.pinnedCategory,
+                trackerList: pinnedTrackerList
+            )
+            cleanCategories.insert(pinnedCategory, at: 0)
+        }
+        
+        return cleanCategories
     }
     
     // MARK: - showPlaceHolder
@@ -333,25 +383,37 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
         point: CGPoint
     ) -> UIContextMenuConfiguration? {
         
-        // TODO: need to fix when 0 pinned trackers
-        let pinUnpinMessage = indexPath.section == 0 ? Constants.unpinMessage : Constants.pinMessage
         let tracker = filteredCategories[indexPath.section].trackerList[indexPath.row]
+        let pinUnpinMessage = tracker.isPinned ? Constants.unpinMessage : Constants.pinMessage
+        let category = filteredCategories[indexPath.section]
         
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { actions in
             return UIMenu(
                 children: [
-                    UIAction(title: pinUnpinMessage) { _ in
-                        // TODO: pin/unpin tracker
-                        print(pinUnpinMessage)
+                    UIAction(title: pinUnpinMessage) { [weak self] _ in
+                        guard let self else { return }
+                        
+                        let trackerPinned = Tracker(
+                            id: tracker.id,
+                            name: tracker.name,
+                            color: tracker.color,
+                            emoji: tracker.emoji,
+                            schedule: tracker.schedule,
+                            isPinned: !tracker.isPinned
+                        )
+                        
+                        self.trackerStore.updateTrackerPin(trackerPinned)
                     },
-                    UIAction(title: Constants.editMessage) { _ in
+                    UIAction(title: Constants.editMessage) { [weak self] _ in
+                        guard let self else { return }
                         let daysCount = self.completedTrackers.filter { $0.trackerId == tracker.id }.count
                         let trackerType = (tracker.schedule != nil) ? TrackerType.habit : TrackerType.event
+                        
                         let newTrackerVC = NewTrackerViewController(
                             trackerType: trackerType,
                             delegate: self,
                             trackerData: tracker,
-                            category: self.filteredCategories[indexPath.section],
+                            category: category,
                             daysCount: daysCount
                         )
                         self.present(UINavigationController(rootViewController: newTrackerVC), animated: true)
@@ -428,9 +490,8 @@ extension TrackerViewController: UITextFieldDelegate {
 
 extension TrackerViewController: TrackerStoreDelegate {
     @objc func didTrackersUpdate() {
+        print("didTrackersUpdate")
         getAllCategories()
-        getCompletedTrackers()
-        trackerView.trackerCollectionView.reloadData()
     }
 }
 
@@ -449,6 +510,7 @@ extension TrackerViewController: CreateTrackerViewControllerDelegate {
 private extension TrackerViewController {
     enum Constants {
         static let dataPickerLocal = NSLocalizedString("datePicker", comment: "")
+        static let pinnedCategory = NSLocalizedString("tracker.screen.pinnedCategory", comment: "")
         static let pinMessage = NSLocalizedString("pin", comment: "")
         static let unpinMessage = NSLocalizedString("unpin", comment: "")
         static let editMessage = NSLocalizedString("edit", comment: "")

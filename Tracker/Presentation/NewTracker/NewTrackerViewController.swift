@@ -258,7 +258,8 @@ extension NewTrackerViewController {
             name: name,
             color: color,
             emoji: emoji,
-            schedule: data.schedule
+            schedule: data.schedule,
+            isPinned: false
         )
         
         delegate?

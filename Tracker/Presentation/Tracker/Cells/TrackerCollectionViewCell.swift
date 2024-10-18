@@ -69,6 +69,14 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
+    private lazy var pinnedImageView: UIImageView = {
+        var imageView = UIImageView()
+        imageView.tintColor = .white
+        imageView.image = UIImage(systemName: "pin.fill")
+        imageView.isHidden = true
+        return imageView
+    }()
+    
     // MARK: - Lifecycle
     
     override init(frame: CGRect) {
@@ -91,6 +99,7 @@ extension TrackerCollectionViewCell {
         days = 0
         addDayButton.setImage(UIImage(systemName: "plus"), for: .normal)
         addDayButton.layer.opacity = 1
+        pinnedImageView.isHidden = true
     }
     
     // MARK: - setupCell
@@ -103,6 +112,7 @@ extension TrackerCollectionViewCell {
         trackerNameLabel.text = tracker.name
         addDayButton.backgroundColor = tracker.color
         setupAddDayButton(isCompleted: isCompleted)
+        pinnedImageView.isHidden = !tracker.isPinned
     }
     
     // MARK: - setupAddDayButton
@@ -143,6 +153,7 @@ extension TrackerCollectionViewCell {
         [
             iconView,
             emojiLabel,
+            pinnedImageView,
             trackerNameLabel
         ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -169,6 +180,11 @@ extension TrackerCollectionViewCell {
             iconView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
             iconView.widthAnchor.constraint(equalToConstant: 24),
             iconView.heightAnchor.constraint(equalTo: iconView.widthAnchor),
+            
+            pinnedImageView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -4),
+            pinnedImageView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
+            pinnedImageView.widthAnchor.constraint(equalToConstant: 24),
+            pinnedImageView.heightAnchor.constraint(equalTo: iconView.widthAnchor),
             
             emojiLabel.centerXAnchor.constraint(equalTo: iconView.centerXAnchor),
             emojiLabel.centerYAnchor.constraint(equalTo: iconView.centerYAnchor),

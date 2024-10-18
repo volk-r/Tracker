@@ -14,6 +14,7 @@ protocol TrackerStoreProtocol {
     func fetchTrackers() -> [Tracker]
     func addTracker(_ tracker: Tracker, to category: TrackerCategory)
     func updateTracker(_ tracker: Tracker, from category: TrackerCategory)
+    func updateTrackerPin(_ tracker: Tracker)
     func deleteTracker(_ tracker: Tracker)
     func getTrackerCoreData(by id: UUID) -> TrackerCoreData?
     func numberOfRowsInSection(_ section: Int) -> Int

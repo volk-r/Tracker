@@ -50,6 +50,7 @@
 
 "tracker.screen.dummyPlaceHolder" = "What will we track?";
 "tracker.screen.alertMessage" = "Are you sure you want to delete the tracker?";
+"tracker.screen.pinnedCategory" = "Pinned";
 
 // MARK: - StatisticViewController
 
