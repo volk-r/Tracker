@@ -1,5 +1,5 @@
 //
-//  CategoryTableViewCell.swift
+//  MainTableViewCell.swift
 //  Tracker
 //
 //  Created by Roman Romanov on 05.10.2024.
