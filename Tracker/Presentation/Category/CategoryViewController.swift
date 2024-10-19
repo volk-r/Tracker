@@ -158,7 +158,6 @@ extension CategoryViewController: UITableViewDelegate {
         
         let currentCell = tableView.cellForRow(at: indexPath)
         currentCell?.accessoryType = .checkmark
-        tableView.deselectRow(at: indexPath, animated: true)
         viewModel.selectCategoryBy(indexPath: indexPath)
     }
     

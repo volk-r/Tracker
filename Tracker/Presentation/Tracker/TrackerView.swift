@@ -75,13 +75,12 @@ extension TrackerView {
     }
     
     func hideFilterButton() {
-        UIView.animate(withDuration: 2.0, delay: 0.5) {
+        UIView.animate(withDuration: 1.5, delay: 0.5) {
             self.filterButton.alpha = 0
         }
     }
     
     @objc private func didTapFilterButton() {
-        print("didTapFilterButton")
         filterCallback?()
     }
     

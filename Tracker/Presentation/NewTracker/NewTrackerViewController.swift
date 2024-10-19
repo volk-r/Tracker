@@ -142,6 +142,7 @@ extension NewTrackerViewController {
             forCellReuseIdentifier: NewTrackerTableViewCell.identifier
         )
         
+        // TODO:
         newTrackerView.tableView.separatorStyle = trackerType.paramsCellsCount == 1
             ? .none
             : .singleLine

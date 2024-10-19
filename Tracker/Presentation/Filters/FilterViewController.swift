@@ -11,11 +11,24 @@ final class FilterViewController: UIViewController {
     
     // MARK: - Properties
     
-//    weak var delegate: FilterViewControllerDelegate?
+    weak var delegate: FilterViewControllerDelegate?
     
     private lazy var filterView = FilterView()
     
+    private var selectedIndexPath: IndexPath?
+    private var selectedFilter: FilterType?
+    
     // MARK: - Lifecycle
+    
+    init(selectedFilter: FilterType?, delegate: FilterViewControllerDelegate) {
+        self.delegate = delegate
+        self.selectedFilter = selectedFilter
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         super.loadView()
@@ -62,19 +75,22 @@ extension FilterViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        if
-//            let selectedIndexPath = viewModel.selectedIndexPath,
-//            selectedIndexPath != indexPath
-//        {
-//            let previousCell = tableView.cellForRow(at: selectedIndexPath)
-//            previousCell?.accessoryType = .none
-//            tableView.deselectRow(at: selectedIndexPath, animated: true)
-//        }
-//
-//        let currentCell = tableView.cellForRow(at: indexPath)
-//        currentCell?.accessoryType = .checkmark
-//        tableView.deselectRow(at: indexPath, animated: true)
-//        viewModel.selectCategoryBy(indexPath: indexPath)
+        if
+            let selectedIndexPath = selectedIndexPath,
+            selectedIndexPath != indexPath
+        {
+            let previousCell = tableView.cellForRow(at: selectedIndexPath)
+            previousCell?.accessoryType = .none
+            tableView.deselectRow(at: selectedIndexPath, animated: true)
+        }
+
+        let currentCell = tableView.cellForRow(at: indexPath)
+        currentCell?.accessoryType = .checkmark
+        selectedIndexPath = indexPath
+
+        let selectedFilter = FilterType.allCases[indexPath.row]
+        delegate?.filterChangedTo(selectedFilter)
+        dismiss(animated: true)
     }
 }
 
@@ -95,14 +111,14 @@ extension FilterViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let title = FilterType.allCases[indexPath.row].title
-//        let isSelected = category.id == selectedCategory?.id
-//        
-//        if isSelected {
-//            viewModel.saveSelected(indexPath: indexPath)
-//        }
+        let currentFilter = FilterType.allCases[indexPath.row]
+        let isSelected = currentFilter == selectedFilter
         
-        categoryCell.setupCell(title: title, isSelected: false)
+        if isSelected {
+            selectedIndexPath = indexPath
+        }
+        
+        categoryCell.setupCell(title: currentFilter.title, isSelected: isSelected)
         
         return categoryCell
     }
@@ -122,7 +138,11 @@ private extension FilterViewController {
 
 @available(iOS 17, *)
 #Preview {
-    let viewController = FilterViewController()
+    let delegate = TrackerViewController()
+    let viewController = FilterViewController(
+        selectedFilter: nil,
+        delegate: delegate
+    )
     viewController
 }
 

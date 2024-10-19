@@ -19,12 +19,21 @@ class TrackerViewController: UIViewController {
     private var trackerRecordStore: TrackerRecordStoreProtocol = TrackerRecordStore()
 
     private var completedTrackers: Set<TrackerRecord> = []
-    private var filteredCategories: [TrackerCategory] = [TrackerCategory]()
+    private var filteredCategories: [TrackerCategory] = [TrackerCategory]() {
+        didSet {
+            showPlaceHolder()
+        }
+    }
     private var categories: [TrackerCategory] = [TrackerCategory]() {
         didSet {
             getCompletedTrackers()
             updateFilteredCategories()
-            showPlaceHolder()
+        }
+    }
+    private var filter: FilterType? {
+        didSet {
+            userAppSettingsStorage.selectedFilter = filter
+            updateFilteredCategories()
         }
     }
     
@@ -35,6 +44,7 @@ class TrackerViewController: UIViewController {
     }()
     
     private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 2, leftInset: 16, rightInset: 16, topInset: 8, bottomInset: 16, height: 148, cellSpacing: 10)
+    private let userAppSettingsStorage = UserAppSettingsStorage.shared
     
     // MARK: - Lifecycle
     
@@ -42,6 +52,7 @@ class TrackerViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         trackerStore.delegate = self
         trackerRecordStore.delegate = self
+        filter = userAppSettingsStorage.selectedFilter
     }
     
     required init?(coder: NSCoder) {
@@ -150,7 +161,10 @@ extension TrackerViewController {
     private func setupButton() {
         trackerView.filterCallback = { [weak self] in
             guard let self else { return }
-            let filtersVC = FilterViewController()
+            let filtersVC = FilterViewController(
+                selectedFilter: filter,
+                delegate: self
+            )
             self.present(UINavigationController(rootViewController: filtersVC), animated: true)
         }
     }
@@ -165,6 +179,25 @@ extension TrackerViewController {
     }
     
     private func updateFilteredCategories() {
+        switch filter {
+        case .all, .none:
+            filterAllTrackers()
+        case .today:
+            filterTodayTrackers()
+        case .completed:
+            filterTrackersByCompletion(isCompleted: true)
+        case .notCompleted:
+            filterTrackersByCompletion(isCompleted: false)
+        }
+        
+        trackerView.trackerCollectionView.reloadData()
+    }
+    
+    private func filterAllTrackers() {
+        filteredCategories = sortCategories(categories)
+    }
+    
+    private func filterTodayTrackers() {
         let weekday = Calendar.current.component(.weekday, from: currentDate)
         var result = [TrackerCategory]()
         
@@ -190,19 +223,37 @@ extension TrackerViewController {
                         TrackerCategory(
                             id: category.id,
                             title: category.title,
-                            trackerList: filteredTrackers.sorted(by: {$0.name > $1.name})
+                            trackerList: filteredTrackers
                         )
                     )
             }
         }
         
         filteredCategories = sortCategories(result)
+    }
+    
+    private func filterTrackersByCompletion(isCompleted: Bool) {
+        filteredCategories = categories.compactMap { category in
+            let completed = category.trackerList.filter { tracker in
+                if isCompleted {
+                    completedTrackers.contains { $0.trackerId == tracker.id && $0.date == currentDate }
+                } else {
+                    // TODO: not valid filter
+                    completedTrackers.contains { $0.trackerId == tracker.id && $0.date == currentDate }
+                }
+            }
+            print(completedTrackers)
+            return completed.isEmpty ? nil : TrackerCategory(
+                id: category.id,
+                title: category.title,
+                trackerList: completed
+            )
+        }
         
-        trackerView.trackerCollectionView.reloadData()
+        filteredCategories = sortCategories(filteredCategories)
     }
     
     private func sortCategories(_ categories: [TrackerCategory]) -> [TrackerCategory] {
-        print("sortCategories")
         var cleanCategories: [TrackerCategory] = []
         var pinnedTrackerList: [Tracker] = []
         
@@ -212,14 +263,9 @@ extension TrackerViewController {
             
             category.trackerList.forEach { trackerData in
                 let isPinned = trackerData.isPinned
-                
                 isPinned
-                ? pinnedTrackers.append(trackerData)
-                : trackers.append(trackerData)
-                
-                if trackerData.isPinned {
-                    
-                }
+                    ? pinnedTrackers.append(trackerData)
+                    : trackers.append(trackerData)
             }
             
             if !pinnedTrackers.isEmpty {
@@ -232,7 +278,7 @@ extension TrackerViewController {
                         TrackerCategory(
                             id: category.id,
                             title: category.title,
-                            trackerList: trackers
+                            trackerList: trackers.sorted(by: {$0.name > $1.name})
                         )
                     )
             }
@@ -242,7 +288,7 @@ extension TrackerViewController {
             let pinnedCategory = TrackerCategory(
                 id: UUID(),
                 title: Constants.pinnedCategory,
-                trackerList: pinnedTrackerList
+                trackerList: pinnedTrackerList.sorted(by: {$0.name > $1.name})
             )
             cleanCategories.insert(pinnedCategory, at: 0)
         }
@@ -260,10 +306,10 @@ extension TrackerViewController {
     
     private func showOnboarding() {
         // TODO: for tests
-//        UserAppSettingsStorage.shared.clean()
-        guard !UserAppSettingsStorage.shared.isOnboardingVisited else { return }
+//        userAppSettingsStorage.clean()
+        guard !userAppSettingsStorage.isOnboardingVisited else { return }
         
-        UserAppSettingsStorage.shared.isOnboardingVisited = true
+        userAppSettingsStorage.isOnboardingVisited = true
         let onboardingVC = OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         onboardingVC.modalPresentationStyle = .fullScreen
         present(onboardingVC, animated: true)
@@ -526,6 +572,14 @@ extension TrackerViewController: CreateTrackerViewControllerDelegate {
         dismiss(animated: true)
         let newTrackerVC = NewTrackerViewController(trackerType: trackerType, delegate: self)
         present(UINavigationController(rootViewController: newTrackerVC), animated: true)
+    }
+}
+
+// MARK: - FilterViewControllerDelegate
+
+extension TrackerViewController: FilterViewControllerDelegate {
+    func filterChangedTo(_ newFilter: FilterType) {
+        filter = newFilter
     }
 }
 
