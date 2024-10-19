@@ -38,6 +38,9 @@ enum AppColorSettings {
     
     static let chosenEmojiItemBackgroundColor = UIColor(hexString: "#E6E8EB")
     
+    static let filterButtonBackgroundColor = UIColor(hexString: "#3772E7")
+    static let filterButtonFontColor = UIColor(hexString: "#FFFFFF")
+    
     static let palette: [UIColor] = [
         UIColor(hexString: "#FD4C49"),
         UIColor(hexString: "#FF881E"),

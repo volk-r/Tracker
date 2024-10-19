@@ -11,6 +11,8 @@ final class TrackerView: UIView {
     
     // MARK: - Properties
     
+    var filterCallback: (() -> Void)?
+    
     lazy var searchTextField: UISearchTextField = {
         let textField = UISearchTextField()
         textField.placeholder = Constants.searchPlaceholder
@@ -26,6 +28,17 @@ final class TrackerView: UIView {
         collectionViewLayout?.collectionView?.backgroundColor = AppColorSettings.backgroundColor
         
         return collectionView
+    }()
+    
+    private lazy var filterButton: UIButton = {
+        let button = UIButton()
+        button.setTitle(Constants.filterButtonTitle, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        button.setTitleColor(AppColorSettings.filterButtonFontColor, for: .normal)
+        button.layer.cornerRadius = 16
+        button.backgroundColor = AppColorSettings.filterButtonBackgroundColor
+        button.addTarget(self, action: #selector(didTapFilterButton), for: .touchUpInside)
+        return button
     }()
     
     private lazy var placeHolderView: UIView = DummyView(
@@ -57,15 +70,28 @@ extension TrackerView {
         placeHolderView.isHidden = isVisible
     }
     
+    func showFilterButton() {
+        filterButton.alpha = 1
+    }
+    
+    func hideFilterButton() {
+        UIView.animate(withDuration: 2.0, delay: 0.5) {
+            self.filterButton.alpha = 0
+        }
+    }
+    
+    @objc private func didTapFilterButton() {
+        print("didTapFilterButton")
+        filterCallback?()
+    }
+    
     private func setupLayout() {
-        [
+        addSubviews(
             searchTextField,
             trackerCollectionView,
-            placeHolderView
-        ].forEach{
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            addSubview($0)
-        }
+            placeHolderView,
+            filterButton
+        )
         
         NSLayoutConstraint.activate([
             searchTextField.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 7),
@@ -79,7 +105,12 @@ extension TrackerView {
             trackerCollectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
             
             placeHolderView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            placeHolderView.centerYAnchor.constraint(equalTo: centerYAnchor)
+            placeHolderView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            filterButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            filterButton.widthAnchor.constraint(equalToConstant: 114),
+            filterButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filterButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 }
@@ -90,5 +121,6 @@ private extension TrackerView {
     enum Constants {
         static let searchPlaceholder = NSLocalizedString("searchPlaceholder", comment: "")
         static let dummyViewPlaceHolder = NSLocalizedString("tracker.screen.dummyPlaceHolder", comment: "")
+        static let filterButtonTitle = NSLocalizedString("filters", comment: "")
     }
 }

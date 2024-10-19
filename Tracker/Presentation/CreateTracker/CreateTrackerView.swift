@@ -8,7 +8,9 @@
 import UIKit
 
 final class CreateTrackerView: UIView {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     var trackerCallback: ((TrackerType) -> Void)?
     
     private lazy var mainStackView: UIStackView = {
@@ -50,7 +52,8 @@ final class CreateTrackerView: UIView {
         return button
     }()
     
-    // MARK: INIT
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = AppColorSettings.backgroundColor
@@ -63,7 +66,9 @@ final class CreateTrackerView: UIView {
 }
 
 extension CreateTrackerView {
-    // MARK: LAYOUT
+    
+    // MARK: - Layout
+    
     private func setupLayout() {
         // body
         [
@@ -73,12 +78,7 @@ extension CreateTrackerView {
             mainStackView.addArrangedSubview($0)
         }
         // main elements
-        [
-            mainStackView,
-        ].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            addSubview($0)
-        }
+        addSubviews(mainStackView)
         
         NSLayoutConstraint.activate([
             habitButton.heightAnchor.constraint(equalToConstant: 60),
@@ -91,12 +91,14 @@ extension CreateTrackerView {
         ])
     }
     
-    // MARK: didHabitTapped
+    // MARK: - didHabitTapped
+    
     @objc private func didHabitTapped() {
         trackerCallback?(.habit)
     }
     
-    // MARK: didEventTapped
+    // MARK: - didEventTapped
+    
     @objc private func didEventTapped() {
         trackerCallback?(.event)
     }

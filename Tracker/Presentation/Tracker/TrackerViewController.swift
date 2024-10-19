@@ -62,6 +62,7 @@ class TrackerViewController: UIViewController {
         setupSearchTextField()
         addTapGestureToHideKeyboard()
         showOnboarding()
+        setupButton()
         
         NotificationCenter.default.addObserver(
             self,
@@ -71,8 +72,6 @@ class TrackerViewController: UIViewController {
         )
         
         getAllCategories()
-        
-        getCompletedTrackers()
     }
 }
 
@@ -147,6 +146,14 @@ extension TrackerViewController {
     }
     
     // MARK: - setupButtons
+    
+    private func setupButton() {
+        trackerView.filterCallback = { [weak self] in
+            guard let self else { return }
+            let filtersVC = FilterViewController()
+            self.present(UINavigationController(rootViewController: filtersVC), animated: true)
+        }
+    }
     
     @objc private func addAction() {
         let createTrackerVC = CreateTrackerViewController(delegate: self)
@@ -260,6 +267,23 @@ extension TrackerViewController {
         let onboardingVC = OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         onboardingVC.modalPresentationStyle = .fullScreen
         present(onboardingVC, animated: true)
+    }
+}
+
+// MARK: - UIScrollViewDelegate
+
+extension TrackerViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.isDragging {
+            trackerView.showFilterButton()
+            let height = scrollView.frame.size.height
+            let contentYOffset = scrollView.contentOffset.y
+            let distanceFromBottom = scrollView.contentSize.height - contentYOffset
+            
+            if distanceFromBottom < height {
+                trackerView.hideFilterButton()
+            }
+        }
     }
 }
 

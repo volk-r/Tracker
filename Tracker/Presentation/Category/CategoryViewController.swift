@@ -93,10 +93,6 @@ extension CategoryViewController {
             CategoryTableViewCell.self,
             forCellReuseIdentifier: CategoryTableViewCell.identifier
         )
-        
-        categoryView.tableView.separatorStyle = viewModel.numberOfCategories() == 1
-            ? .none
-            : .singleLine
     }
     
     // MARK: - createButtonTapAction
@@ -141,10 +137,13 @@ extension CategoryViewController {
 }
 
 extension CategoryViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1 {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: tableView.bounds.width)
-        }
+    func tableView(
+        _ tableView: UITableView,
+        willDisplay cell: UITableViewCell,
+        forRowAt indexPath: IndexPath
+    ) {
+        let cellCount = tableView.numberOfRows(inSection: indexPath.section)
+        cell.setCustomStyle(indexPath: indexPath, cellCount: cellCount)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

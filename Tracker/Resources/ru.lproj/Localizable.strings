@@ -34,6 +34,8 @@
 "searchPlaceholder" = "Поиск";
 "validation.title.message" = "Ограничение %d символов";
 
+"filters" = "Фильтры";
+
 // MARK: - CreateTrackerViewController
 
 "createTracker.screen.title" = "Создание трекера";
@@ -92,3 +94,10 @@
 "sunday.short" = "Вс";
 
 "everyDay" = "Каждый день";
+
+// MARK: - FilterViewController
+
+"filter.screen.all" = "Все трекеры";
+"filter.screen.today" = "Трекеры на сегодня";
+"filter.screen.completed" = "Завершенные";
+"filter.screen.notCompleted" = "Не завершенные";

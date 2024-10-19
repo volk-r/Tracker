@@ -11,15 +11,11 @@ final class CategoryView: UIView {
     
     // MARK: - Properties
     
-    // TODO: need to fixed tableView
-    
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
         tableView.isScrollEnabled = false
         tableView.layer.masksToBounds = true
-        tableView.layer.cornerRadius = 10
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.separatorColor = AppColorSettings.notActiveFontColor
         tableView.isEmptyHeaderHidden = true
         return tableView

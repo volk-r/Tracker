@@ -34,6 +34,8 @@
 "searchPlaceholder" = "Search";
 "validation.title.message" = "%d character limit";
 
+"filters" = "Filters";
+
 // MARK: - CreateTrackerViewController
 
 "createTracker.screen.title" = "Create Tracker";
@@ -92,3 +94,10 @@
 "sunday.short" = "Sun";
 
 "everyDay" = "Every day";
+
+// MARK: - FilterViewController
+
+"filter.screen.all" = "All trackers";
+"filter.screen.today" = "Today trackers";
+"filter.screen.completed" = "Completed";
+"filter.screen.notCompleted" = "Not completed";
