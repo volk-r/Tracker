@@ -90,8 +90,8 @@ extension CategoryViewController {
         categoryView.tableView.dataSource = self
         
         categoryView.tableView.register(
-            CategoryTableViewCell.self,
-            forCellReuseIdentifier: CategoryTableViewCell.identifier
+            MainTableViewCell.self,
+            forCellReuseIdentifier: MainTableViewCell.identifier
         )
     }
     
@@ -197,11 +197,11 @@ extension CategoryViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
-            withIdentifier: CategoryTableViewCell.identifier,
+            withIdentifier: MainTableViewCell.identifier,
             for: indexPath
         )
         
-        guard let categoryCell = cell as? CategoryTableViewCell else {
+        guard let categoryCell = cell as? MainTableViewCell else {
             return UITableViewCell()
         }
         
@@ -213,7 +213,6 @@ extension CategoryViewController: UITableViewDataSource {
         }
         
         categoryCell.setupCell(title: category.title, isSelected: isSelected)
-        categoryView.tableView.reloadRows(at: [indexPath], with: .automatic)
         
         return categoryCell
     }

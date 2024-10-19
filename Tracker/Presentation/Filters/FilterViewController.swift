@@ -37,8 +37,8 @@ extension FilterViewController {
         filterView.tableView.dataSource = self
         
         filterView.tableView.register(
-            CategoryTableViewCell.self,
-            forCellReuseIdentifier: CategoryTableViewCell.identifier
+            MainTableViewCell.self,
+            forCellReuseIdentifier: MainTableViewCell.identifier
         )
         
         filterView.tableView.reloadData()
@@ -87,11 +87,11 @@ extension FilterViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
-            withIdentifier: CategoryTableViewCell.identifier,
+            withIdentifier: MainTableViewCell.identifier,
             for: indexPath
         )
         
-        guard let categoryCell = cell as? CategoryTableViewCell else {
+        guard let categoryCell = cell as? MainTableViewCell else {
             return UITableViewCell()
         }
         
@@ -103,7 +103,6 @@ extension FilterViewController: UITableViewDataSource {
 //        }
         
         categoryCell.setupCell(title: title, isSelected: false)
-//        filterView.tableView.reloadRows(at: [indexPath], with: .automatic)
         
         return categoryCell
     }

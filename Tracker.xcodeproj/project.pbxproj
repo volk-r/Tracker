@@ -288,7 +288,6 @@
 				3C165B3D2CB11D9C00824FD9 /* CategoryViewController.swift */,
 				3C165B602CB2F9E100824FD9 /* CategoryViewModel.swift */,
 				3C165B3F2CB11DC400824FD9 /* CategoryView.swift */,
-				3C165B462CB1727B00824FD9 /* Cell */,
 				3C165B422CB1263900824FD9 /* Protocols */,
 			);
 			path = Category;
@@ -300,14 +299,6 @@
 				3C165B432CB1264C00824FD9 /* CategoryViewControllerDelegate.swift */,
 			);
 			path = Protocols;
-			sourceTree = "<group>";
-		};
-		3C165B462CB1727B00824FD9 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				3C165B472CB1729200824FD9 /* CategoryTableViewCell.swift */,
-			);
-			path = Cell;
 			sourceTree = "<group>";
 		};
 		3C165B4D2CB1A47E00824FD9 /* CreateCategory */ = {
@@ -556,9 +547,18 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		3C8722942CC41F5C00205A3A /* ReusableViews */ = {
+			isa = PBXGroup;
+			children = (
+				3C165B472CB1729200824FD9 /* CategoryTableViewCell.swift */,
+			);
+			path = ReusableViews;
+			sourceTree = "<group>";
+		};
 		3CB438C82C7B9B3300E3614F /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				3C8722942CC41F5C00205A3A /* ReusableViews */,
 				3C165B662CB3197600824FD9 /* Alert */,
 				3C165B0D2CAC745D00824FD9 /* Onboarding */,
 				3C8722882CC3F19300205A3A /* Filters */,

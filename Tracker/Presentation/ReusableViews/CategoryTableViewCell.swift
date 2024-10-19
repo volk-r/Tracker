@@ -7,11 +7,11 @@
 
 import UIKit
 
-final class CategoryTableViewCell: UITableViewCell {
+final class MainTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     
-    static let identifier = "CategoryTableViewCell"
+    static let identifier = "MainTableViewCell"
     
     private let nameLabel: UILabel = {
         let label = UILabel()
@@ -42,7 +42,7 @@ final class CategoryTableViewCell: UITableViewCell {
     }
 }
 
-extension CategoryTableViewCell {
+extension MainTableViewCell {
     
     // MARK: - Layout
     
