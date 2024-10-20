@@ -32,12 +32,7 @@ final class CategoryView: UIView {
         return button
     }()
     
-    private lazy var placeHolderView: UIView = DummyView(
-        model: DummyModel(
-            description: Constants.dummyViewPlaceHolder,
-            imageName: AppImages.trackerEmptyPage
-        )
-    )
+    private lazy var placeHolderView: UIView = DummyView(model: DummyPlaceHolder.categoryEmptyPage.model)
     
     // MARK: - Lifecycle
     
@@ -88,7 +83,6 @@ extension CategoryView {
 
 private extension CategoryView {
     enum Constants {
-        static let dummyViewPlaceHolder = NSLocalizedString("category.screen.dummyPlaceHolder", comment: "")
         static let addCategoryMessage = NSLocalizedString("category.screen.addCategory", comment: "")
     }
 }

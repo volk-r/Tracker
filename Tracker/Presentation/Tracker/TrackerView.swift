@@ -41,12 +41,7 @@ final class TrackerView: UIView {
         return button
     }()
     
-    private lazy var placeHolderView: UIView = DummyView(
-        model: DummyModel(
-            description: Constants.dummyViewPlaceHolder,
-            imageName: AppImages.trackerEmptyPage
-        )
-    )
+    private lazy var placeHolderView: DummyView = DummyView(model: DummyPlaceHolder.trackerEmptyPage.model)
     
     // MARK: - Init
     
@@ -70,15 +65,20 @@ extension TrackerView {
         placeHolderView.isHidden = isVisible
     }
     
+    func setupPlaceHolder(isEmptyCategories: Bool) {
+        placeHolderView.setupNewModel(model: isEmptyCategories
+                                      ? DummyPlaceHolder.trackerEmptyPage.model
+                                      : DummyPlaceHolder.searchEmptyPage.model
+        )
+        
+        filterButton(isHidden: isEmptyCategories)
+    }
+    
     func isFilersActive(_ isActive: Bool) {
         let titleColor = isActive
             ? AppColorSettings.filterButtonFontColorActive
             : AppColorSettings.filterButtonFontColor
         filterButton.setTitleColor(titleColor, for: .normal)
-    }
-    
-    func filterButton(isHidden: Bool) {
-        filterButton.isHidden = isHidden
     }
     
     func showFilterButton() {
@@ -93,6 +93,10 @@ extension TrackerView {
     
     @objc private func didTapFilterButton() {
         filterCallback?()
+    }
+    
+    private func filterButton(isHidden: Bool) {
+        filterButton.isHidden = isHidden
     }
     
     private func setupLayout() {
@@ -130,7 +134,6 @@ extension TrackerView {
 private extension TrackerView {
     enum Constants {
         static let searchPlaceholder = NSLocalizedString("searchPlaceholder", comment: "")
-        static let dummyViewPlaceHolder = NSLocalizedString("tracker.screen.dummyPlaceHolder", comment: "")
         static let filterButtonTitle = NSLocalizedString("filters", comment: "")
     }
 }

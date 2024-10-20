@@ -49,6 +49,7 @@
 // MARK: - TrackerViewController
 
 "tracker.screen.dummyPlaceHolder" = "What will we track?";
+"tracker.screen.dummySearchPlaceHolder" = "Nothing found";
 "tracker.screen.alertMessage" = "Are you sure you want to delete the tracker?";
 "tracker.screen.pinnedCategory" = "Pinned";
 

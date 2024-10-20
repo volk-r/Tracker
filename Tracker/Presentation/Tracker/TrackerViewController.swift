@@ -108,6 +108,16 @@ extension TrackerViewController {
         trackerView.searchTextField.addTarget(self, action: #selector(searchTextChanged), for: .editingChanged)
     }
     
+    private func setupPlaceHolder() {
+        var noTrackers: Bool = categories.isEmpty
+        
+        for category in categories {
+            noTrackers = category.trackerList.isEmpty
+        }
+        
+        trackerView.setupPlaceHolder(isEmptyCategories: noTrackers)
+    }
+    
     // MARK: - setupDatePicker
     
     private func setupDatePicker() {
@@ -316,6 +326,7 @@ extension TrackerViewController {
     // MARK: - showPlaceHolder
     
     private func showPlaceHolder() {
+        setupPlaceHolder()
         trackerView.showPlaceHolder(isVisible: !filteredCategories.isEmpty)
     }
     

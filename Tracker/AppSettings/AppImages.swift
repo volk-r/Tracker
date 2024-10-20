@@ -12,4 +12,5 @@ enum AppImages {
     static let addNewTracker = "AddTracker"
     
     static let statisticEmptyPage = "StatisticEmptyPage"
+    static let searchEmptyPage = "SearchEmptyPage"
 }
