@@ -208,7 +208,31 @@ extension TrackerViewController {
     }
     
     private func filterAllTrackers() {
-        filteredCategories = sortCategories(categories)
+        var result = [TrackerCategory]()
+        
+        let filterText = (trackerView.searchTextField.text ?? "").lowercased()
+        
+        for category in categories {
+            let filteredTrackers = category.trackerList.filter { tracker in
+                let isFilteredByText = filterText.isEmpty || tracker.name.localizedCaseInsensitiveContains(filterText)
+                
+                guard tracker.schedule != nil else { return isFilteredByText }
+                return isFilteredByText
+            }
+            
+            if !filteredTrackers.isEmpty {
+                result
+                    .append(
+                        TrackerCategory(
+                            id: category.id,
+                            title: category.title,
+                            trackerList: filteredTrackers
+                        )
+                    )
+            }
+        }
+        
+        filteredCategories = sortCategories(result)
     }
     
     private func filterTodayTrackers(additionalFilter: ((UUID) -> Bool)) {
