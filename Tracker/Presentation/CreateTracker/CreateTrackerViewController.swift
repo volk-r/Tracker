@@ -8,12 +8,15 @@
 import UIKit
 
 final class CreateTrackerViewController: UIViewController {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     weak var delegate: CreateTrackerViewControllerDelegate?
     
     private lazy var createTrackerView = CreateTrackerView()
     
-    // MARK: INIT
+    // MARK: - Init
+    
     init(delegate: CreateTrackerViewControllerDelegate) {
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
@@ -23,7 +26,8 @@ final class CreateTrackerViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override func loadView() {
         super.loadView()
         view = createTrackerView
@@ -52,7 +56,8 @@ private extension CreateTrackerViewController {
     }
 }
 
-// MARK: SHOW PREVIEW
+// MARK: - Preview
+
 #if DEBUG
 
 @available(iOS 17, *)

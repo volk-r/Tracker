@@ -54,7 +54,7 @@ class TrackerViewController: UIViewController {
         trackerStore.delegate = self
         trackerRecordStore.delegate = self
         filter = userAppSettingsStorage.selectedFilter
-        trackerView.isFilersActive(filter != .all)
+        trackerView.isFilersActive(filter != nil && filter != .all)
     }
     
     required init?(coder: NSCoder) {
@@ -528,6 +528,7 @@ extension TrackerViewController: TrackerCollectionViewCellDelegate {
 
 extension TrackerViewController: NewTrackerViewControllerDelegate {
     func didTapConfirmButton(categoryTitle: String, trackerToAdd: Tracker, isEditMode: Bool) {
+        getAllCategories()
         guard let categoryIndex = categories.firstIndex(where: { $0.title == categoryTitle }) else { return }
         
         if isEditMode {
