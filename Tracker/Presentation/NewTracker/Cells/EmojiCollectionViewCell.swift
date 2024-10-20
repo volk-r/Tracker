@@ -8,7 +8,9 @@
 import UIKit
 
 final class EmojiCollectionViewCell: UICollectionViewCell {
-    // MARK: PROPERTIES
+
+    // MARK: - Properties
+    
     static let identifier = "EmojiCollectionViewCell"
     
     private let emojiLabel: UILabel = {
@@ -17,7 +19,8 @@ final class EmojiCollectionViewCell: UICollectionViewCell {
         return label
     }()
         
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -29,7 +32,8 @@ final class EmojiCollectionViewCell: UICollectionViewCell {
     }
 }
 
-// MARK: FUNCTIONS
+// MARK: - Layout
+
 private extension EmojiCollectionViewCell {
     func setupView() {
         contentView.layer.cornerRadius = 16
@@ -48,11 +52,15 @@ private extension EmojiCollectionViewCell {
 }
 
 extension EmojiCollectionViewCell {
-    // MARK: setupCell
+    
+    // MARK: - setupCell
+    
     func setupCell(with label: String) {
         emojiLabel.text = label
     }
 }
+
+// MARK: - CellSelectProtocol
 
 extension EmojiCollectionViewCell: CellSelectProtocol {
     func select() {
