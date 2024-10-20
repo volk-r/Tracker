@@ -70,12 +70,19 @@ extension TrackerView {
         placeHolderView.isHidden = isVisible
     }
     
+    func isFilersActive(_ isActive: Bool) {
+        let titleColor = isActive
+            ? AppColorSettings.filterButtonFontColorActive
+            : AppColorSettings.filterButtonFontColor
+        filterButton.setTitleColor(titleColor, for: .normal)
+    }
+    
     func showFilterButton() {
         filterButton.alpha = 1
     }
     
     func hideFilterButton() {
-        UIView.animate(withDuration: 1.5, delay: 0.5) {
+        UIView.animate(withDuration: 1.5, delay: 0.3) {
             self.filterButton.alpha = 0
         }
     }

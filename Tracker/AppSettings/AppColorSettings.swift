@@ -40,6 +40,7 @@ enum AppColorSettings {
     
     static let filterButtonBackgroundColor = UIColor(hexString: "#3772E7")
     static let filterButtonFontColor = UIColor(hexString: "#FFFFFF")
+    static let filterButtonFontColorActive = UIColor(hexString: "#FFFF00")
     
     static let palette: [UIColor] = [
         UIColor(hexString: "#FD4C49"),

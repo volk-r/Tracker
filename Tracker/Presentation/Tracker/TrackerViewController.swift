@@ -33,6 +33,7 @@ class TrackerViewController: UIViewController {
     private var filter: FilterType? {
         didSet {
             userAppSettingsStorage.selectedFilter = filter
+            trackerView.isFilersActive(filter != .all)
             updateFilteredCategories()
         }
     }
@@ -53,6 +54,7 @@ class TrackerViewController: UIViewController {
         trackerStore.delegate = self
         trackerRecordStore.delegate = self
         filter = userAppSettingsStorage.selectedFilter
+        trackerView.isFilersActive(filter != .all)
     }
     
     required init?(coder: NSCoder) {
@@ -224,8 +226,6 @@ extension TrackerViewController {
         for category in categories {
             let filteredTrackers = category.trackerList.filter { tracker in
                 let isFilteredByText = filterText.isEmpty || tracker.name.localizedCaseInsensitiveContains(filterText)
-                
-                print(tracker.id, tracker.name, additionalFilter(tracker.id))
                 
                 guard let schedule = tracker.schedule else { return isFilteredByText && additionalFilter(tracker.id) }
                 return schedule.contains(selectedWeekday) && isFilteredByText && additionalFilter(tracker.id)
@@ -553,7 +553,6 @@ extension TrackerViewController: UITextFieldDelegate {
 
 extension TrackerViewController: TrackerStoreDelegate {
     @objc func didTrackersUpdate() {
-        print("didTrackersUpdate")
         getAllCategories()
     }
 }
