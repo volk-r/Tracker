@@ -183,11 +183,23 @@ extension TrackerViewController {
         case .all, .none:
             filterAllTrackers()
         case .today:
-            filterTodayTrackers()
+            filterTodayTrackers { id in
+                true
+            }
         case .completed:
-            filterTrackersByCompletion(isCompleted: true)
+            filterTodayTrackers { id in
+                completedTrackers
+                    .contains {
+                        $0.trackerId == id && $0.date == currentDate
+                    }
+            }
         case .notCompleted:
-            filterTrackersByCompletion(isCompleted: false)
+            filterTodayTrackers { id in
+                !completedTrackers
+                    .contains {
+                        $0.trackerId == id && $0.date == currentDate
+                    }
+            }
         }
         
         trackerView.trackerCollectionView.reloadData()
@@ -197,7 +209,7 @@ extension TrackerViewController {
         filteredCategories = sortCategories(categories)
     }
     
-    private func filterTodayTrackers() {
+    private func filterTodayTrackers(additionalFilter: ((UUID) -> Bool)) {
         let weekday = Calendar.current.component(.weekday, from: currentDate)
         var result = [TrackerCategory]()
         
@@ -213,8 +225,10 @@ extension TrackerViewController {
             let filteredTrackers = category.trackerList.filter { tracker in
                 let isFilteredByText = filterText.isEmpty || tracker.name.localizedCaseInsensitiveContains(filterText)
                 
-                guard let schedule = tracker.schedule else { return isFilteredByText }
-                return schedule.contains(selectedWeekday) && isFilteredByText
+                print(tracker.id, tracker.name, additionalFilter(tracker.id))
+                
+                guard let schedule = tracker.schedule else { return isFilteredByText && additionalFilter(tracker.id) }
+                return schedule.contains(selectedWeekday) && isFilteredByText && additionalFilter(tracker.id)
             }
             
             if !filteredTrackers.isEmpty {
@@ -230,27 +244,6 @@ extension TrackerViewController {
         }
         
         filteredCategories = sortCategories(result)
-    }
-    
-    private func filterTrackersByCompletion(isCompleted: Bool) {
-        filteredCategories = categories.compactMap { category in
-            let completed = category.trackerList.filter { tracker in
-                if isCompleted {
-                    completedTrackers.contains { $0.trackerId == tracker.id && $0.date == currentDate }
-                } else {
-                    // TODO: not valid filter
-                    completedTrackers.contains { $0.trackerId == tracker.id && $0.date == currentDate }
-                }
-            }
-            print(completedTrackers)
-            return completed.isEmpty ? nil : TrackerCategory(
-                id: category.id,
-                title: category.title,
-                trackerList: completed
-            )
-        }
-        
-        filteredCategories = sortCategories(filteredCategories)
     }
     
     private func sortCategories(_ categories: [TrackerCategory]) -> [TrackerCategory] {
