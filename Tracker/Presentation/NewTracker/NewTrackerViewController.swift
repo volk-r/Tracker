@@ -141,11 +141,7 @@ extension NewTrackerViewController {
             NewTrackerTableViewCell.self,
             forCellReuseIdentifier: NewTrackerTableViewCell.identifier
         )
-        
-        // TODO:
-        newTrackerView.tableView.separatorStyle = trackerType.paramsCellsCount == 1
-            ? .none
-            : .singleLine
+
         newTrackerView.setHeightTableView(cellsCount: CGFloat(trackerType.paramsCellsCount))
     }
     
@@ -180,7 +176,8 @@ extension NewTrackerViewController {
             name: trackerData.name,
             color: trackerData.color,
             emoji: trackerData.emoji,
-            schedule: trackerData.schedule
+            schedule: trackerData.schedule,
+            isPinned: trackerData.isPinned
         )
         newTrackerView.setupDaysCount(daysCount)
         newTrackerView.trackerNameTextField.text = data.name
@@ -197,6 +194,9 @@ extension NewTrackerViewController {
             section: CollectionViewCellTypes.color.rawValue
         )
         selectedItems[CollectionViewCellTypes.color.rawValue] = colorCellIndexPath
+        
+        title = trackerType.title
+        newTrackerView.createButton.setTitle(Constants.editTrackerTitle, for: .normal)
     }
     
     private func checkDataValidation() {
@@ -260,7 +260,7 @@ extension NewTrackerViewController {
             color: color,
             emoji: emoji,
             schedule: data.schedule,
-            isPinned: false
+            isPinned: data.isPinned ?? false
         )
         
         delegate?
@@ -291,6 +291,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
     }
     
     // MARK: - Setup Collection cells
+    
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -491,13 +492,16 @@ extension NewTrackerViewController: UITableViewDataSource {
     }
 }
 
-// MARK: - UITableViewDataSource
+// MARK: - UITableViewDelegate
 
 extension NewTrackerViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1 {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: tableView.bounds.width)
-        }
+    func tableView(
+        _ tableView: UITableView,
+        willDisplay cell: UITableViewCell,
+        forRowAt indexPath: IndexPath
+    ) {
+        let cellCount = tableView.numberOfRows(inSection: indexPath.section)
+        cell.setCustomStyle(indexPath: indexPath, cellCount: cellCount)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -567,6 +571,8 @@ private extension NewTrackerViewController {
         static let emoji = "Emoji"
         static let color = NSLocalizedString("color", comment: "")
         static let unknown = NSLocalizedString("unknown", comment: "")
+        
+        static let editTrackerTitle = NSLocalizedString("save", comment: "")
     }
 }
 

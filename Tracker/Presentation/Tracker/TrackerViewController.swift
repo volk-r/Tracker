@@ -494,13 +494,24 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
                     UIAction(title: Constants.editMessage) { [weak self] _ in
                         guard let self else { return }
                         let daysCount = self.completedTrackers.filter { $0.trackerId == tracker.id }.count
-                        let trackerType = (tracker.schedule != nil) ? TrackerType.habit : TrackerType.event
+                        let trackerType = (tracker.schedule != nil) ? TrackerType.editHabit : TrackerType.editEvent
+                        
+                        var realCategory: TrackerCategory? = nil
+
+                        for category in categories {
+                            let filteredTrackers = category.trackerList.filter { tracker.id == $0.id
+                            }
+                            
+                            if !filteredTrackers.isEmpty {
+                                realCategory = category
+                            }
+                        }
                         
                         let newTrackerVC = NewTrackerViewController(
                             trackerType: trackerType,
                             delegate: self,
                             trackerData: tracker,
-                            category: category,
+                            category: realCategory ?? category,
                             daysCount: daysCount
                         )
                         self.present(UINavigationController(rootViewController: newTrackerVC), animated: true)

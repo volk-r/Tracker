@@ -77,6 +77,10 @@ extension TrackerView {
         filterButton.setTitleColor(titleColor, for: .normal)
     }
     
+    func filterButton(isHidden: Bool) {
+        filterButton.isHidden = isHidden
+    }
+    
     func showFilterButton() {
         filterButton.alpha = 1
     }

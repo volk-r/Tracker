@@ -39,8 +39,6 @@
 // MARK: - CreateTrackerViewController
 
 "createTracker.screen.title" = "Create Tracker";
-"habit.new" = "New habit";
-"irregularEvent.new" = "New irregular event";
 
 // MARK: - OnboardingViewController
 
@@ -61,6 +59,10 @@
 // MARK: - NewTrackerViewController
 
 "newTracker.screen.textFieldPlaceholder" = "Enter tracker name";
+"newTracker.screen.habit.new" = "New habit";
+"newTracker.screen.habit.edit" = "Edit a habit";
+"newTracker.screen.irregularEvent.new" = "New irregular event";
+"newTracker.screen.irregularEvent.edit" = "Edit irregular event";
 
 // MARK: - CategoryViewController
 

@@ -26,8 +26,6 @@ final class NewTrackerView: UIView {
         tableView.backgroundColor = .clear
         tableView.isScrollEnabled = false
         tableView.layer.masksToBounds = true
-        tableView.layer.cornerRadius = 10
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.separatorColor = AppColorSettings.notActiveFontColor
         tableView.isEmptyHeaderHidden = true
         return tableView
