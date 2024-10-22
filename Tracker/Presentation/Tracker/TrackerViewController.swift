@@ -47,6 +47,8 @@ class TrackerViewController: UIViewController {
     private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 2, leftInset: 16, rightInset: 16, topInset: 8, bottomInset: 16, height: 148, cellSpacing: 10)
     private let userAppSettingsStorage = UserAppSettingsStorage.shared
     
+    private let analyticService: AnalyticServiceProtocol = AnalyticService()
+    
     // MARK: - Lifecycle
     
     init() {
@@ -64,6 +66,11 @@ class TrackerViewController: UIViewController {
     override func loadView() {
         super.loadView()
         view = trackerView
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        analyticService.trackOpenScreen(screen: .main)
     }
 
     override func viewDidLoad() {
@@ -86,6 +93,11 @@ class TrackerViewController: UIViewController {
         
         getAllCategories()
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(true)
+        analyticService.trackCloseScreen(screen: .main)
+    }
 }
 
 extension TrackerViewController {
@@ -107,6 +119,8 @@ extension TrackerViewController {
     private func setupSearchTextField() {
         trackerView.searchTextField.addTarget(self, action: #selector(searchTextChanged), for: .editingChanged)
     }
+    
+    // MARK: - setupPlaceHolder
     
     private func setupPlaceHolder() {
         var noTrackers: Bool = categories.isEmpty
@@ -173,6 +187,7 @@ extension TrackerViewController {
     private func setupButton() {
         trackerView.filterCallback = { [weak self] in
             guard let self else { return }
+            self.analyticService.trackClick(screen: .main, item: .tapFilterButton)
             let filtersVC = FilterViewController(
                 selectedFilter: filter,
                 delegate: self
@@ -182,6 +197,7 @@ extension TrackerViewController {
     }
     
     @objc private func addAction() {
+        analyticService.trackClick(screen: .main, item: .tapAddTrack)
         let createTrackerVC = CreateTrackerViewController(delegate: self)
         present(UINavigationController(rootViewController: createTrackerVC), animated: true)
     }
@@ -333,8 +349,6 @@ extension TrackerViewController {
     // MARK: - showOnboarding
     
     private func showOnboarding() {
-        // TODO: for tests
-//        userAppSettingsStorage.clean()
         guard !userAppSettingsStorage.isOnboardingVisited else { return }
         
         userAppSettingsStorage.isOnboardingVisited = true
@@ -504,6 +518,7 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
                     },
                     UIAction(title: Constants.editMessage) { [weak self] _ in
                         guard let self else { return }
+                        self.analyticService.trackClick(screen: .main, item: .editFromContextMenu)
                         let daysCount = self.completedTrackers.filter { $0.trackerId == tracker.id }.count
                         let trackerType = (tracker.schedule != nil) ? TrackerType.editHabit : TrackerType.editEvent
                         
@@ -529,6 +544,7 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
                     },
                     UIAction(title: Constants.deleteMessage, attributes: .destructive) { [weak self] _ in
                         guard let self else { return }
+                        self.analyticService.trackClick(screen: .main, item: .deleteFromContextMenu)
                         self.deleteTracker(tracker)
                     }
                 ]

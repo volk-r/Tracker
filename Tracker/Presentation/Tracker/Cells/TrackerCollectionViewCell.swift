@@ -25,6 +25,8 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    private let analyticService: AnalyticServiceProtocol = AnalyticService()
+    
     private let cardView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 16
@@ -142,6 +144,7 @@ extension TrackerCollectionViewCell {
     // MARK: - didTapAddDayButton
     
     @objc private func didTapAddDayButton() {
+        analyticService.trackClick(screen: .main, item: .tapTracker)
         guard let tracker else { return }
         delegate?.didTapAddDayButton(for: tracker, in: self)
     }
