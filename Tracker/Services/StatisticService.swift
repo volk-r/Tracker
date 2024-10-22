@@ -20,22 +20,36 @@ final class StatisticService: StatisticServiceProtocol {
         let allTrackerRecord = trackerRecordStore.fetchAllRecords()
         let allCategories = trackerCategoryStore.fetchAllCategories()
         
+        let bestPeriod = getBestPeriod(from: allTrackerRecord, allCategories: allCategories)
+        let perfectDays = getPerfectDays(allCategories: allCategories, records: allTrackerRecord)
+        let completedTrackers = getCompletedTrackersFrom(allTrackerRecord)
+        let averageCompletedTrackers = getAverageCompletedTrackersFrom(allTrackerRecord)
+        
+        if
+            bestPeriod == 0,
+            perfectDays == 0,
+            completedTrackers == 0,
+            averageCompletedTrackers == 0
+        {
+            return []
+        }
+        
         return [
             StatisticModel(
-                title: getCompletedTrackersFrom(allTrackerRecord).description,
-                description: Constants.trackersCompleted
-            ),
-            StatisticModel(
-                title: getAverageCompletedTrackersFrom(allTrackerRecord).description,
-                description: Constants.averageValue
-            ),
-            StatisticModel(
-                title: getBestPeriod(from: allTrackerRecord, allCategories: allCategories).description,
+                title: bestPeriod.description,
                 description: Constants.bestPeriod
             ),
             StatisticModel(
-                title: getPerfectDays(allCategories: allCategories, records: allTrackerRecord).description,
+                title: perfectDays.description,
                 description: Constants.idealВays
+            ),
+            StatisticModel(
+                title: completedTrackers.description,
+                description: Constants.trackersCompleted
+            ),
+            StatisticModel(
+                title: averageCompletedTrackers.description,
+                description: Constants.averageValue
             ),
         ]
     }
