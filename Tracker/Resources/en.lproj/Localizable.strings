@@ -104,3 +104,10 @@
 "filter.screen.today" = "Today trackers";
 "filter.screen.completed" = "Completed";
 "filter.screen.notCompleted" = "Not completed";
+
+// MARK: - StatisticViewController
+
+"statistic.screen.trackersCompleted" = "Trackers completed";
+"statistic.screen.bestPeriod" = "Best period";
+"statistic.screen.idealВays" = "Ideal days";
+"statistic.screen.averageValue" = "Average value";

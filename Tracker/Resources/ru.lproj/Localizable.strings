@@ -104,3 +104,10 @@
 "filter.screen.today" = "Трекеры на сегодня";
 "filter.screen.completed" = "Завершенные";
 "filter.screen.notCompleted" = "Не завершенные";
+
+// MARK: - StatisticViewController
+
+"statistic.screen.trackersCompleted" = "Трекеров завершено";
+"statistic.screen.bestPeriod" = "Лучший период";
+"statistic.screen.idealВays" = "Идеальные дни";
+"statistic.screen.averageValue" = "Cреднее значение";

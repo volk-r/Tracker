@@ -45,6 +45,8 @@
 		3C41E88C2CC6D8BB00CADBB7 /* StatisticCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C41E88B2CC6D8BB00CADBB7 /* StatisticCollectionViewCell.swift */; };
 		3C41E88E2CC6E4C500CADBB7 /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C41E88D2CC6E4C500CADBB7 /* CGPoint+Extensions.swift */; };
 		3C41E8922CC6E52D00CADBB7 /* StatisticModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C41E8912CC6E52D00CADBB7 /* StatisticModel.swift */; };
+		3C41E8942CC8041100CADBB7 /* StatisticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C41E8932CC8041100CADBB7 /* StatisticService.swift */; };
+		3C41E8962CC807D800CADBB7 /* StatisticServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C41E8952CC807D800CADBB7 /* StatisticServiceProtocol.swift */; };
 		3C62898B2C8AE6E2003CE842 /* NewTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C62898A2C8AE6E2003CE842 /* NewTrackerView.swift */; };
 		3C62898E2C8AE717003CE842 /* NewTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C62898D2C8AE717003CE842 /* NewTrackerViewController.swift */; };
 		3C6289912C8AE95E003CE842 /* TrackerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6289902C8AE95E003CE842 /* TrackerType.swift */; };
@@ -153,6 +155,8 @@
 		3C41E88B2CC6D8BB00CADBB7 /* StatisticCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticCollectionViewCell.swift; sourceTree = "<group>"; };
 		3C41E88D2CC6E4C500CADBB7 /* CGPoint+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extensions.swift"; sourceTree = "<group>"; };
 		3C41E8912CC6E52D00CADBB7 /* StatisticModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticModel.swift; sourceTree = "<group>"; };
+		3C41E8932CC8041100CADBB7 /* StatisticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticService.swift; sourceTree = "<group>"; };
+		3C41E8952CC807D800CADBB7 /* StatisticServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticServiceProtocol.swift; sourceTree = "<group>"; };
 		3C62898A2C8AE6E2003CE842 /* NewTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerView.swift; sourceTree = "<group>"; };
 		3C62898D2C8AE717003CE842 /* NewTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewController.swift; sourceTree = "<group>"; };
 		3C6289902C8AE95E003CE842 /* TrackerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerType.swift; sourceTree = "<group>"; };
@@ -252,6 +256,7 @@
 			isa = PBXGroup;
 			children = (
 				3C165B0A2CAC70F600824FD9 /* UserAppSettingsStorageProtocol.swift */,
+				3C41E8952CC807D800CADBB7 /* StatisticServiceProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -260,6 +265,7 @@
 			isa = PBXGroup;
 			children = (
 				3C165B072CAC70E800824FD9 /* UserAppSettingsStorage.swift */,
+				3C41E8932CC8041100CADBB7 /* StatisticService.swift */,
 				3C165B062CAC70E800824FD9 /* Protocols */,
 			);
 			path = Services;
@@ -831,6 +837,7 @@
 				3C75B1C72C77BF320045E709 /* TrackerViewController.swift in Sources */,
 				3C85FA5E2C9F081E00E4109A /* TrackerRecordStore.swift in Sources */,
 				3C165B092CAC70E800824FD9 /* UserAppSettingsStorage.swift in Sources */,
+				3C41E8942CC8041100CADBB7 /* StatisticService.swift in Sources */,
 				3C6289B52C8D9166003CE842 /* ScheduleTableViewCell.swift in Sources */,
 				3C6289A32C8B83EA003CE842 /* CellSelectProtocol.swift in Sources */,
 				3C165B742CB5B56D00824FD9 /* Notification+Extensions.swift in Sources */,
@@ -853,6 +860,7 @@
 				3CB438CF2C7B9D6500E3614F /* StatisticViewController.swift in Sources */,
 				3CB438DF2C84DA3600E3614F /* TrackerRecord.swift in Sources */,
 				3C165B502CB1A48800824FD9 /* CreateCategoryView.swift in Sources */,
+				3C41E8962CC807D800CADBB7 /* StatisticServiceProtocol.swift in Sources */,
 				3C62899C2C8B54E9003CE842 /* ColorCollectionViewCell.swift in Sources */,
 				3C165B3A2CB117EA00824FD9 /* DummyModel.swift in Sources */,
 				3C6289A52C8C2FC6003CE842 /* UITextField+Extensions.swift in Sources */,

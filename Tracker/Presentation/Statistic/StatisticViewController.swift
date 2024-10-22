@@ -19,6 +19,8 @@ final class StatisticViewController: UIViewController {
         }
     }
     
+    private let statisticService: StatisticServiceProtocol = StatisticService()
+    
     private let collectionViewParams = UICollectionView.GeometricParams(
         cellCount: 1,
         leftInset: 16,
@@ -40,13 +42,22 @@ final class StatisticViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        
-        // TODO:
-        statisticData = [StatisticModel(title: "1", description: "Лучший период")]
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getStatistic()
     }
 }
 
 extension StatisticViewController {
+    
+    // MARK: - getStatistic
+    
+    private func getStatistic() {
+        statisticData = statisticService.getStatistic()
+        statisticView.statisticCollectionView.reloadData()
+    }
     
     // MARK: - setupNavBar
     
