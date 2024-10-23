@@ -8,7 +8,7 @@
 import Foundation
 import AppMetricaCore
 
-struct         AnalyticService: AnalyticServiceProtocol {
+struct AnalyticService: AnalyticServiceProtocol {
     static func activate() {
         guard
             let configuration = AppMetricaConfiguration(apiKey: AppConstants.AppMetricaKey)
@@ -18,7 +18,7 @@ struct         AnalyticService: AnalyticServiceProtocol {
     }
 }
 
-extension         AnalyticService {
+extension AnalyticService {
     func trackOpenScreen(screen: AnalyticScreen) {
         reportEvent(event: Events.open.rawValue, screen: screen.rawValue)
     }
@@ -32,7 +32,7 @@ extension         AnalyticService {
     }
 }
 
-private extension         AnalyticService {
+private extension AnalyticService {
     private func reportEvent(event: String, screen: String, item: String? = nil) {
         let params : [AnyHashable : Any] = ["event": event, "screen": screen]
         AppMetrica.reportEvent(name: "EVENT", parameters: params, onFailure: { (error) in
