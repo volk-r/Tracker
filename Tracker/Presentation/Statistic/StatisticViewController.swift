@@ -56,7 +56,7 @@ extension StatisticViewController {
     
     private func getStatistic() {
         statisticData = statisticService.getStatistic()
-        statisticView.statisticCollectionView.reloadData()
+        statisticView.reloadCollection()
     }
     
     // MARK: - setupNavBar
@@ -74,12 +74,7 @@ extension StatisticViewController {
     // MARK: - setupCollectionView
     
     private func setupCollectionView() {
-        statisticView.statisticCollectionView.dataSource = self
-        statisticView.statisticCollectionView.delegate = self
-        statisticView.statisticCollectionView.register(
-            StatisticCollectionViewCell.self,
-            forCellWithReuseIdentifier: StatisticCollectionViewCell.identifier
-        )
+        statisticView.setupCollectionView(source: self)
     }
 }
 

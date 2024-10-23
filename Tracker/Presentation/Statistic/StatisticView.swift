@@ -11,7 +11,7 @@ final class StatisticView: UIView {
     
     // MARK: - Properties
     
-    lazy var statisticCollectionView: UICollectionView = {
+    private lazy var statisticCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -44,6 +44,19 @@ extension StatisticView {
     
     func showPlaceHolder(isVisible: Bool) {
         placeHolderView.isHidden = isVisible
+    }
+    
+    func reloadCollection() {
+        statisticCollectionView.reloadData()
+    }
+    
+    func setupCollectionView(source: StatisticViewController) {
+        statisticCollectionView.dataSource = source
+        statisticCollectionView.delegate = source
+        statisticCollectionView.register(
+            StatisticCollectionViewCell.self,
+            forCellWithReuseIdentifier: StatisticCollectionViewCell.identifier
+        )
     }
     
     // MARK: - Layout
