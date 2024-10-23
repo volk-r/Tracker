@@ -33,7 +33,7 @@ class TrackerViewController: UIViewController {
     private var filter: FilterType? {
         didSet {
             userAppSettingsStorage.selectedFilter = filter
-            trackerView.isFilersActive(filter != .all)
+            trackerView.isFilersActive(filersActiveState.contains(filter))
             updateFilteredCategories()
         }
     }
@@ -43,6 +43,8 @@ class TrackerViewController: UIViewController {
         let calendar = Calendar.current
         return calendar.startOfDay(for: Date())
     }()
+    
+    private let filersActiveState: [FilterType?] = [.all, .completed, .notCompleted]
     
     private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 2, leftInset: 16, rightInset: 16, topInset: 8, bottomInset: 16, height: 148, cellSpacing: 10)
     private let userAppSettingsStorage = UserAppSettingsStorage.shared
@@ -56,7 +58,7 @@ class TrackerViewController: UIViewController {
         trackerStore.delegate = self
         trackerRecordStore.delegate = self
         filter = userAppSettingsStorage.selectedFilter
-        trackerView.isFilersActive(filter != nil && filter != .all)
+        trackerView.isFilersActive(filersActiveState.contains(filter))
     }
     
     required init?(coder: NSCoder) {
@@ -208,9 +210,7 @@ extension TrackerViewController {
     
     private func updateFilteredCategories() {
         switch filter {
-        case .all, .none:
-            filterAllTrackers()
-        case .today:
+        case .all, .none, .today:
             filterTodayTrackers { id in
                 true
             }
@@ -231,34 +231,6 @@ extension TrackerViewController {
         }
         
         trackerView.trackerCollectionView.reloadData()
-    }
-    
-    private func filterAllTrackers() {
-        var result = [TrackerCategory]()
-        
-        let filterText = (trackerView.searchTextField.text ?? "").lowercased()
-        
-        for category in categories {
-            let filteredTrackers = category.trackerList.filter { tracker in
-                let isFilteredByText = filterText.isEmpty || tracker.name.localizedCaseInsensitiveContains(filterText)
-                
-                guard tracker.schedule != nil else { return isFilteredByText }
-                return isFilteredByText
-            }
-            
-            if !filteredTrackers.isEmpty {
-                result
-                    .append(
-                        TrackerCategory(
-                            id: category.id,
-                            title: category.title,
-                            trackerList: filteredTrackers
-                        )
-                    )
-            }
-        }
-        
-        filteredCategories = sortCategories(result)
     }
     
     private func filterTodayTrackers(additionalFilter: ((UUID) -> Bool)) {
@@ -634,7 +606,14 @@ extension TrackerViewController: CreateTrackerViewControllerDelegate {
 
 extension TrackerViewController: FilterViewControllerDelegate {
     func filterChangedTo(_ newFilter: FilterType) {
-        filter = newFilter
+        guard newFilter == .today else {
+            filter = newFilter
+            return
+        }
+        
+        currentDate = Calendar.current.startOfDay(for: Date())
+        datePicker.date = currentDate
+        filter = nil
     }
 }
 
