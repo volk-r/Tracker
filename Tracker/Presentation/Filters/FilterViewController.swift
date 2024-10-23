@@ -43,18 +43,11 @@ final class FilterViewController: UIViewController {
 }
 
 extension FilterViewController {
+    
     // MARK: - setupTableView
     
     private func setupTableView() {
-        filterView.tableView.delegate = self
-        filterView.tableView.dataSource = self
-        
-        filterView.tableView.register(
-            MainTableViewCell.self,
-            forCellReuseIdentifier: MainTableViewCell.identifier
-        )
-        
-        filterView.tableView.reloadData()
+        filterView.setupTableView(source: self)
     }
 }
 

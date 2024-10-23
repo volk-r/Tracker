@@ -11,7 +11,7 @@ final class FilterView: UIView {
     
     // MARK: - Properties
     
-    lazy var tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
         tableView.isScrollEnabled = false
@@ -34,9 +34,23 @@ final class FilterView: UIView {
     }
 }
 
-// MARK: - Layout
-
 extension FilterView {
+    
+    // MARK: - setupTableView
+    
+    func setupTableView(source: FilterViewController) {
+        tableView.delegate = source
+        tableView.dataSource = source
+        
+        tableView.register(
+            MainTableViewCell.self,
+            forCellReuseIdentifier: MainTableViewCell.identifier
+        )
+        
+        tableView.reloadData()
+    }
+    
+    // MARK: - Layout
     
     private func setupLayout() {
         addSubviews(tableView)
