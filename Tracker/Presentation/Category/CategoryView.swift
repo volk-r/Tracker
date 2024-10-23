@@ -11,7 +11,9 @@ final class CategoryView: UIView {
     
     // MARK: - Properties
     
-    lazy var tableView: UITableView = {
+    weak var delegate: CategoryViewDelegate?
+    
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
         tableView.isScrollEnabled = false
@@ -21,7 +23,7 @@ final class CategoryView: UIView {
         return tableView
     }()
     
-    lazy var createButton: UIButton = {
+    private lazy var createButton: UIButton = {
         let button = UIButton()
         button.setTitle(Constants.addCategoryMessage, for: .normal)
         button.setTitleColor(AppColorSettings.backgroundColor, for: .normal)
@@ -36,10 +38,12 @@ final class CategoryView: UIView {
     
     // MARK: - Lifecycle
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(delegate: CategoryViewDelegate) {
+        super.init(frame: .zero)
+        self.delegate = delegate
         backgroundColor = AppColorSettings.backgroundColor
         setupLayout()
+        setupButtons()
     }
     
     required init?(coder: NSCoder) {
@@ -47,13 +51,43 @@ final class CategoryView: UIView {
     }
 }
 
-// MARK: - Layout
-
 extension CategoryView {
+    
+    // MARK: - setupTableView
+    
+    func setupTableView(source: CategoryViewController) {
+        tableView.delegate = source
+        tableView.dataSource = source
+        
+        tableView.register(
+            MainTableViewCell.self,
+            forCellReuseIdentifier: MainTableViewCell.identifier
+        )
+    }
+    
+    func reloadTableView() {
+        tableView.reloadData()
+    }
+    
+    // MARK: - showPlaceHolder
     
     func showPlaceHolder(isVisible: Bool) {
         placeHolderView.isHidden = isVisible
     }
+    
+    // MARK: - setupButtons
+    
+    private func setupButtons() {
+        createButton.addTarget(self, action: #selector(createButtonTapAction), for: .touchUpInside)
+    }
+    
+    // MARK: - createButtonTapAction
+    
+    @objc private func createButtonTapAction() {
+        delegate?.tapCreateButton()
+    }
+    
+    // MARK: - Layout
     
     private func setupLayout() {
         addSubviews(

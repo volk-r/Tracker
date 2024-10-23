@@ -13,7 +13,7 @@ final class CategoryViewController: UIViewController {
     
     weak var delegate: CategoryViewControllerDelegate?
     
-    private lazy var categoryView = CategoryView()
+    private lazy var categoryView = CategoryView(delegate: self)
     private lazy var viewModel = CategoryViewModel()
     private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
     
@@ -41,7 +41,6 @@ final class CategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupButtons()
         setupTableView()
         setupBindings()
         getAllCategories()
@@ -55,7 +54,7 @@ extension CategoryViewController {
     private func setupBindings() {
         viewModel.onCategoriesChanged = { [weak self] categories in
             guard let self else { return }
-            self.categoryView.tableView.reloadData()
+            self.categoryView.reloadTableView()
             self.showPlaceHolder()
         }
         
@@ -77,34 +76,10 @@ extension CategoryViewController {
         categoryView.showPlaceHolder(isVisible: viewModel.numberOfCategories() != 0)
     }
     
-    // MARK: - setupButtons
-    
-    private func setupButtons() {
-        categoryView.createButton.addTarget(self, action: #selector(createButtonTapAction), for: .touchUpInside)
-    }
-    
     // MARK: - setupTableView
     
     private func setupTableView() {
-        categoryView.tableView.delegate = self
-        categoryView.tableView.dataSource = self
-        
-        categoryView.tableView.register(
-            MainTableViewCell.self,
-            forCellReuseIdentifier: MainTableViewCell.identifier
-        )
-    }
-    
-    // MARK: - createButtonTapAction
-    
-    @objc private func createButtonTapAction() {
-        let createCategoryVC = CreateCategoryViewController(
-            mode: .create,
-            delegate: self,
-            editingCategory: nil
-        )
-        let navigationController = UINavigationController(rootViewController: createCategoryVC)
-        present(navigationController, animated: true)
+        categoryView.setupTableView(source: self)
     }
     
     // MARK: - editCategory
@@ -136,6 +111,22 @@ extension CategoryViewController {
     }
 }
 
+// MARK: - CategoryViewDelegate
+
+extension CategoryViewController: CategoryViewDelegate {
+    func tapCreateButton() {
+        let createCategoryVC = CreateCategoryViewController(
+            mode: .create,
+            delegate: self,
+            editingCategory: nil
+        )
+        let navigationController = UINavigationController(rootViewController: createCategoryVC)
+        present(navigationController, animated: true)
+    }
+}
+
+// MARK: - UITableViewDelegate
+
 extension CategoryViewController: UITableViewDelegate {
     func tableView(
         _ tableView: UITableView,
@@ -162,7 +153,7 @@ extension CategoryViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        return Constants.tableViewHeightForRowAt
     }
     
     func tableView(
@@ -234,6 +225,8 @@ private extension CategoryViewController {
         static let deleteMessage = NSLocalizedString("delete", comment: "")
         static let editMessage = NSLocalizedString("edit", comment: "")
         static let alertMessage = NSLocalizedString("category.screen.alertMessage", comment: "")
+        
+        static let tableViewHeightForRowAt: CGFloat = 75
     }
 }
 
