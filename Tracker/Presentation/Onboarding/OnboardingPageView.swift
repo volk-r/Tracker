@@ -11,6 +11,8 @@ final class OnboardingPageView: UIView {
     
     // MARK: - Properties
     
+    weak var delegate: OnboardingPageViewDelegate?
+    
     private lazy var backgroundImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage()
@@ -27,7 +29,7 @@ final class OnboardingPageView: UIView {
         return label
     }()
     
-    lazy var skipTourButton: UIButton = {
+    private lazy var skipTourButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = AppColorSettings.onboardingFontColor
         button.setTitle(Constants.onboardingSkipTourButton, for: .normal)
@@ -39,10 +41,11 @@ final class OnboardingPageView: UIView {
     
     // MARK: - Init
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    init(delegate: OnboardingPageViewDelegate) {
+        super.init(frame: .zero)
+        self.delegate = delegate
         setupLayout()
+        setupButtons()
     }
     
     required init?(coder: NSCoder) {
@@ -50,9 +53,21 @@ final class OnboardingPageView: UIView {
     }
 }
 
-// MARK: - Layout
-
 extension OnboardingPageView {
+    
+    // MARK: - didTapButton
+    
+    private func setupButtons() {
+        skipTourButton.addTarget(nil, action: #selector(didTapButton), for: .touchUpInside)
+    }
+    
+    // MARK: - didTapButton
+    
+    @objc private func didTapButton() {
+        delegate?.dismis()
+    }
+    
+    // MARK: - Layout
     
     private func setupLayout() {
         addSubviews(

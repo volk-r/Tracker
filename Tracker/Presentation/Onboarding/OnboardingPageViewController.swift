@@ -11,7 +11,7 @@ final class OnboardingPageViewController: UIViewController {
     
     // MARK: - Properties
     
-    private lazy var onboardingPageView = OnboardingPageView()
+    private lazy var onboardingPageView = OnboardingPageView(delegate: self)
     private let pageNumber: OnboardingPage
     
     // MARK: - Init
@@ -31,21 +31,12 @@ final class OnboardingPageViewController: UIViewController {
         super.viewDidLoad()
         view = onboardingPageView
         onboardingPageView.setupView(for: pageNumber)
-        setupButtons()
     }
 }
 
-extension OnboardingPageViewController {
-    
-    // MARK: - didTapButton
-    
-    private func setupButtons() {
-        onboardingPageView.skipTourButton.addTarget(nil, action: #selector(didTapButton), for: .touchUpInside)
-    }
-    
-    // MARK: - didTapButton
-    
-    @objc private func didTapButton() {
+extension OnboardingPageViewController: OnboardingPageViewDelegate {
+    func dismis() {
+        print("OnboardingPageViewController")
         dismiss(animated: true)
     }
 }

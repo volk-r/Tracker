@@ -20,5 +20,4 @@ final class TrackerTests: XCTestCase {
         let vc = TrackerViewController()
         assertSnapshot(of: vc, as: .image(traits: UITraitCollection(userInterfaceStyle: .dark)))
     }
-    
 }
