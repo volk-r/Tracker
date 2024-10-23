@@ -62,7 +62,7 @@ extension FilterViewController {
 
 extension FilterViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        return Constants.tableViewHeightForRowAt
     }
     
     func tableView(
@@ -129,6 +129,8 @@ extension FilterViewController: UITableViewDataSource {
 private extension FilterViewController {
     enum Constants {
         static let pageTitle = NSLocalizedString("filters", comment: "")
+        
+        static let tableViewHeightForRowAt: CGFloat = 75
     }
 }
 

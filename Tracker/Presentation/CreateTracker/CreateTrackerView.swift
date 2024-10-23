@@ -81,13 +81,13 @@ extension CreateTrackerView {
         addSubviews(mainStackView)
         
         NSLayoutConstraint.activate([
-            habitButton.heightAnchor.constraint(equalToConstant: 60),
-            eventButton.heightAnchor.constraint(equalToConstant: 60),
+            habitButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
+            eventButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
             
-            mainStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            mainStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: Constants.mainInset),
             mainStackView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
             mainStackView.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
-            mainStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            mainStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -Constants.mainInset),
         ])
     }
     
@@ -110,5 +110,8 @@ private extension CreateTrackerView {
     enum Constants {
         static let habitTitle = NSLocalizedString("habit", comment: "")
         static let eventTitle = NSLocalizedString("irregularEvent", comment: "")
+        
+        static let mainInset: CGFloat = 20
+        static let buttonHeight: CGFloat = 60
     }
 }

@@ -46,7 +46,15 @@ class TrackerViewController: UIViewController {
     
     private let filersActiveState: [FilterType?] = [.all, .completed, .notCompleted]
     
-    private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 2, leftInset: 16, rightInset: 16, topInset: 8, bottomInset: 16, height: 148, cellSpacing: 10)
+    private let collectionViewParams = UICollectionView.GeometricParams(
+        cellCount: 2,
+        leftInset: 16,
+        rightInset: 16,
+        topInset: 8,
+        bottomInset: 16,
+        height: 148,
+        cellSpacing: 9
+    )
     private let userAppSettingsStorage = UserAppSettingsStorage.shared
     
     private let analyticService: AnalyticServiceProtocol = AnalyticService()
@@ -411,7 +419,7 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 9
+        return collectionViewParams.cellSpacing
     }
     
     // MARK: - SETUP Collection HEADER

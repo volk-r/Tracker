@@ -177,32 +177,32 @@ extension TrackerCollectionViewCell {
             cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
             cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            cardView.heightAnchor.constraint(equalToConstant: 90),
+            cardView.heightAnchor.constraint(equalToConstant: Constants.cardViewHeight),
             
-            iconView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
-            iconView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
-            iconView.widthAnchor.constraint(equalToConstant: 24),
+            iconView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: Constants.mainInset),
+            iconView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: Constants.mainInset),
+            iconView.widthAnchor.constraint(equalToConstant: Constants.viewWidth),
             iconView.heightAnchor.constraint(equalTo: iconView.widthAnchor),
             
-            pinnedImageView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -4),
-            pinnedImageView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
-            pinnedImageView.widthAnchor.constraint(equalToConstant: 24),
+            pinnedImageView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -Constants.secondaryInset / 2),
+            pinnedImageView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: Constants.mainInset),
+            pinnedImageView.widthAnchor.constraint(equalToConstant: Constants.viewWidth),
             pinnedImageView.heightAnchor.constraint(equalTo: iconView.widthAnchor),
             
             emojiLabel.centerXAnchor.constraint(equalTo: iconView.centerXAnchor),
             emojiLabel.centerYAnchor.constraint(equalTo: iconView.centerYAnchor),
             
-            trackerNameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
-            trackerNameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
-            trackerNameLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -12),
+            trackerNameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: Constants.mainInset),
+            trackerNameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -Constants.mainInset),
+            trackerNameLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -Constants.mainInset),
             
-            daysCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            daysCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.mainInset),
             daysCountLabel.centerYAnchor.constraint(equalTo: addDayButton.centerYAnchor),
-            daysCountLabel.trailingAnchor.constraint(equalTo: addDayButton.leadingAnchor, constant: -8),
+            daysCountLabel.trailingAnchor.constraint(equalTo: addDayButton.leadingAnchor, constant: -Constants.secondaryInset),
             
-            addDayButton.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 8),
-            addDayButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
-            addDayButton.widthAnchor.constraint(equalToConstant: 34),
+            addDayButton.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: Constants.secondaryInset),
+            addDayButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.mainInset),
+            addDayButton.widthAnchor.constraint(equalToConstant: Constants.buttonWidth),
             addDayButton.heightAnchor.constraint(equalTo: addDayButton.widthAnchor),
         ])
     }
@@ -213,5 +213,11 @@ extension TrackerCollectionViewCell {
 private extension TrackerCollectionViewCell {
     enum Constants {
         static let numberOfDays = NSLocalizedString("numberOfDays", comment: "Number of completed habbits/events in days")
+        
+        static let cardViewHeight: CGFloat = 90
+        static let mainInset: CGFloat = 12
+        static let secondaryInset: CGFloat = 8
+        static let viewWidth: CGFloat = 24
+        static let buttonWidth: CGFloat = 34
     }
 }

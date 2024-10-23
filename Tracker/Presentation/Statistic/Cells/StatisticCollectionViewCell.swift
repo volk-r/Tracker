@@ -75,18 +75,6 @@ extension StatisticCollectionViewCell {
         )
     }
     
-    // MARK: - setGradientBackground
-    
-    private func setGradientBackground() {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [UIColor.red, UIColor.green, UIColor.blue]
-        gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
-        gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
-        gradientLayer.frame = CGRect(x: 0, y: 0, width: 361, height: 90)
-        
-        contentView.layer.insertSublayer(gradientLayer, at: 0)
-    }
-    
     // MARK: - setupLayout
     
     private func setupLayout() {
@@ -104,10 +92,18 @@ extension StatisticCollectionViewCell {
         }
         
         NSLayoutConstraint.activate([
-            mainStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 12),
-            mainStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 12),
-            mainStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -12),
-            mainStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -12),
+            mainStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: Constants.mainInset),
+            mainStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Constants.mainInset),
+            mainStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -Constants.mainInset),
+            mainStackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -Constants.mainInset),
         ])
+    }
+}
+
+// MARK: - Constants
+
+private extension StatisticCollectionViewCell {
+    enum Constants {
+        static let mainInset: CGFloat = 12
     }
 }

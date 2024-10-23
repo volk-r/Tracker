@@ -30,7 +30,15 @@ final class NewTrackerViewController: UIViewController {
     
     private var indexPathCell: [NewTrackerParam: IndexPath] = [:]
     
-    private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 6, leftInset: 18, rightInset: 18, topInset: 24, bottomInset: 24, height: 52, cellSpacing: 5)
+    private let collectionViewParams = UICollectionView.GeometricParams(
+        cellCount: 6,
+        leftInset: 18,
+        rightInset: 18,
+        topInset: 24,
+        bottomInset: 24,
+        height: 52,
+        cellSpacing: 5
+    )
     
     private var selectedItems: [Int: IndexPath] = [:]
     
@@ -372,7 +380,7 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAt section: Int
     ) -> CGFloat {
-        0
+        Constants.minimumLineSpacingForSection
     }
     
     // MARK: - collectionView Header
@@ -404,7 +412,7 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         referenceSizeForHeaderInSection section: Int
     ) -> CGSize {
-        CGSize(width: collectionView.bounds.width, height: 18)
+        CGSize(width: collectionView.bounds.width, height: Constants.referenceSizeForHeaderInSection)
     }
 }
 
@@ -529,7 +537,7 @@ extension NewTrackerViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        return Constants.tableViewHeightForRowAt
     }
 }
 
@@ -573,6 +581,10 @@ private extension NewTrackerViewController {
         static let unknown = NSLocalizedString("unknown", comment: "")
         
         static let editTrackerTitle = NSLocalizedString("save", comment: "")
+        
+        static let tableViewHeightForRowAt: CGFloat = 75
+        static let referenceSizeForHeaderInSection: CGFloat = 18
+        static let minimumLineSpacingForSection: CGFloat = 0
     }
 }
 

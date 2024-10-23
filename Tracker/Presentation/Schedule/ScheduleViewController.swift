@@ -80,7 +80,7 @@ extension ScheduleViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        return Constants.tableViewHeightForRowAt
     }
 }
 
@@ -131,6 +131,8 @@ extension ScheduleViewController: ScheduleViewControllerCellDelegate {
 private extension ScheduleViewController {
     enum Constants {
         static let pageTitle = NSLocalizedString("schedule", comment: "")
+        
+        static let tableViewHeightForRowAt: CGFloat = 75
     }
 }
 
