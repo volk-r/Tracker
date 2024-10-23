@@ -14,7 +14,7 @@ final class ScheduleViewController: UIViewController {
     weak var cellDelegate: ScheduleViewControllerCellDelegate?
     weak var delegate: ScheduleViewControllerDelegate?
     
-    private lazy var scheduleView = ScheduleView()
+    private lazy var scheduleView = ScheduleView(delegate: self)
     
     private var selectedWeekdays: Set<WeekDay>
     
@@ -41,7 +41,6 @@ final class ScheduleViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        setupButtons()
     }
 }
 
@@ -50,21 +49,14 @@ extension ScheduleViewController {
     // MARK: - setupTableView
     
     func setupTableView() {
-        scheduleView.tableView.delegate = self
-        scheduleView.tableView.dataSource = self
-        scheduleView.tableView.register(
-            ScheduleTableViewCell.self,
-            forCellReuseIdentifier: ScheduleTableViewCell.identifier
-        )
+        scheduleView.setupTableView(source: self)
     }
-    
-    // MARK: - setupButtons
-    
-    func setupButtons() {
-        scheduleView.doneButton.addTarget(self, action: #selector(doneButtonTapAction), for: .touchUpInside)
-    }
-    
-    @objc private func doneButtonTapAction() {
+}
+
+// MARK: - ScheduleViewDelegate
+
+extension ScheduleViewController: ScheduleViewDelegate {
+    func tapDoneButton() {
         let weekdays = Array(selectedWeekdays).sorted()
         delegate?.didConfirmSchedule(weekdays)
     }
@@ -108,7 +100,7 @@ extension ScheduleViewController: UITableViewDataSource {
         )
         scheduleCell.setupCell(with: model)
         scheduleCell.delegate = self
-        scheduleView.tableView.reloadRows(at: [indexPath], with: .automatic)
+        scheduleView.reloadTableViewRows(at: [indexPath])
         
         return scheduleCell
     }

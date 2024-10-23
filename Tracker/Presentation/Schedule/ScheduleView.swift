@@ -11,7 +11,9 @@ final class ScheduleView: UIView {
     
     // MARK: - Properties
     
-    lazy var tableView: UITableView = {
+    weak var delegate: ScheduleViewDelegate?
+    
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
         tableView.isScrollEnabled = false
@@ -47,10 +49,12 @@ final class ScheduleView: UIView {
     
     // MARK: - Lifecycle
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(delegate: ScheduleViewDelegate) {
+        super.init(frame: .zero)
+        self.delegate = delegate
         backgroundColor = AppColorSettings.backgroundColor
         setupLayout()
+        setupButtons()
     }
     
     required init?(coder: NSCoder) {
@@ -58,9 +62,34 @@ final class ScheduleView: UIView {
     }
 }
 
-// MARK: - Layout
-
 extension ScheduleView {
+    
+    // MARK: - setupButtons
+    
+    func setupButtons() {
+        doneButton.addTarget(self, action: #selector(doneButtonTapAction), for: .touchUpInside)
+    }
+    
+    @objc private func doneButtonTapAction() {
+        delegate?.tapDoneButton()
+    }
+    
+    // MARK: - setupTableView
+    
+    func setupTableView(source: ScheduleViewController) {
+        tableView.delegate = source
+        tableView.dataSource = source
+        tableView.register(
+            ScheduleTableViewCell.self,
+            forCellReuseIdentifier: ScheduleTableViewCell.identifier
+        )
+    }
+    
+    func reloadTableViewRows(at indexPaths: [IndexPath]) {
+        tableView.reloadRows(at: indexPaths, with: .automatic)
+    }
+    
+    // MARK: - Layout
     
     func setupLayout() {
         [
