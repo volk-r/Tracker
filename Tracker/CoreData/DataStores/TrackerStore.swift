@@ -87,7 +87,42 @@ extension TrackerStore: TrackerStoreProtocol {
         trackerEntity.schedule = tracker.schedule as? NSArray
         trackerEntity.name = tracker.name
         trackerEntity.category = categoryCoreData
+        trackerEntity.isPinned = tracker.isPinned
 
+        coreDataStack.saveContext()
+    }
+    
+    func updateTracker(_ tracker: Tracker, from category: TrackerCategory) {
+        guard
+            let categoryCoreData = trackerCategoryStore.getCategoryById(category.id),
+            let trackerToUpdate = getTrackerCoreData(by: tracker.id)
+        else {
+            return
+        }
+        
+        trackerToUpdate.trackerId = tracker.id
+        trackerToUpdate.colorHEX = UIColorMarshalling.serialize(color: tracker.color)
+        trackerToUpdate.emoji = tracker.emoji
+        trackerToUpdate.schedule = tracker.schedule as? NSArray
+        trackerToUpdate.name = tracker.name
+        trackerToUpdate.category = categoryCoreData
+        trackerToUpdate.isPinned = tracker.isPinned
+        
+        coreDataStack.saveContext()
+    }
+    
+    func updateTrackerPin(_ tracker: Tracker) {
+        guard let trackerToUpdate = getTrackerCoreData(by: tracker.id) else { return }
+        trackerToUpdate.isPinned = tracker.isPinned
+        
+        coreDataStack.saveContext()
+    }
+    
+    func deleteTracker(_ tracker: Tracker) {
+        guard let trackerToDelete = getTrackerCoreData(by: tracker.id) else {
+            return
+        }
+        coreDataStack.context.delete(trackerToDelete)
         coreDataStack.saveContext()
     }
     

@@ -19,6 +19,15 @@ final class TabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupControllers()
+        
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = AppColorSettings.backgroundColor
+        tabBar.standardAppearance = appearance
+        if #available(iOS 15.0, *) {
+            tabBar.scrollEdgeAppearance = appearance
+        }
+        tabBar.tintColor = AppColorSettings.switchBackgroundColor
     }
 }
 
@@ -31,10 +40,19 @@ private extension TabBarViewController {
         let navigationControllerStatistic = UINavigationController(rootViewController: statisticVC)
         
         statisticVC.tabBarItem.image = UIImage(systemName: "hare.fill")
-        statisticVC.title = "Статистика"
+        statisticVC.title = Constants.statisticVCTitle
         trackerVC.tabBarItem.image = UIImage(systemName: "record.circle.fill")
-        trackerVC.title = "Трекеры"
+        trackerVC.title = Constants.trackerVCVCTitle
         
         viewControllers = [navigationControllerTracker, navigationControllerStatistic]
+    }
+}
+
+// MARK: - Constants
+
+private extension TabBarViewController {
+    enum Constants {
+        static let statisticVCTitle = NSLocalizedString("statistic.screen.title", comment: "")
+        static let trackerVCVCTitle = NSLocalizedString("trackers.screen.title", comment: "")
     }
 }

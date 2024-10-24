@@ -17,22 +17,18 @@ final class StatisticView: UIView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         let collectionViewLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout // casting is required because UICollectionViewLayout doesn't offer header pin. Its feature of UICollectionViewFlowLayout
         collectionViewLayout?.sectionHeadersPinToVisibleBounds = true
+        collectionViewLayout?.collectionView?.backgroundColor = AppColorSettings.backgroundColor
         
         return collectionView
     }()
     
-    private lazy var placeHolderView: UIView = DummyView(
-        model: DummyModel(
-            description: "Анализировать пока нечего",
-            imageName: AppImages.statisticEmptyPage
-        )
-    )
+    private lazy var placeHolderView: UIView = DummyView(model: DummyPlaceHolder.statisticEmptyPage.model)
     
     // MARK: - Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = AppColorSettings.backgroundColor
         
         setupLayout()
     }
@@ -42,9 +38,28 @@ final class StatisticView: UIView {
     }
 }
 
-// MARK: - Layout
-
 extension StatisticView {
+    
+    // MARK: - showPlaceHolder
+    
+    func showPlaceHolder(isVisible: Bool) {
+        placeHolderView.isHidden = isVisible
+    }
+    
+    func reloadCollection() {
+        statisticCollectionView.reloadData()
+    }
+    
+    func setupCollectionView(source: StatisticViewController) {
+        statisticCollectionView.dataSource = source
+        statisticCollectionView.delegate = source
+        statisticCollectionView.register(
+            StatisticCollectionViewCell.self,
+            forCellWithReuseIdentifier: StatisticCollectionViewCell.identifier
+        )
+    }
+    
+    // MARK: - Layout
     
     private func setupLayout() {
         addSubviews(

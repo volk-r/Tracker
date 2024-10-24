@@ -18,25 +18,25 @@ enum WeekDay: Int, CaseIterable, Comparable, Codable {
     
     var description: String {
         switch self {
-        case .monday: return "Понедельник"
-        case .tuesday: return "Вторник"
-        case .wednesday: return "Среда"
-        case .thursday: return "Четверг"
-        case .friday: return "Пятница"
-        case .saturday: return "Суббота"
-        case .sunday: return "Воскресенье"
+        case .monday: return Constants.monday
+        case .tuesday: return Constants.tuesday
+        case .wednesday: return Constants.wednesday
+        case .thursday: return Constants.thursday
+        case .friday: return Constants.friday
+        case .saturday: return Constants.saturday
+        case .sunday: return Constants.sunday
         }
     }
     
     var shortName: String {
         switch self {
-        case .monday: return "Пн"
-        case .tuesday: return "Вт"
-        case .wednesday: return "Ср"
-        case .thursday: return "Чт"
-        case .friday: return "Пт"
-        case .saturday: return "Сб"
-        case .sunday: return "Вс"
+        case .monday: return Constants.mondayShort
+        case .tuesday: return Constants.tuesdayShort
+        case .wednesday: return Constants.wednesdayShort
+        case .thursday: return Constants.thursdayShort
+        case .friday: return Constants.fridayShort
+        case .saturday: return Constants.saturdayShort
+        case .sunday: return Constants.sundayShort
         }
     }
     
@@ -53,7 +53,7 @@ enum WeekDay: Int, CaseIterable, Comparable, Codable {
         case self.friday.rawValue: return self.friday.description
         case self.saturday.rawValue: return self.saturday.description
         case self.sunday.rawValue: return self.sunday.description
-        default: return "Unknown"
+        default: return Constants.unknownMessage
         }
     }
     
@@ -61,11 +61,34 @@ enum WeekDay: Int, CaseIterable, Comparable, Codable {
         guard let schedule else { return nil }
         
         if schedule.count == WeekDay.allCases.count {
-            return "Каждый день"
+            return Constants.everyDay
         }
         
         let shortNameString: [String] = schedule.map { $0.shortName }
         
         return shortNameString.joined(separator: ", ")
+    }
+}
+
+// MARK: - Constants
+
+private extension WeekDay {
+    enum Constants {
+        static let monday = NSLocalizedString("monday", comment: "")
+        static let tuesday = NSLocalizedString("tuesday", comment: "")
+        static let wednesday = NSLocalizedString("wednesday", comment: "")
+        static let thursday = NSLocalizedString("thursday", comment: "")
+        static let friday = NSLocalizedString("friday", comment: "")
+        static let saturday = NSLocalizedString("saturday", comment: "")
+        static let sunday = NSLocalizedString("sunday", comment: "")
+        static let mondayShort = NSLocalizedString("monday.short", comment: "")
+        static let tuesdayShort = NSLocalizedString("tuesday.short", comment: "")
+        static let wednesdayShort = NSLocalizedString("wednesday.short", comment: "")
+        static let thursdayShort = NSLocalizedString("thursday.short", comment: "")
+        static let fridayShort = NSLocalizedString("friday.short", comment: "")
+        static let saturdayShort = NSLocalizedString("saturday.short", comment: "")
+        static let sundayShort = NSLocalizedString("sunday.short", comment: "")
+        static let everyDay = NSLocalizedString("everyDay", comment: "")
+        static let unknownMessage = NSLocalizedString("unknown", comment: "")
     }
 }

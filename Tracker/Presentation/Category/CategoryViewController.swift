@@ -13,7 +13,7 @@ final class CategoryViewController: UIViewController {
     
     weak var delegate: CategoryViewControllerDelegate?
     
-    private lazy var categoryView = CategoryView()
+    private lazy var categoryView = CategoryView(delegate: self)
     private lazy var viewModel = CategoryViewModel()
     private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
     
@@ -36,12 +36,11 @@ final class CategoryViewController: UIViewController {
     override func loadView() {
         super.loadView()
         view = categoryView
-        title = "Категория"
+        title = Constants.pageTitle
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupButtons()
         setupTableView()
         setupBindings()
         getAllCategories()
@@ -55,7 +54,7 @@ extension CategoryViewController {
     private func setupBindings() {
         viewModel.onCategoriesChanged = { [weak self] categories in
             guard let self else { return }
-            self.categoryView.tableView.reloadData()
+            self.categoryView.reloadTableView()
             self.showPlaceHolder()
         }
         
@@ -77,38 +76,10 @@ extension CategoryViewController {
         categoryView.showPlaceHolder(isVisible: viewModel.numberOfCategories() != 0)
     }
     
-    // MARK: - setupButtons
-    
-    private func setupButtons() {
-        categoryView.createButton.addTarget(self, action: #selector(createButtonTapAction), for: .touchUpInside)
-    }
-    
     // MARK: - setupTableView
     
     private func setupTableView() {
-        categoryView.tableView.delegate = self
-        categoryView.tableView.dataSource = self
-        
-        categoryView.tableView.register(
-            CategoryTableViewCell.self,
-            forCellReuseIdentifier: CategoryTableViewCell.identifier
-        )
-        
-        categoryView.tableView.separatorStyle = viewModel.numberOfCategories() == 1
-            ? .none
-            : .singleLine
-    }
-    
-    // MARK: - createButtonTapAction
-    
-    @objc private func createButtonTapAction() {
-        let createCategoryVC = CreateCategoryViewController(
-            mode: .create,
-            delegate: self,
-            editingCategory: nil
-        )
-        let navigationController = UINavigationController(rootViewController: createCategoryVC)
-        present(navigationController, animated: true)
+        categoryView.setupTableView(source: self)
     }
     
     // MARK: - editCategory
@@ -128,9 +99,9 @@ extension CategoryViewController {
     private func deleteCategory(_ category: TrackerCategory) {
         let alert = AlertModel(
             title: nil,
-            message: "Эта категория точно не нужна?",
-            buttonText: "Удалить",
-            cancelButtonText: "Отменить"
+            message: Constants.alertMessage,
+            buttonText: Constants.deleteMessage,
+            cancelButtonText: Constants.cancelMessage
         ) { [weak self] in
             guard let self else { return }
             self.viewModel.deleteCategory(category)
@@ -140,11 +111,30 @@ extension CategoryViewController {
     }
 }
 
+// MARK: - CategoryViewDelegate
+
+extension CategoryViewController: CategoryViewDelegate {
+    func tapCreateButton() {
+        let createCategoryVC = CreateCategoryViewController(
+            mode: .create,
+            delegate: self,
+            editingCategory: nil
+        )
+        let navigationController = UINavigationController(rootViewController: createCategoryVC)
+        present(navigationController, animated: true)
+    }
+}
+
+// MARK: - UITableViewDelegate
+
 extension CategoryViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1 {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: tableView.bounds.width)
-        }
+    func tableView(
+        _ tableView: UITableView,
+        willDisplay cell: UITableViewCell,
+        forRowAt indexPath: IndexPath
+    ) {
+        let cellCount = tableView.numberOfRows(inSection: indexPath.section)
+        cell.setCustomStyle(indexPath: indexPath, cellCount: cellCount)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -159,12 +149,11 @@ extension CategoryViewController: UITableViewDelegate {
         
         let currentCell = tableView.cellForRow(at: indexPath)
         currentCell?.accessoryType = .checkmark
-        tableView.deselectRow(at: indexPath, animated: true)
         viewModel.selectCategoryBy(indexPath: indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        return Constants.tableViewHeightForRowAt
     }
     
     func tableView(
@@ -176,11 +165,11 @@ extension CategoryViewController: UITableViewDelegate {
         
         return UIContextMenuConfiguration(actionProvider:  { _ in
             UIMenu(children: [
-                UIAction(title: "Редактировать") { [weak self] _ in
+                UIAction(title: Constants.editMessage) { [weak self] _ in
                     guard let self else { return }
                     self.editCategory(category)
                 },
-                UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+                UIAction(title: Constants.deleteMessage, attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
                     self.deleteCategory(category)
                 }
@@ -198,11 +187,11 @@ extension CategoryViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
-            withIdentifier: CategoryTableViewCell.identifier,
+            withIdentifier: MainTableViewCell.identifier,
             for: indexPath
         )
         
-        guard let categoryCell = cell as? CategoryTableViewCell else {
+        guard let categoryCell = cell as? MainTableViewCell else {
             return UITableViewCell()
         }
         
@@ -214,7 +203,6 @@ extension CategoryViewController: UITableViewDataSource {
         }
         
         categoryCell.setupCell(title: category.title, isSelected: isSelected)
-        categoryView.tableView.reloadRows(at: [indexPath], with: .automatic)
         
         return categoryCell
     }
@@ -225,7 +213,20 @@ extension CategoryViewController: UITableViewDataSource {
 extension CategoryViewController: CreateCategoryViewControllerDelegate {
     func acceptChanges() {
         getAllCategories()
-        dismiss(animated: true)
+    }
+}
+
+// MARK: - Constants
+
+private extension CategoryViewController {
+    enum Constants {
+        static let pageTitle = NSLocalizedString("category", comment: "")
+        static let cancelMessage = NSLocalizedString("cancel", comment: "")
+        static let deleteMessage = NSLocalizedString("delete", comment: "")
+        static let editMessage = NSLocalizedString("edit", comment: "")
+        static let alertMessage = NSLocalizedString("category.screen.alertMessage", comment: "")
+        
+        static let tableViewHeightForRowAt: CGFloat = 75
     }
 }
 

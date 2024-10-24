@@ -8,6 +8,7 @@
     <entity name="TrackerCoreData" representedClassName="TrackerCoreData" syncable="YES" codeGenerationType="class">
         <attribute name="colorHEX" attributeType="String" valueTransformerName="DaysValueTransformer"/>
         <attribute name="emoji" attributeType="String"/>
+        <attribute name="isPinned" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="schedule" optional="YES" attributeType="Transformable" valueTransformerName="DaysValueTransformer" customClassName="NSArray"/>
         <attribute name="trackerId" attributeType="UUID" usesScalarValueType="NO"/>

@@ -8,7 +8,9 @@
 import UIKit
 
 final class NewTrackerViewController: UIViewController {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     weak var delegate: NewTrackerViewControllerDelegate?
     
     private enum NewTrackerParam: Int {
@@ -17,18 +19,26 @@ final class NewTrackerViewController: UIViewController {
         
         var description: String {
             switch self {
-            case .category: return "Категория"
-            case .schedule: return "Расписание"
+            case .category: return Constants.categoryTitle
+            case .schedule: return Constants.scheduleTitle
             }
         }
     }
     
     private var trackerType: TrackerType
-    private lazy var newTrackerView = NewTrackerView()
+    private lazy var newTrackerView = NewTrackerView(delegate: self)
     
     private var indexPathCell: [NewTrackerParam: IndexPath] = [:]
     
-    private let collectionViewParams = UICollectionView.GeometricParams(cellCount: 6, leftInset: 18, rightInset: 18, topInset: 24, bottomInset: 24, height: 52, cellSpacing: 5)
+    private let collectionViewParams = UICollectionView.GeometricParams(
+        cellCount: 6,
+        leftInset: 18,
+        rightInset: 18,
+        topInset: 24,
+        bottomInset: 24,
+        height: 52,
+        cellSpacing: 5
+    )
     
     private var selectedItems: [Int: IndexPath] = [:]
     
@@ -37,29 +47,48 @@ final class NewTrackerViewController: UIViewController {
             checkDataValidation()
         }
     }
-
+    
     private var category: TrackerCategory? {
         didSet {
             checkDataValidation()
         }
     }
     
-    // MARK: INIT
+    private var isEditMode = false
+    
+    // MARK: - Init
+    
     init(trackerType: TrackerType, delegate: NewTrackerViewControllerDelegate) {
         self.trackerType = trackerType
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
     
+    init(
+        trackerType: TrackerType,
+        delegate: NewTrackerViewControllerDelegate,
+        trackerData: Tracker,
+        category: TrackerCategory,
+        daysCount: Int
+    ) {
+        self.trackerType = trackerType
+        self.delegate = delegate
+        super.init(nibName: nil, bundle: nil)
+        
+        isEditMode = true
+        setDataToEdit(trackerData: trackerData, category: category, daysCount: daysCount)
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override func loadView() {
         super.loadView()
         view = newTrackerView
-        title = trackerType.rawValue
+        title = trackerType.title
     }
     
     override func viewDidLoad() {
@@ -67,7 +96,6 @@ final class NewTrackerViewController: UIViewController {
         setupCollectionView()
         setupTextField()
         setupTableView()
-        setupButtons()
         addTapGestureToHideKeyboard()
         
         checkDataValidation()
@@ -75,7 +103,9 @@ final class NewTrackerViewController: UIViewController {
 }
 
 extension NewTrackerViewController {
-    // MARK: CollectionViewCellTypes
+    
+    // MARK: - CollectionViewCellTypes
+    
     private enum CollectionViewCellTypes: Int, CaseIterable {
         case emoji = 0
         case color = 1
@@ -94,55 +124,63 @@ extension NewTrackerViewController {
         static func getTitleSection(_ number: Int) -> String {
             switch number {
             case self.emoji.rawValue:
-                return "Emoji"
+                return Constants.emoji
             case self.color.rawValue:
-                return "Цвет"
+                return Constants.color
             default:
-                return "Unknown"
+                return Constants.unknown
             }
         }
     }
     
-    // MARK: setupTextField
+    // MARK: - setupTextField
+    
     func setupTextField() {
-        newTrackerView.trackerNameTextField.delegate = self
+        newTrackerView.setupTextField(source: self)
     }
     
-    // MARK: setupTableView
+    // MARK: - setupTableView
+    
     func setupTableView() {
-        newTrackerView.tableView.delegate = self
-        newTrackerView.tableView.dataSource = self
-        newTrackerView.tableView.register(
-            NewTrackerTableViewCell.self,
-            forCellReuseIdentifier: NewTrackerTableViewCell.identifier
-        )
-        
-        newTrackerView.tableView.separatorStyle = trackerType.paramsCellsCount == 1
-            ? .none
-            : .singleLine
+        newTrackerView.setupTableView(source: self)
         newTrackerView.setHeightTableView(cellsCount: CGFloat(trackerType.paramsCellsCount))
     }
     
-    // MARK: setupCollectionView
+    // MARK: - setupCollectionView
+    
     func setupCollectionView() {
-        newTrackerView.collectionView.dataSource = self
-        newTrackerView.collectionView.delegate = self
-        
-        newTrackerView.collectionView.register(
-            SupplementaryView.self,
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: SupplementaryView.identifier
+        newTrackerView.setupCollectionView(source: self)
+    }
+    
+    // MARK: - setDataToEdit
+    
+    func setDataToEdit(trackerData: Tracker, category: TrackerCategory, daysCount: Int) {
+        data = Tracker.NewTrackerData(
+            id: trackerData.id,
+            name: trackerData.name,
+            color: trackerData.color,
+            emoji: trackerData.emoji,
+            schedule: trackerData.schedule,
+            isPinned: trackerData.isPinned
         )
+        newTrackerView.setupDaysCount(daysCount)
+        newTrackerView.setTrackerName(trackerName: data.name)
+        self.category = category
         
-        newTrackerView.collectionView.register(
-            EmojiCollectionViewCell.self,
-            forCellWithReuseIdentifier: EmojiCollectionViewCell.identifier
+        let emojiCellIndexPath = IndexPath(
+            row: AppEmojis.firstIndex(of: trackerData.emoji) ?? 0,
+            section: CollectionViewCellTypes.emoji.rawValue
         )
+        selectedItems[CollectionViewCellTypes.emoji.rawValue] = emojiCellIndexPath
+
+        let colorCellIndexPath = IndexPath(
+            row: AppColorSettings.palette.firstIndex(of: trackerData.color) ?? 0,
+            section: CollectionViewCellTypes.color.rawValue
+        )
+        selectedItems[CollectionViewCellTypes.color.rawValue] = colorCellIndexPath
         
-        newTrackerView.collectionView.register(
-            ColorCollectionViewCell.self,
-            forCellWithReuseIdentifier: ColorCollectionViewCell.identifier
-        )
+        title = trackerType.title
+        newTrackerView.setCreateButtonTitleTo(Constants.editTrackerTitle)
     }
     
     private func checkDataValidation() {
@@ -168,27 +206,20 @@ extension NewTrackerViewController {
         
         newTrackerView.doCreateButtonActive(true)
     }
-    
-    // MARK: setupButtons
-    private func setupButtons() {
-        newTrackerView.cancelButton.addTarget(self, action: #selector(cancelTapAction), for: .touchUpInside)
-        newTrackerView.createButton.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
-        
-        newTrackerView.trackerNameTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
+}
+
+// MARK: - NewTrackerViewDelegate
+
+extension NewTrackerViewController: NewTrackerViewDelegate {
+    func setTrackerNameTo(_ newTrackerName: String) {
+        data = data.update(newName: newTrackerName)
     }
     
-    @objc private func cancelTapAction() {
+    func didTapCancelButton() {
         dismiss(animated: true)
     }
-    
-    @objc private func editingChanged(_ sender: UITextField) {
-        guard let text = sender.text else { return }
-        data = data.update(newName: text)
-        let errorIsHidden = text.count < AppConstants.nameLengthRestriction
-        newTrackerView.showTrackerNameError(errorIsHidden)
-    }
 
-    @objc private func didTapCreateButton() {
+    func didTapCreateButton() {
         guard
             let category = category?.title,
             let name = data.name,
@@ -200,18 +231,27 @@ extension NewTrackerViewController {
         }
 
         let newTracker = Tracker(
-            id: UUID(),
+            id: data.id ?? UUID(),
             name: name,
             color: color,
             emoji: emoji,
-            schedule: data.schedule
+            schedule: data.schedule,
+            isPinned: data.isPinned ?? false
         )
-        delegate?.didTapConfirmButton(categoryTitle: category, trackerToAdd: newTracker)
+        
+        delegate?
+            .didTapConfirmButton(
+                categoryTitle: category,
+                trackerToAdd: newTracker,
+                isEditMode: isEditMode
+            )
+        
         dismiss(animated: true)
     }
 }
 
-// MARK: UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource
+
 extension NewTrackerViewController: UICollectionViewDataSource {
     func numberOfSections(
         in collectionView: UICollectionView
@@ -226,7 +266,8 @@ extension NewTrackerViewController: UICollectionViewDataSource {
         CollectionViewCellTypes.getNumberOfItemsInSection(section)
     }
     
-    // MARK: SETUP Collection CELLS
+    // MARK: - Setup Collection cells
+    
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -237,11 +278,11 @@ extension NewTrackerViewController: UICollectionViewDataSource {
                 withReuseIdentifier: EmojiCollectionViewCell.identifier,
                 for: indexPath
             ) as? EmojiCollectionViewCell {
+                emojiCell.setupCell(with: AppEmojis[indexPath.item])
+                
                 if selectedItems[indexPath.section] == indexPath {
                     emojiCell.select()
                 }
-                
-                emojiCell.setupCell(with: AppEmojis[indexPath.item])
                 
                 return emojiCell
             }
@@ -250,11 +291,11 @@ extension NewTrackerViewController: UICollectionViewDataSource {
                 withReuseIdentifier: ColorCollectionViewCell.identifier,
                 for: indexPath
             ) as? ColorCollectionViewCell {
+                colorCell.setupCell(with: AppColorSettings.palette[indexPath.item])
+                
                 if selectedItems[indexPath.section] == indexPath {
                     colorCell.select()
                 }
-                
-                colorCell.setupCell(with: AppColorSettings.palette[indexPath.item])
                 
                 return colorCell
             }
@@ -264,7 +305,8 @@ extension NewTrackerViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: UICollectionViewDelegateFlowLayout
+// MARK: - UICollectionViewDelegateFlowLayout
+
 extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
@@ -306,10 +348,11 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAt section: Int
     ) -> CGFloat {
-        0
+        Constants.minimumLineSpacingForSection
     }
     
-    // MARK: collectionView Header
+    // MARK: - collectionView Header
+    
     func collectionView(
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,
@@ -337,11 +380,12 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         referenceSizeForHeaderInSection section: Int
     ) -> CGSize {
-        CGSize(width: collectionView.bounds.width, height: 18)
+        CGSize(width: collectionView.bounds.width, height: Constants.referenceSizeForHeaderInSection)
     }
 }
 
-// MARK: UICollectionViewDelegate
+// MARK: - UICollectionViewDelegate
+
 extension NewTrackerViewController: UICollectionViewDelegate {
     func collectionView(
         _ collectionView: UICollectionView,
@@ -372,7 +416,8 @@ extension NewTrackerViewController: UICollectionViewDelegate {
     }
 }
 
-// MARK: UITextFieldDelegate
+// MARK: - UITextFieldDelegate
+
 extension NewTrackerViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.endEditing(true)
@@ -381,13 +426,15 @@ extension NewTrackerViewController: UITextFieldDelegate {
     }
 }
 
-// MARK: UITableViewDataSource
+// MARK: - UITableViewDataSource
+
 extension NewTrackerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         trackerType.paramsCellsCount
     }
     
-    // MARK: SETUP TableView CELLS
+    // MARK: - Setup TableView cells
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
             withIdentifier: NewTrackerTableViewCell.identifier,
@@ -415,18 +462,22 @@ extension NewTrackerViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        newTrackerView.tableView.reloadRows(at: [indexPath], with: .automatic)
+        newTrackerView.reloadTableViewRows(at: [indexPath])
         
         return newTrackerCell
     }
 }
 
-// MARK: UITableViewDataSource
+// MARK: - UITableViewDelegate
+
 extension NewTrackerViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1 {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: tableView.bounds.width)
-        }
+    func tableView(
+        _ tableView: UITableView,
+        willDisplay cell: UITableViewCell,
+        forRowAt indexPath: IndexPath
+    ) {
+        let cellCount = tableView.numberOfRows(inSection: indexPath.section)
+        cell.setCustomStyle(indexPath: indexPath, cellCount: cellCount)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -454,30 +505,32 @@ extension NewTrackerViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        return Constants.tableViewHeightForRowAt
     }
 }
 
-// MARK: ScheduleViewControllerDelegate
+// MARK: - ScheduleViewControllerDelegate
+
 extension NewTrackerViewController: ScheduleViewControllerDelegate {
     func didConfirmSchedule(_ schedule: [WeekDay]) {
         data = data.update(newSchedule: schedule)
         let indexPathCell = indexPathCell.filter{ $0.key == NewTrackerParam.schedule }
         
         guard let indexPath = indexPathCell.values.first else { return }
-        newTrackerView.tableView.reloadRows(at: [indexPath], with: .automatic)
+        newTrackerView.reloadTableViewRows(at: [indexPath])
         dismiss(animated: true)
     }
 }
 
-// MARK: CategoryViewControllerDelegate
+// MARK: - CategoryViewControllerDelegate
+
 extension NewTrackerViewController: CategoryViewControllerDelegate {
     func didSelectCategory(_ selectedCategory: TrackerCategory) {
         category = selectedCategory
         let indexPathCell = indexPathCell.filter{ $0.key == NewTrackerParam.category }
         
         guard let indexPath = indexPathCell.values.first else { return }
-        newTrackerView.tableView.reloadRows(at: [indexPath], with: .automatic)
+        newTrackerView.reloadTableViewRows(at: [indexPath])
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
             guard let self else { return }
             self.dismiss(animated: true)
@@ -485,7 +538,26 @@ extension NewTrackerViewController: CategoryViewControllerDelegate {
     }
 }
 
-// MARK: SHOW PREVIEW
+// MARK: - Constants
+
+private extension NewTrackerViewController {
+    enum Constants {
+        static let categoryTitle = NSLocalizedString("category", comment: "")
+        static let scheduleTitle = NSLocalizedString("schedule", comment: "")
+        static let emoji = "Emoji"
+        static let color = NSLocalizedString("color", comment: "")
+        static let unknown = NSLocalizedString("unknown", comment: "")
+        
+        static let editTrackerTitle = NSLocalizedString("save", comment: "")
+        
+        static let tableViewHeightForRowAt: CGFloat = 75
+        static let referenceSizeForHeaderInSection: CGFloat = 18
+        static let minimumLineSpacingForSection: CGFloat = 0
+    }
+}
+
+// MARK: - Preview
+
 #if DEBUG
 
 @available(iOS 17, *)

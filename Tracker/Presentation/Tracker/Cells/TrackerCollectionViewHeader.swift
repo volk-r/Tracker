@@ -13,7 +13,7 @@ final class TrackerCollectionViewHeader: UICollectionReusableView {
     
     static let identifier = "TrackerCollectionViewHeader"
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         return label
@@ -33,6 +33,12 @@ final class TrackerCollectionViewHeader: UICollectionReusableView {
 
 extension TrackerCollectionViewHeader {
     
+    // MARK: - setupHeaderCell
+    
+    func setupHeaderCell(with label: String) {
+        titleLabel.text = label
+    }
+    
     // MARK: - setupLayout
     
     private func setupLayout() {
@@ -44,11 +50,5 @@ extension TrackerCollectionViewHeader {
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
-    }
-    
-    // MARK: - setupHeaderCell
-    
-    func setupHeaderCell(with label: String) {
-        titleLabel.text = label
     }
 }

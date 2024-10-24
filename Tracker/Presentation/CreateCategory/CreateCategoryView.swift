@@ -11,19 +11,22 @@ final class CreateCategoryView: UIView {
     
     // MARK: - Properties
     
-    lazy var categoryNameTextField: UITextField = {
+    weak var delegate: CreateCategoryViewDelegate?
+    
+    private lazy var categoryNameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название категории"
-        textField.backgroundColor = AppColorSettings.chosenItemBackgroundColor.withAlphaComponent(0.3)
+        textField.placeholder = Constants.textFieldPlaceholder
+        textField.backgroundColor = AppColorSettings.chosenItemBackgroundColor
         textField.layer.cornerRadius = 16
         textField.clearButtonMode = .whileEditing
         textField.setLeftPaddingPoints(16)
         return textField
     }()
     
-    lazy var doneButton: UIButton = {
+    private lazy var doneButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(Constants.doneMessage, for: .normal)
+        button.setTitleColor(AppColorSettings.backgroundColor, for: .normal)
         button.backgroundColor = AppColorSettings.notActiveFontColor
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.layer.cornerRadius = 16
@@ -35,7 +38,7 @@ final class CreateCategoryView: UIView {
     private lazy var errorLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .regular)
-        label.text = "Ограничение \(AppConstants.nameLengthRestriction) символов"
+        label.text = String(format: Constants.validationTitleMessage, AppConstants.nameLengthRestriction)
         label.textColor = AppColorSettings.redColor
         label.isHidden = true
         return label
@@ -43,10 +46,12 @@ final class CreateCategoryView: UIView {
     
     // MARK: - Lifecycle
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .white
+    init(delegate: CreateCategoryViewDelegate) {
+        super.init(frame: .zero)
+        self.delegate = delegate
+        backgroundColor = AppColorSettings.backgroundColor
         setupLayout()
+        setupButtons()
     }
     
     required init?(coder: NSCoder) {
@@ -54,9 +59,43 @@ final class CreateCategoryView: UIView {
     }
 }
 
-// MARK: - Layout
-
 extension CreateCategoryView {
+    
+    // MARK: - setupTextField
+    
+    func setupTextField(source: CreateCategoryViewController, editingCategory: String?) {
+        categoryNameTextField.delegate = source
+        categoryNameTextField.text = editingCategory
+    }
+    
+    // MARK: - getCategoryName
+    
+    func getCategoryName() -> String? {
+        categoryNameTextField.text
+    }
+    
+    // MARK: - setupButtons
+    
+    private func setupButtons() {
+        doneButton.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
+        categoryNameTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
+    }
+    
+    @objc private func didTapDoneButton() {
+        delegate?.didTapDoneButton()
+    }
+    
+    // MARK: - editingChanged
+    
+    @objc private func editingChanged(_ sender: UITextField) {
+        guard let text = sender.text else { return }
+        let errorIsHidden = text.count < AppConstants.nameLengthRestriction
+        showTrackerNameError(errorIsHidden)
+        let isDoneButtonHidden = !text.isEmpty && errorIsHidden
+        doDoneButtonActive(isDoneButtonHidden)
+    }
+    
+    // MARK: - Layout
     
     private func setupLayout() {
         addSubviews(
@@ -82,14 +121,24 @@ extension CreateCategoryView {
         ])
     }
     
-    func showTrackerNameError(_ show: Bool) {
+    private func showTrackerNameError(_ show: Bool) {
         errorLabel.isHidden = show
     }
     
-    func doDoneButtonActive(_ isEnabled: Bool) {
+    private func doDoneButtonActive(_ isEnabled: Bool) {
         doneButton.isEnabled = isEnabled
         doneButton.backgroundColor = isEnabled
             ? AppColorSettings.fontColor
             : AppColorSettings.notActiveFontColor
+    }
+}
+
+// MARK: - Constants
+
+private extension CreateCategoryView {
+    enum Constants {
+        static let textFieldPlaceholder = NSLocalizedString("createCategory.screen.textFieldPlaceholder", comment: "")
+        static let validationTitleMessage = NSLocalizedString("validation.title.message", comment: "")
+        static let doneMessage = NSLocalizedString("done", comment: "")
     }
 }

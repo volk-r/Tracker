@@ -8,7 +8,9 @@
 import UIKit
 
 final class ColorCollectionViewCell: UICollectionViewCell {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     static let identifier = "ColorCollectionViewCell"
     
     private let colorView: UIView = {
@@ -18,7 +20,8 @@ final class ColorCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    // MARK: Lifecycle
+    // MARK: - Lifecycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -30,7 +33,8 @@ final class ColorCollectionViewCell: UICollectionViewCell {
     }
 }
 
-// MARK: FUNCTIONS
+// MARK: - Layout
+
 private extension ColorCollectionViewCell {
     func setupView() {
         contentView.layer.cornerRadius = 8
@@ -51,11 +55,15 @@ private extension ColorCollectionViewCell {
 }
 
 extension ColorCollectionViewCell {
-    // MARK: setupCell
+    
+    // MARK: - setupCell
+    
     func setupCell(with color: UIColor) {
         colorView.backgroundColor = color
     }
 }
+
+// MARK: - ColorCollectionViewCell
 
 extension ColorCollectionViewCell: CellSelectProtocol {
     func select() {

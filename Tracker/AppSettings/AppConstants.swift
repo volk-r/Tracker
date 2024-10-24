@@ -9,4 +9,5 @@ import Foundation
 
 enum AppConstants {
     static let nameLengthRestriction: Int = 38
+    static let AppMetricaKey = "7febd020-3841-4349-b632-17d4e2cd534b"
 }

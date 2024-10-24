@@ -11,20 +11,22 @@ final class CategoryView: UIView {
     
     // MARK: - Properties
     
-    lazy var tableView: UITableView = {
+    weak var delegate: CategoryViewDelegate?
+    
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
         tableView.isScrollEnabled = false
         tableView.layer.masksToBounds = true
-        tableView.layer.cornerRadius = 10
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        tableView.separatorColor = AppColorSettings.notActiveFontColor
         tableView.isEmptyHeaderHidden = true
         return tableView
     }()
     
-    lazy var createButton: UIButton = {
+    private lazy var createButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(Constants.addCategoryMessage, for: .normal)
+        button.setTitleColor(AppColorSettings.backgroundColor, for: .normal)
         button.backgroundColor = AppColorSettings.fontColor
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.layer.cornerRadius = 16
@@ -32,19 +34,16 @@ final class CategoryView: UIView {
         return button
     }()
     
-    private lazy var placeHolderView: UIView = DummyView(
-        model: DummyModel(
-            description: "Привычки и события можно\n объединить по смыслу",
-            imageName: AppImages.trackerEmptyPage
-        )
-    )
+    private lazy var placeHolderView: UIView = DummyView(model: DummyPlaceHolder.categoryEmptyPage.model)
     
     // MARK: - Lifecycle
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .white
+    init(delegate: CategoryViewDelegate) {
+        super.init(frame: .zero)
+        self.delegate = delegate
+        backgroundColor = AppColorSettings.backgroundColor
         setupLayout()
+        setupButtons()
     }
     
     required init?(coder: NSCoder) {
@@ -52,13 +51,43 @@ final class CategoryView: UIView {
     }
 }
 
-// MARK: - Layout
-
 extension CategoryView {
+    
+    // MARK: - setupTableView
+    
+    func setupTableView(source: CategoryViewController) {
+        tableView.delegate = source
+        tableView.dataSource = source
+        
+        tableView.register(
+            MainTableViewCell.self,
+            forCellReuseIdentifier: MainTableViewCell.identifier
+        )
+    }
+    
+    func reloadTableView() {
+        tableView.reloadData()
+    }
+    
+    // MARK: - showPlaceHolder
     
     func showPlaceHolder(isVisible: Bool) {
         placeHolderView.isHidden = isVisible
     }
+    
+    // MARK: - setupButtons
+    
+    private func setupButtons() {
+        createButton.addTarget(self, action: #selector(createButtonTapAction), for: .touchUpInside)
+    }
+    
+    // MARK: - createButtonTapAction
+    
+    @objc private func createButtonTapAction() {
+        delegate?.tapCreateButton()
+    }
+    
+    // MARK: - Layout
     
     private func setupLayout() {
         addSubviews(
@@ -81,5 +110,13 @@ extension CategoryView {
             createButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
             createButton.heightAnchor.constraint(equalToConstant: 60),
         ])
+    }
+}
+
+// MARK: - Constants
+
+private extension CategoryView {
+    enum Constants {
+        static let addCategoryMessage = NSLocalizedString("category.screen.addCategory", comment: "")
     }
 }
