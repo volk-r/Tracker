@@ -123,18 +123,6 @@ extension TrackerViewController {
         completedTrackers = Set(trackerRecordStore.fetchAllRecords())
     }
     
-    // MARK: - setupPlaceHolder
-    
-    private func setupPlaceHolder() {
-        var noTrackers: Bool = categories.isEmpty
-        
-        for category in categories {
-            noTrackers = category.trackerList.isEmpty
-        }
-        
-        trackerView.setupPlaceHolder(isEmptyCategories: noTrackers)
-    }
-    
     // MARK: - setupDatePicker
     
     private func setupDatePicker() {
@@ -300,8 +288,19 @@ extension TrackerViewController {
     // MARK: - showPlaceHolder
     
     private func showPlaceHolder() {
-        setupPlaceHolder()
+        let isFilterButtonHidden = filteredCategories.isEmpty && filter == nil
+        trackerView.filterButton(isHidden: isFilterButtonHidden)
+        
+        setupPlaceHolder(isFilterButtonHidden: isFilterButtonHidden)
+
         trackerView.showPlaceHolder(isVisible: !filteredCategories.isEmpty)
+    }
+    
+    // MARK: - setupPlaceHolder
+    
+    private func setupPlaceHolder(isFilterButtonHidden: Bool) {
+        let isEmptyTrackers = isFilterButtonHidden && trackerView.getSearchText() == ""
+        trackerView.setupPlaceHolder(isEmptyTrackers: isEmptyTrackers)
     }
     
     // MARK: - showOnboarding

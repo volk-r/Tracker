@@ -90,13 +90,13 @@ extension TrackerView {
         placeHolderView.isHidden = isVisible
     }
     
-    func setupPlaceHolder(isEmptyCategories: Bool) {
-        placeHolderView.setupNewModel(model: isEmptyCategories
+    func setupPlaceHolder(isEmptyTrackers: Bool) {
+        placeHolderView
+            .setupNewModel(
+                model: isEmptyTrackers
                                       ? DummyPlaceHolder.trackerEmptyPage.model
                                       : DummyPlaceHolder.searchEmptyPage.model
         )
-        
-        filterButton(isHidden: isEmptyCategories)
     }
     
     // MARK: - Filter Button actions
@@ -122,7 +122,7 @@ extension TrackerView {
         filterCallback?()
     }
     
-    private func filterButton(isHidden: Bool) {
+    func filterButton(isHidden: Bool) {
         filterButton.isHidden = isHidden
     }
     
