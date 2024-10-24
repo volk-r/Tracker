@@ -26,7 +26,7 @@ final class NewTrackerViewController: UIViewController {
     }
     
     private var trackerType: TrackerType
-    private lazy var newTrackerView = NewTrackerView()
+    private lazy var newTrackerView = NewTrackerView(delegate: self)
     
     private var indexPathCell: [NewTrackerParam: IndexPath] = [:]
     
@@ -96,7 +96,6 @@ final class NewTrackerViewController: UIViewController {
         setupCollectionView()
         setupTextField()
         setupTableView()
-        setupButtons()
         addTapGestureToHideKeyboard()
         
         checkDataValidation()
@@ -137,43 +136,20 @@ extension NewTrackerViewController {
     // MARK: - setupTextField
     
     func setupTextField() {
-        newTrackerView.trackerNameTextField.delegate = self
+        newTrackerView.setupTextField(source: self)
     }
     
     // MARK: - setupTableView
     
     func setupTableView() {
-        newTrackerView.tableView.delegate = self
-        newTrackerView.tableView.dataSource = self
-        newTrackerView.tableView.register(
-            NewTrackerTableViewCell.self,
-            forCellReuseIdentifier: NewTrackerTableViewCell.identifier
-        )
-
+        newTrackerView.setupTableView(source: self)
         newTrackerView.setHeightTableView(cellsCount: CGFloat(trackerType.paramsCellsCount))
     }
     
     // MARK: - setupCollectionView
     
     func setupCollectionView() {
-        newTrackerView.collectionView.dataSource = self
-        newTrackerView.collectionView.delegate = self
-        
-        newTrackerView.collectionView.register(
-            SupplementaryView.self,
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: SupplementaryView.identifier
-        )
-        
-        newTrackerView.collectionView.register(
-            EmojiCollectionViewCell.self,
-            forCellWithReuseIdentifier: EmojiCollectionViewCell.identifier
-        )
-        
-        newTrackerView.collectionView.register(
-            ColorCollectionViewCell.self,
-            forCellWithReuseIdentifier: ColorCollectionViewCell.identifier
-        )
+        newTrackerView.setupCollectionView(source: self)
     }
     
     // MARK: - setDataToEdit
@@ -188,7 +164,7 @@ extension NewTrackerViewController {
             isPinned: trackerData.isPinned
         )
         newTrackerView.setupDaysCount(daysCount)
-        newTrackerView.trackerNameTextField.text = data.name
+        newTrackerView.setTrackerName(trackerName: data.name)
         self.category = category
         
         let emojiCellIndexPath = IndexPath(
@@ -204,7 +180,7 @@ extension NewTrackerViewController {
         selectedItems[CollectionViewCellTypes.color.rawValue] = colorCellIndexPath
         
         title = trackerType.title
-        newTrackerView.createButton.setTitle(Constants.editTrackerTitle, for: .normal)
+        newTrackerView.setCreateButtonTitleTo(Constants.editTrackerTitle)
     }
     
     private func checkDataValidation() {
@@ -230,28 +206,20 @@ extension NewTrackerViewController {
         
         newTrackerView.doCreateButtonActive(true)
     }
-    
-    // MARK: - setupButtons
-    
-    private func setupButtons() {
-        newTrackerView.cancelButton.addTarget(self, action: #selector(cancelTapAction), for: .touchUpInside)
-        newTrackerView.createButton.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
-        
-        newTrackerView.trackerNameTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
+}
+
+// MARK: - NewTrackerViewDelegate
+
+extension NewTrackerViewController: NewTrackerViewDelegate {
+    func setTrackerNameTo(_ newTrackerName: String) {
+        data = data.update(newName: newTrackerName)
     }
     
-    @objc private func cancelTapAction() {
+    func didTapCancelButton() {
         dismiss(animated: true)
     }
-    
-    @objc private func editingChanged(_ sender: UITextField) {
-        guard let text = sender.text else { return }
-        data = data.update(newName: text)
-        let errorIsHidden = text.count < AppConstants.nameLengthRestriction
-        newTrackerView.showTrackerNameError(errorIsHidden)
-    }
 
-    @objc private func didTapCreateButton() {
+    func didTapCreateButton() {
         guard
             let category = category?.title,
             let name = data.name,
@@ -494,7 +462,7 @@ extension NewTrackerViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        newTrackerView.tableView.reloadRows(at: [indexPath], with: .automatic)
+        newTrackerView.reloadTableViewRows(at: [indexPath])
         
         return newTrackerCell
     }
@@ -549,7 +517,7 @@ extension NewTrackerViewController: ScheduleViewControllerDelegate {
         let indexPathCell = indexPathCell.filter{ $0.key == NewTrackerParam.schedule }
         
         guard let indexPath = indexPathCell.values.first else { return }
-        newTrackerView.tableView.reloadRows(at: [indexPath], with: .automatic)
+        newTrackerView.reloadTableViewRows(at: [indexPath])
         dismiss(animated: true)
     }
 }
@@ -562,7 +530,7 @@ extension NewTrackerViewController: CategoryViewControllerDelegate {
         let indexPathCell = indexPathCell.filter{ $0.key == NewTrackerParam.category }
         
         guard let indexPath = indexPathCell.values.first else { return }
-        newTrackerView.tableView.reloadRows(at: [indexPath], with: .automatic)
+        newTrackerView.reloadTableViewRows(at: [indexPath])
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
             guard let self else { return }
             self.dismiss(animated: true)

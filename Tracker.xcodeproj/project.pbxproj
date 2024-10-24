@@ -48,6 +48,7 @@
 		3C30EB142CC97D0300B5CC73 /* ScheduleViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C30EB132CC97D0300B5CC73 /* ScheduleViewDelegate.swift */; };
 		3C30EB162CC982B900B5CC73 /* CategoryViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C30EB152CC982B900B5CC73 /* CategoryViewDelegate.swift */; };
 		3C30EB1A2CCAAC7300B5CC73 /* CreateCategoryViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C30EB192CCAAC7300B5CC73 /* CreateCategoryViewDelegate.swift */; };
+		3C30EB1C2CCABB7D00B5CC73 /* NewTrackerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C30EB1B2CCABB7D00B5CC73 /* NewTrackerViewDelegate.swift */; };
 		3C41E8882CC5814E00CADBB7 /* DummyPlaceHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C41E8872CC5814E00CADBB7 /* DummyPlaceHolder.swift */; };
 		3C41E88C2CC6D8BB00CADBB7 /* StatisticCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C41E88B2CC6D8BB00CADBB7 /* StatisticCollectionViewCell.swift */; };
 		3C41E88E2CC6E4C500CADBB7 /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C41E88D2CC6E4C500CADBB7 /* CGPoint+Extensions.swift */; };
@@ -168,6 +169,7 @@
 		3C30EB132CC97D0300B5CC73 /* ScheduleViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewDelegate.swift; sourceTree = "<group>"; };
 		3C30EB152CC982B900B5CC73 /* CategoryViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewDelegate.swift; sourceTree = "<group>"; };
 		3C30EB192CCAAC7300B5CC73 /* CreateCategoryViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCategoryViewDelegate.swift; sourceTree = "<group>"; };
+		3C30EB1B2CCABB7D00B5CC73 /* NewTrackerViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewDelegate.swift; sourceTree = "<group>"; };
 		3C41E8872CC5814E00CADBB7 /* DummyPlaceHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyPlaceHolder.swift; sourceTree = "<group>"; };
 		3C41E88B2CC6D8BB00CADBB7 /* StatisticCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticCollectionViewCell.swift; sourceTree = "<group>"; };
 		3C41E88D2CC6E4C500CADBB7 /* CGPoint+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extensions.swift"; sourceTree = "<group>"; };
@@ -474,6 +476,7 @@
 			children = (
 				3C6289A22C8B83EA003CE842 /* CellSelectProtocol.swift */,
 				3C6289D02C90D1A2003CE842 /* NewTrackerViewControllerDelegate.swift */,
+				3C30EB1B2CCABB7D00B5CC73 /* NewTrackerViewDelegate.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -1025,6 +1028,7 @@
 				3C165B3A2CB117EA00824FD9 /* DummyModel.swift in Sources */,
 				3C30EB0C2CC8331500B5CC73 /* AnalyticItems.swift in Sources */,
 				3C6289A52C8C2FC6003CE842 /* UITextField+Extensions.swift in Sources */,
+				3C30EB1C2CCABB7D00B5CC73 /* NewTrackerViewDelegate.swift in Sources */,
 				3C85FA5A2C9F080F00E4109A /* TrackerStore.swift in Sources */,
 				3C6289C92C8F7227003CE842 /* TrackerCollectionViewCellDelegate.swift in Sources */,
 				3C8722982CC46A0E00205A3A /* FilterViewControllerDelegate.swift in Sources */,
