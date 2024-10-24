@@ -11,15 +11,17 @@ final class TrackerView: UIView {
     
     // MARK: - Properties
     
+    weak var delegate: TrackerViewDelegate?
+    
     var filterCallback: (() -> Void)?
     
-    lazy var searchTextField: UISearchTextField = {
+    private lazy var searchTextField: UISearchTextField = {
         let textField = UISearchTextField()
         textField.placeholder = Constants.searchPlaceholder
         return textField
     }()
     
-    lazy var trackerCollectionView: UICollectionView = {
+    private lazy var trackerCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -45,11 +47,13 @@ final class TrackerView: UIView {
     
     // MARK: - Init
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(delegate: TrackerViewDelegate) {
+        super.init(frame: .zero)
+        self.delegate = delegate
         backgroundColor = AppColorSettings.backgroundColor
         
         setupLayout()
+        setupSearchTextField()
     }
     
     required init?(coder: NSCoder) {
@@ -57,9 +61,30 @@ final class TrackerView: UIView {
     }
 }
 
-// MARK: - Layout
-
 extension TrackerView {
+    
+    // MARK: - setupCollectionView
+    
+    func setupCollectionView(source: TrackerViewController) {
+        trackerCollectionView.dataSource = source
+        trackerCollectionView.delegate = source
+        trackerCollectionView.register(
+            TrackerCollectionViewCell.self,
+            forCellWithReuseIdentifier: TrackerCollectionViewCell.identifier
+        )
+        
+        trackerCollectionView.register(
+            TrackerCollectionViewHeader.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: TrackerCollectionViewHeader.identifier
+        )
+    }
+    
+    func reloadCollection() {
+        trackerCollectionView.reloadData()
+    }
+    
+    // MARK: - PlaceHolder actions
 
     func showPlaceHolder(isVisible: Bool) {
         placeHolderView.isHidden = isVisible
@@ -73,6 +98,8 @@ extension TrackerView {
         
         filterButton(isHidden: isEmptyCategories)
     }
+    
+    // MARK: - Filter Button actions
     
     func isFilersActive(_ isActive: Bool) {
         let titleColor = isActive
@@ -98,6 +125,22 @@ extension TrackerView {
     private func filterButton(isHidden: Bool) {
         filterButton.isHidden = isHidden
     }
+    
+    // MARK: - setupSearchTextField
+    
+    private func setupSearchTextField() {
+        searchTextField.addTarget(self, action: #selector(searchTextChanged), for: .editingChanged)
+    }
+    
+    @objc private func searchTextChanged() {
+        delegate?.searchTextChanged()
+    }
+    
+    func getSearchText() -> String {
+        searchTextField.text ?? ""
+    }
+    
+    // MARK: - Layout
     
     private func setupLayout() {
         addSubviews(

@@ -11,7 +11,7 @@ class TrackerViewController: UIViewController {
     
     // MARK: - Properties
     
-    private lazy var trackerView = TrackerView()
+    private lazy var trackerView = TrackerView(delegate: self)
     private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
     
     private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
@@ -89,7 +89,6 @@ class TrackerViewController: UIViewController {
         setupNavBar()
         setupDatePicker()
         showPlaceHolder()
-        setupSearchTextField()
         addTapGestureToHideKeyboard()
         showOnboarding()
         setupButton()
@@ -122,12 +121,6 @@ extension TrackerViewController {
     
     private func getCompletedTrackers() {
         completedTrackers = Set(trackerRecordStore.fetchAllRecords())
-    }
-    
-    // MARK: - setupSearchTextField
-    
-    private func setupSearchTextField() {
-        trackerView.searchTextField.addTarget(self, action: #selector(searchTextChanged), for: .editingChanged)
     }
     
     // MARK: - setupPlaceHolder
@@ -178,19 +171,7 @@ extension TrackerViewController {
     // MARK: - setupCollectionView
     
     private func setupCollectionView() {
-        // TODO: move to view
-        trackerView.trackerCollectionView.dataSource = self
-        trackerView.trackerCollectionView.delegate = self
-        trackerView.trackerCollectionView.register(
-            TrackerCollectionViewCell.self,
-            forCellWithReuseIdentifier: TrackerCollectionViewCell.identifier
-        )
-        
-        trackerView.trackerCollectionView.register(
-            TrackerCollectionViewHeader.self,
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: TrackerCollectionViewHeader.identifier
-        )
+        trackerView.setupCollectionView(source: self)
     }
     
     // MARK: - setupButtons
@@ -211,10 +192,6 @@ extension TrackerViewController {
         analyticService.trackClick(screen: .main, item: .tapAddTrack)
         let createTrackerVC = CreateTrackerViewController(delegate: self)
         present(UINavigationController(rootViewController: createTrackerVC), animated: true)
-    }
-    
-    @objc private func searchTextChanged() {
-        updateFilteredCategories()
     }
     
     private func updateFilteredCategories() {
@@ -239,7 +216,7 @@ extension TrackerViewController {
             }
         }
         
-        trackerView.trackerCollectionView.reloadData()
+        trackerView.reloadCollection()
     }
     
     private func filterTodayTrackers(additionalFilter: ((UUID) -> Bool)) {
@@ -252,7 +229,7 @@ extension TrackerViewController {
             return filteredCategories = result
         }
         
-        let filterText = (trackerView.searchTextField.text ?? "").lowercased()
+        let filterText = trackerView.getSearchText().lowercased()
         
         for category in categories {
             let filteredTrackers = category.trackerList.filter { tracker in
@@ -336,6 +313,14 @@ extension TrackerViewController {
         let onboardingVC = OnboardingViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         onboardingVC.modalPresentationStyle = .fullScreen
         present(onboardingVC, animated: true)
+    }
+}
+
+// MARK: - TrackerViewDelegate
+
+extension TrackerViewController: TrackerViewDelegate {
+    func searchTextChanged() {
+        updateFilteredCategories()
     }
 }
 
@@ -456,7 +441,7 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
         // dynamic sizing instead of hard code like as
         // CGSize(width: collectionView.bounds.width, height: 18)
         let headerView = TrackerCollectionViewHeader(frame: .zero)
-        headerView.titleLabel.text = filteredCategories[section].title
+        headerView.setupHeaderCell(with: filteredCategories[section].title)
         return headerView
             .systemLayoutSizeFitting(
                 CGSize(
