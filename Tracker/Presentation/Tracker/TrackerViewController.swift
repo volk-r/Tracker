@@ -178,6 +178,7 @@ extension TrackerViewController {
     // MARK: - setupCollectionView
     
     private func setupCollectionView() {
+        // TODO: move to view
         trackerView.trackerCollectionView.dataSource = self
         trackerView.trackerCollectionView.delegate = self
         trackerView.trackerCollectionView.register(

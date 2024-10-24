@@ -11,7 +11,9 @@ final class CreateCategoryView: UIView {
     
     // MARK: - Properties
     
-    lazy var categoryNameTextField: UITextField = {
+    weak var delegate: CreateCategoryViewDelegate?
+    
+    private lazy var categoryNameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = Constants.textFieldPlaceholder
         textField.backgroundColor = AppColorSettings.chosenItemBackgroundColor
@@ -21,7 +23,7 @@ final class CreateCategoryView: UIView {
         return textField
     }()
     
-    lazy var doneButton: UIButton = {
+    private lazy var doneButton: UIButton = {
         let button = UIButton()
         button.setTitle(Constants.doneMessage, for: .normal)
         button.setTitleColor(AppColorSettings.backgroundColor, for: .normal)
@@ -44,10 +46,12 @@ final class CreateCategoryView: UIView {
     
     // MARK: - Lifecycle
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(delegate: CreateCategoryViewDelegate) {
+        super.init(frame: .zero)
+        self.delegate = delegate
         backgroundColor = AppColorSettings.backgroundColor
         setupLayout()
+        setupButtons()
     }
     
     required init?(coder: NSCoder) {
@@ -55,9 +59,43 @@ final class CreateCategoryView: UIView {
     }
 }
 
-// MARK: - Layout
-
 extension CreateCategoryView {
+    
+    // MARK: - setupTextField
+    
+    func setupTextField(source: CreateCategoryViewController, editingCategory: String?) {
+        categoryNameTextField.delegate = source
+        categoryNameTextField.text = editingCategory
+    }
+    
+    // MARK: - getCategoryName
+    
+    func getCategoryName() -> String? {
+        categoryNameTextField.text
+    }
+    
+    // MARK: - setupButtons
+    
+    private func setupButtons() {
+        doneButton.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
+        categoryNameTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
+    }
+    
+    @objc private func didTapDoneButton() {
+        delegate?.didTapDoneButton()
+    }
+    
+    // MARK: - editingChanged
+    
+    @objc private func editingChanged(_ sender: UITextField) {
+        guard let text = sender.text else { return }
+        let errorIsHidden = text.count < AppConstants.nameLengthRestriction
+        showTrackerNameError(errorIsHidden)
+        let isDoneButtonHidden = !text.isEmpty && errorIsHidden
+        doDoneButtonActive(isDoneButtonHidden)
+    }
+    
+    // MARK: - Layout
     
     private func setupLayout() {
         addSubviews(
@@ -83,11 +121,11 @@ extension CreateCategoryView {
         ])
     }
     
-    func showTrackerNameError(_ show: Bool) {
+    private func showTrackerNameError(_ show: Bool) {
         errorLabel.isHidden = show
     }
     
-    func doDoneButtonActive(_ isEnabled: Bool) {
+    private func doDoneButtonActive(_ isEnabled: Bool) {
         doneButton.isEnabled = isEnabled
         doneButton.backgroundColor = isEnabled
             ? AppColorSettings.fontColor
