@@ -28,7 +28,7 @@ final class DummyView: UIView {
     
     init(model: DummyModel) {
         super.init(frame: .zero)
-        self.descriptionLabel.text  = model.description
+        self.descriptionLabel.text = model.description
         self.descriptionImage.image = UIImage(named: model.imageName)
         
         setupLayout()
@@ -42,6 +42,11 @@ final class DummyView: UIView {
 // MARK: - Layout
 
 extension DummyView {
+    
+    func setupNewModel(model: DummyModel) {
+        descriptionLabel.text = model.description
+        descriptionImage.image = UIImage(named: model.imageName)
+    }
     
     private func setupLayout() {
         addSubviews(

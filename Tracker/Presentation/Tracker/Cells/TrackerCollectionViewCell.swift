@@ -18,9 +18,14 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     private var tracker: Tracker?
     private var days = 0 {
         willSet {
-            formatWordingFor(day: newValue)
+            daysCountLabel.text = String.localizedStringWithFormat(
+                Constants.numberOfDays,
+                newValue
+            )
         }
     }
+    
+    private let analyticService: AnalyticServiceProtocol = AnalyticService()
     
     private let cardView: UIView = {
         let view = UIView()
@@ -66,6 +71,14 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
+    private lazy var pinnedImageView: UIImageView = {
+        var imageView = UIImageView()
+        imageView.tintColor = .white
+        imageView.image = UIImage(systemName: "pin.fill")
+        imageView.isHidden = true
+        return imageView
+    }()
+    
     // MARK: - Lifecycle
     
     override init(frame: CGRect) {
@@ -88,6 +101,7 @@ extension TrackerCollectionViewCell {
         days = 0
         addDayButton.setImage(UIImage(systemName: "plus"), for: .normal)
         addDayButton.layer.opacity = 1
+        pinnedImageView.isHidden = true
     }
     
     // MARK: - setupCell
@@ -100,6 +114,7 @@ extension TrackerCollectionViewCell {
         trackerNameLabel.text = tracker.name
         addDayButton.backgroundColor = tracker.color
         setupAddDayButton(isCompleted: isCompleted)
+        pinnedImageView.isHidden = !tracker.isPinned
     }
     
     // MARK: - setupAddDayButton
@@ -129,24 +144,9 @@ extension TrackerCollectionViewCell {
     // MARK: - didTapAddDayButton
     
     @objc private func didTapAddDayButton() {
+        analyticService.trackClick(screen: .main, item: .tapTracker)
         guard let tracker else { return }
         delegate?.didTapAddDayButton(for: tracker, in: self)
-    }
-    
-    // MARK: - formatWordingFor
-    
-    private func formatWordingFor(day: Int) {
-        var wording: String
-
-        switch (day % 10) {
-            case 1:
-            wording = "день";
-            case 2...4:
-            wording = "дня";
-            default:
-            wording = "дней";
-        }
-        daysCountLabel.text = "\(day) \(wording)"
     }
     
     // MARK: - setupLayout
@@ -156,6 +156,7 @@ extension TrackerCollectionViewCell {
         [
             iconView,
             emojiLabel,
+            pinnedImageView,
             trackerNameLabel
         ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -176,28 +177,47 @@ extension TrackerCollectionViewCell {
             cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
             cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            cardView.heightAnchor.constraint(equalToConstant: 90),
+            cardView.heightAnchor.constraint(equalToConstant: Constants.cardViewHeight),
             
-            iconView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
-            iconView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
-            iconView.widthAnchor.constraint(equalToConstant: 24),
+            iconView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: Constants.mainInset),
+            iconView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: Constants.mainInset),
+            iconView.widthAnchor.constraint(equalToConstant: Constants.viewWidth),
             iconView.heightAnchor.constraint(equalTo: iconView.widthAnchor),
+            
+            pinnedImageView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -Constants.secondaryInset / 2),
+            pinnedImageView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: Constants.mainInset),
+            pinnedImageView.widthAnchor.constraint(equalToConstant: Constants.viewWidth),
+            pinnedImageView.heightAnchor.constraint(equalTo: iconView.widthAnchor),
             
             emojiLabel.centerXAnchor.constraint(equalTo: iconView.centerXAnchor),
             emojiLabel.centerYAnchor.constraint(equalTo: iconView.centerYAnchor),
             
-            trackerNameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
-            trackerNameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -12),
-            trackerNameLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -12),
+            trackerNameLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: Constants.mainInset),
+            trackerNameLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -Constants.mainInset),
+            trackerNameLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -Constants.mainInset),
             
-            daysCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            daysCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.mainInset),
             daysCountLabel.centerYAnchor.constraint(equalTo: addDayButton.centerYAnchor),
-            daysCountLabel.trailingAnchor.constraint(equalTo: addDayButton.leadingAnchor, constant: -8),
+            daysCountLabel.trailingAnchor.constraint(equalTo: addDayButton.leadingAnchor, constant: -Constants.secondaryInset),
             
-            addDayButton.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 8),
-            addDayButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
-            addDayButton.widthAnchor.constraint(equalToConstant: 34),
+            addDayButton.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: Constants.secondaryInset),
+            addDayButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.mainInset),
+            addDayButton.widthAnchor.constraint(equalToConstant: Constants.buttonWidth),
             addDayButton.heightAnchor.constraint(equalTo: addDayButton.widthAnchor),
         ])
+    }
+}
+
+// MARK: - Constants
+
+private extension TrackerCollectionViewCell {
+    enum Constants {
+        static let numberOfDays = NSLocalizedString("numberOfDays", comment: "Number of completed habbits/events in days")
+        
+        static let cardViewHeight: CGFloat = 90
+        static let mainInset: CGFloat = 12
+        static let secondaryInset: CGFloat = 8
+        static let viewWidth: CGFloat = 24
+        static let buttonWidth: CGFloat = 34
     }
 }

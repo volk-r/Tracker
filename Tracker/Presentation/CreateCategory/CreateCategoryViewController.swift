@@ -13,7 +13,7 @@ final class CreateCategoryViewController: UIViewController {
     
     weak var delegate: CreateCategoryViewControllerDelegate?
     
-    private lazy var createCategoryView = CreateCategoryView()
+    private lazy var createCategoryView = CreateCategoryView(delegate: self)
     
     private let trackerCategoryStore: TrackerCategoryStoreProtocol = TrackerCategoryStore()
     
@@ -42,12 +42,11 @@ final class CreateCategoryViewController: UIViewController {
     override func loadView() {
         super.loadView()
         view = createCategoryView
-        title = createCategoryMode.rawValue
+        title = createCategoryMode.title
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupButtons()
         setupTextField()
     }
 }
@@ -57,22 +56,16 @@ extension CreateCategoryViewController {
     // MARK: - setupTextField
     
     func setupTextField() {
-        createCategoryView.categoryNameTextField.delegate = self
-        createCategoryView.categoryNameTextField.text = editingCategory?.title
+        createCategoryView.setupTextField(source: self, editingCategory: editingCategory?.title)
     }
-    
-    // MARK: - setupButtons
-    
-    private func setupButtons() {
-        createCategoryView.doneButton.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
+}
 
-        createCategoryView.categoryNameTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
-    }
+extension CreateCategoryViewController: CreateCategoryViewDelegate {
     
     // MARK: - didTapDoneButton
     
-    @objc private func didTapDoneButton() {
-        guard let categoryName = createCategoryView.categoryNameTextField.text else { return }
+    func didTapDoneButton() {
+        guard let categoryName = createCategoryView.getCategoryName() else { return }
         
         switch createCategoryMode {
         case .create:
@@ -107,16 +100,7 @@ extension CreateCategoryViewController {
         }
         
         delegate?.acceptChanges()
-    }
-    
-    // MARK: - editingChanged
-    
-    @objc private func editingChanged(_ sender: UITextField) {
-        guard let text = sender.text else { return }
-        let errorIsHidden = text.count < AppConstants.nameLengthRestriction
-        createCategoryView.showTrackerNameError(errorIsHidden)
-        let isDoneButtonHidden = !text.isEmpty && errorIsHidden
-        createCategoryView.doDoneButtonActive(isDoneButtonHidden)
+        dismiss(animated: true)
     }
 }
 

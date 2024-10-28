@@ -11,6 +11,8 @@ final class OnboardingPageView: UIView {
     
     // MARK: - Properties
     
+    weak var delegate: OnboardingPageViewDelegate?
+    
     private lazy var backgroundImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage()
@@ -21,17 +23,17 @@ final class OnboardingPageView: UIView {
     private lazy var messageLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        label.textColor = AppColorSettings.fontColor
+        label.textColor = AppColorSettings.onboardingFontColor
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
     }()
     
-    lazy var skipTourButton: UIButton = {
+    private lazy var skipTourButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = AppColorSettings.fontColor
-        button.setTitle("Вот это технологии!", for: .normal)
-        button.setTitleColor(AppColorSettings.cellIconFontColor, for: .normal)
+        button.backgroundColor = AppColorSettings.onboardingFontColor
+        button.setTitle(Constants.onboardingSkipTourButton, for: .normal)
+        button.setTitleColor(AppColorSettings.onboardingCellIconFontColor, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
         return button
@@ -39,10 +41,11 @@ final class OnboardingPageView: UIView {
     
     // MARK: - Init
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    init(delegate: OnboardingPageViewDelegate) {
+        super.init(frame: .zero)
+        self.delegate = delegate
         setupLayout()
+        setupButtons()
     }
     
     required init?(coder: NSCoder) {
@@ -50,9 +53,21 @@ final class OnboardingPageView: UIView {
     }
 }
 
-// MARK: - Layout
-
 extension OnboardingPageView {
+    
+    // MARK: - didTapButton
+    
+    private func setupButtons() {
+        skipTourButton.addTarget(nil, action: #selector(didTapButton), for: .touchUpInside)
+    }
+    
+    // MARK: - didTapButton
+    
+    @objc private func didTapButton() {
+        delegate?.dismis()
+    }
+    
+    // MARK: - Layout
     
     private func setupLayout() {
         addSubviews(
@@ -82,5 +97,13 @@ extension OnboardingPageView {
     func setupView(for page: OnboardingPage) {
         backgroundImage.image = UIImage(named: page.backGroundImageName)
         messageLabel.text = page.message
+    }
+}
+
+// MARK: - Constants
+
+private extension OnboardingPageView {
+    enum Constants {
+        static let onboardingSkipTourButton = NSLocalizedString("onboarding.screen.skipButton", comment: "")
     }
 }

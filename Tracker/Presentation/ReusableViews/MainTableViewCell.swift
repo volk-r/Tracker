@@ -1,5 +1,5 @@
 //
-//  CategoryTableViewCell.swift
+//  MainTableViewCell.swift
 //  Tracker
 //
 //  Created by Roman Romanov on 05.10.2024.
@@ -7,11 +7,11 @@
 
 import UIKit
 
-final class CategoryTableViewCell: UITableViewCell {
+final class MainTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     
-    static let identifier = "CategoryTableViewCell"
+    static let identifier = "MainTableViewCell"
     
     private let nameLabel: UILabel = {
         let label = UILabel()
@@ -31,7 +31,7 @@ final class CategoryTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        backgroundColor = AppColorSettings.chosenItemBackgroundColor.withAlphaComponent(0.3)
+        backgroundColor = AppColorSettings.chosenItemBackgroundColor
         selectionStyle = .none
         
         setupLayout()
@@ -42,7 +42,7 @@ final class CategoryTableViewCell: UITableViewCell {
     }
 }
 
-extension CategoryTableViewCell {
+extension MainTableViewCell {
     
     // MARK: - Layout
     

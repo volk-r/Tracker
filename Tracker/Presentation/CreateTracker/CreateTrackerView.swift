@@ -8,7 +8,9 @@
 import UIKit
 
 final class CreateTrackerView: UIView {
-    // MARK: PROPERTIES
+    
+    // MARK: - Properties
+    
     var trackerCallback: ((TrackerType) -> Void)?
     
     private lazy var mainStackView: UIStackView = {
@@ -22,10 +24,10 @@ final class CreateTrackerView: UIView {
     
     private lazy var habitButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Привычка", for: .normal)
+        button.setTitle(Constants.habitTitle, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(AppColorSettings.backgroundColor, for: .normal)
         button.layer.cornerRadius = 16
         button.backgroundColor = AppColorSettings.fontColor
         button.addTarget(self, action: #selector(didHabitTapped), for: .touchUpInside)
@@ -37,10 +39,10 @@ final class CreateTrackerView: UIView {
     
     private lazy var eventButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Нерегулярные событие", for: .normal)
+        button.setTitle(Constants.eventTitle, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(AppColorSettings.backgroundColor, for: .normal)
         button.layer.cornerRadius = 16
         button.backgroundColor = AppColorSettings.fontColor
         button.addTarget(self, action: #selector(didEventTapped), for: .touchUpInside)
@@ -50,10 +52,11 @@ final class CreateTrackerView: UIView {
         return button
     }()
     
-    // MARK: INIT
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = AppColorSettings.backgroundColor
         setupLayout()
     }
     
@@ -63,7 +66,9 @@ final class CreateTrackerView: UIView {
 }
 
 extension CreateTrackerView {
-    // MARK: LAYOUT
+    
+    // MARK: - Layout
+    
     private func setupLayout() {
         // body
         [
@@ -73,31 +78,40 @@ extension CreateTrackerView {
             mainStackView.addArrangedSubview($0)
         }
         // main elements
-        [
-            mainStackView,
-        ].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            addSubview($0)
-        }
+        addSubviews(mainStackView)
         
         NSLayoutConstraint.activate([
-            habitButton.heightAnchor.constraint(equalToConstant: 60),
-            eventButton.heightAnchor.constraint(equalToConstant: 60),
+            habitButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
+            eventButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
             
-            mainStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            mainStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: Constants.mainInset),
             mainStackView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor),
             mainStackView.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
-            mainStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            mainStackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -Constants.mainInset),
         ])
     }
     
-    // MARK: didHabitTapped
+    // MARK: - didHabitTapped
+    
     @objc private func didHabitTapped() {
         trackerCallback?(.habit)
     }
     
-    // MARK: didEventTapped
+    // MARK: - didEventTapped
+    
     @objc private func didEventTapped() {
         trackerCallback?(.event)
+    }
+}
+
+// MARK: - Constants
+
+private extension CreateTrackerView {
+    enum Constants {
+        static let habitTitle = NSLocalizedString("habit", comment: "")
+        static let eventTitle = NSLocalizedString("irregularEvent", comment: "")
+        
+        static let mainInset: CGFloat = 20
+        static let buttonHeight: CGFloat = 60
     }
 }

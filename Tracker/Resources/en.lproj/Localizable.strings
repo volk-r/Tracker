@@ -1,0 +1,113 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Roman Romanov on 09.10.2024.
+  
+*/
+
+// MARK: - TabBarViewController
+
+"statistic.screen.title" = "Statistic";
+"trackers.screen.title" = "Trackers";
+
+// MARK: - General
+
+"datePicker" = "en_GB";
+
+"habit" = "Habit";
+"irregularEvent" = "Irregular event";
+"category" = "Category";
+"schedule" = "Schedule";
+"color" = "Color";
+"unknown" = "Unknown";
+
+"cancel" = "Cancel";
+"create" = "Сreate";
+"delete" = "Delete";
+"edit" = "Edit";
+"done" = "Done";
+"save" = "Save";
+"unpin" = "Unpin";
+"pin" = "Pin";
+
+"searchPlaceholder" = "Search";
+"validation.title.message" = "%d character limit";
+
+"filters" = "Filters";
+
+// MARK: - CreateTrackerViewController
+
+"createTracker.screen.title" = "Create Tracker";
+
+// MARK: - OnboardingViewController
+
+"onboarding.screen.skipButton" = "This is technology!";
+"onboarding.screen.message.first" = "Only track what you want";
+"onboarding.screen.message.second" = "Even if it not liters of water and yoga";
+
+// MARK: - TrackerViewController
+
+"tracker.screen.dummyPlaceHolder" = "What will we track?";
+"tracker.screen.dummySearchPlaceHolder" = "Nothing found";
+"tracker.screen.alertMessage" = "Are you sure you want to delete the tracker?";
+"tracker.screen.pinnedCategory" = "Pinned";
+
+// MARK: - StatisticViewController
+
+"statistic.screen.dummyPlaceHolder" = "There is nothing to analyze yet";
+
+// MARK: - NewTrackerViewController
+
+"newTracker.screen.textFieldPlaceholder" = "Enter tracker name";
+"newTracker.screen.habit.new" = "New habit";
+"newTracker.screen.habit.edit" = "Edit a habit";
+"newTracker.screen.irregularEvent.new" = "New irregular event";
+"newTracker.screen.irregularEvent.edit" = "Edit irregular event";
+
+// MARK: - CategoryViewController
+
+"category.screen.alertMessage" = "Is this category definitely not needed?";
+"category.screen.dummyPlaceHolder" = "Habits and events can be \n united in meaning";
+"category.screen.addCategory" = "Add category";
+
+// MARK: - CreateCategoryViewController
+
+"createCategory.screen.textFieldPlaceholder" = "Enter category name";
+
+"category.new" = "New category";
+"category.edit" = "Editing a category";
+
+// MARK: - WeekDay
+
+"monday" = "Monday";
+"tuesday" = "Tuesday";
+"wednesday" = "Wednesday";
+"thursday" = "Thursday";
+"friday" = "Friday";
+"saturday" = "Saturday";
+"sunday" = "Sunday";
+
+"monday.short" = "Mon";
+"tuesday.short" = "Tue";
+"wednesday.short" = "Wed";
+"thursday.short" = "Thu";
+"friday.short" = "Fri";
+"saturday.short" = "Sat";
+"sunday.short" = "Sun";
+
+"everyDay" = "Every day";
+
+// MARK: - FilterViewController
+
+"filter.screen.all" = "All trackers";
+"filter.screen.today" = "Today trackers";
+"filter.screen.completed" = "Completed";
+"filter.screen.notCompleted" = "Not completed";
+
+// MARK: - StatisticViewController
+
+"statistic.screen.trackersCompleted" = "Trackers completed";
+"statistic.screen.bestPeriod" = "Best period";
+"statistic.screen.idealВays" = "Ideal days";
+"statistic.screen.averageValue" = "Average value";

@@ -14,7 +14,7 @@ final class ScheduleViewController: UIViewController {
     weak var cellDelegate: ScheduleViewControllerCellDelegate?
     weak var delegate: ScheduleViewControllerDelegate?
     
-    private lazy var scheduleView = ScheduleView()
+    private lazy var scheduleView = ScheduleView(delegate: self)
     
     private var selectedWeekdays: Set<WeekDay>
     
@@ -35,13 +35,12 @@ final class ScheduleViewController: UIViewController {
     override func loadView() {
         super.loadView()
         view = scheduleView
-        title = "Расписание"
+        title = Constants.pageTitle
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        setupButtons()
     }
 }
 
@@ -50,21 +49,14 @@ extension ScheduleViewController {
     // MARK: - setupTableView
     
     func setupTableView() {
-        scheduleView.tableView.delegate = self
-        scheduleView.tableView.dataSource = self
-        scheduleView.tableView.register(
-            ScheduleTableViewCell.self,
-            forCellReuseIdentifier: ScheduleTableViewCell.identifier
-        )
+        scheduleView.setupTableView(source: self)
     }
-    
-    // MARK: - setupButtons
-    
-    func setupButtons() {
-        scheduleView.doneButton.addTarget(self, action: #selector(doneButtonTapAction), for: .touchUpInside)
-    }
-    
-    @objc private func doneButtonTapAction() {
+}
+
+// MARK: - ScheduleViewDelegate
+
+extension ScheduleViewController: ScheduleViewDelegate {
+    func tapDoneButton() {
         let weekdays = Array(selectedWeekdays).sorted()
         delegate?.didConfirmSchedule(weekdays)
     }
@@ -79,12 +71,8 @@ extension ScheduleViewController: UITableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
+        return Constants.tableViewHeightForRowAt
     }
 }
 
@@ -112,7 +100,7 @@ extension ScheduleViewController: UITableViewDataSource {
         )
         scheduleCell.setupCell(with: model)
         scheduleCell.delegate = self
-        scheduleView.tableView.reloadRows(at: [indexPath], with: .automatic)
+        scheduleView.reloadTableViewRows(at: [indexPath])
         
         return scheduleCell
     }
@@ -127,6 +115,16 @@ extension ScheduleViewController: ScheduleViewControllerCellDelegate {
         } else {
             selectedWeekdays.remove(weekday)
         }
+    }
+}
+
+// MARK: - Constants
+
+private extension ScheduleViewController {
+    enum Constants {
+        static let pageTitle = NSLocalizedString("schedule", comment: "")
+        
+        static let tableViewHeightForRowAt: CGFloat = 75
     }
 }
 
